@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "utils/lib/index.js",
   "types": "utils/lib/index.d.ts",
   "typings": "utils/lib/index.d.ts",
@@ -33,7 +33,6 @@
     "@types/node": "^10.17.9",
     "jest": "^24.9.0",
     "lodash": "^4.17.15",
-    "oao": "1.7.0",
     "prettier": "1.19.1",
     "prettier-eslint-cli": "^5.0.0",
     "ts-jest": "^24.3.0",
