@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "utils/lib/index.js",
   "types": "utils/lib/index.d.ts",
   "typings": "utils/lib/index.d.ts",
