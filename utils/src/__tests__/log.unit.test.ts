@@ -1,12 +1,6 @@
-import {
-  getLog,
-  setLogCorrelationId,
-  resetLogCorrelationId,
-  logRootNamespace
-} from "../log";
+import { getLog, setLogCorrelationId, resetLogCorrelationId, logRootNamespace } from '../log'
 
-const prettify = ({ mock }) =>
-  mock.calls.join("\n").replace(/\+\d+ms/gi, "+0ms");
+const prettify = ({ mock }) => mock.calls.join('\n').replace(/\+\d+ms/gi, '+0ms')
 
 const writeTestLogs = log => {
   const largeObject = {
@@ -33,111 +27,111 @@ const writeTestLogs = log => {
         }
       }
     }
-  };
+  }
 
-  log.log("test text");
-  log.log(42);
-  log.log(largeObject);
+  log.log('test text')
+  log.log(42)
+  log.log(largeObject)
 
-  log.error("test text");
-  log.error(42);
-  log.error(largeObject);
+  log.error('test text')
+  log.error(42)
+  log.error(largeObject)
 
-  log.warn("test text");
-  log.warn(42);
-  log.warn(largeObject);
+  log.warn('test text')
+  log.warn(42)
+  log.warn(largeObject)
 
-  log.debug("test text");
-  log.debug(42);
-  log.debug(largeObject);
+  log.debug('test text')
+  log.debug(42)
+  log.debug(largeObject)
 
-  log.info("test text");
-  log.info(42);
-  log.info(largeObject);
+  log.info('test text')
+  log.info(42)
+  log.info(largeObject)
 
-  log.verbose("test text");
-  log.verbose(42);
-  log.verbose(largeObject);
-};
+  log.verbose('test text')
+  log.verbose(42)
+  log.verbose(largeObject)
+}
 
 for (const { describeName, prepare } of [
   {
-    describeName: "log",
+    describeName: 'log',
     prepare: () => {
-      resetLogCorrelationId();
+      resetLogCorrelationId()
     }
   },
   {
-    describeName: "log with correlationId",
+    describeName: 'log with correlationId',
     prepare: () => {
-      setLogCorrelationId("test-correlation-id");
+      setLogCorrelationId('test-correlation-id')
     }
   }
 ]) {
   describe(describeName, () => {
-    let originalStandardWrite;
-    let originalErrorWrite;
+    let originalStandardWrite
+    let originalErrorWrite
     const write = jest.fn().mockImplementation(function(...args) {
-      originalStandardWrite.call(this, ...args);
-    });
+      originalStandardWrite.call(this, ...args)
+    })
     beforeAll(() => {
-      originalStandardWrite = process.stdout.write;
-      process.stdout.write = write.bind(process.stdout);
-      originalErrorWrite = process.stderr.write;
-      process.stderr.write = write.bind(process.stderr);
-    });
+      originalStandardWrite = process.stdout.write
+      process.stdout.write = write.bind(process.stdout)
+      originalErrorWrite = process.stderr.write
+      process.stderr.write = write.bind(process.stderr)
+    })
 
     afterAll(() => {
-      process.stdout.write = originalStandardWrite;
-      process.stderr.write = originalErrorWrite;
-    });
+      process.stdout.write = originalStandardWrite
+      process.stderr.write = originalErrorWrite
+    })
 
     beforeEach(() => {
-      prepare();
-    });
+      prepare()
+    })
 
     afterEach(() => {
-      delete process.env.DEBUG_LEVEL;
-      write.mockClear();
-    });
+      delete process.env.DEBUG_LEVEL
+      write.mockClear()
+    })
 
     test(`should not write to scope "test-scope"`, () => {
-      const scope = "test-scope";
-      const log = getLog(scope);
-      writeTestLogs(log);
+      const scope = 'test-scope'
+      const log = getLog(scope)
+      writeTestLogs(log)
 
-      expect(prettify(write)).toMatchSnapshot();
-    });
+      expect(prettify(write)).toMatchSnapshot()
+    })
 
     test(`should write to scope "${logRootNamespace}:my-test" (log,error,warn,debug,info)`, () => {
-      const log = getLog(`${logRootNamespace}:my-test`);
-      writeTestLogs(log);
+      const log = getLog(`${logRootNamespace}:my-test`)
+      writeTestLogs(log)
 
-      expect(prettify(write)).toMatchSnapshot();
-    });
+      expect(prettify(write)).toMatchSnapshot()
+    })
 
     test(`should write to scope "${logRootNamespace}:my-test" (log,error)`, () => {
-      process.env.DEBUG_LEVEL = "error";
+      process.env.DEBUG_LEVEL = 'error'
 
-      const log = getLog(`${logRootNamespace}:my-test`);
-      writeTestLogs(log);
+      const log = getLog(`${logRootNamespace}:my-test`)
+      writeTestLogs(log)
 
-      expect(prettify(write)).toMatchSnapshot();
-    });
+      expect(prettify(write)).toMatchSnapshot()
+    })
 
     test(`should write to scope "resolve:*" (log,error,warn,debug,info,verbose) (resolve:*)`, () => {
-      process.env.DEBUG = "resolve:*";
-      process.env.DEBUG_LEVEL = "verbose";
+      process.env.DEBUG = 'resolve:*'
+      process.env.DEBUG_LEVEL = 'verbose'
 
-      const logStorage = getLog(`resolve:storage`);
-      const logBus = getLog(`resolve:bus`);
-      const logCustomer = getLog(`customer`);
+      const logStorage = getLog(`resolve:storage`)
+      const logBus = getLog(`resolve:bus`)
+      const logCustomer = getLog(`customer`)
 
       for (const log of [logStorage, logBus, logCustomer]) {
-        writeTestLogs(log);
+        writeTestLogs(log)
       }
 
-      expect(prettify(write)).toMatchSnapshot();
-    });
-  });
+      expect(prettify(write)).toMatchSnapshot()
+    })
+  })
 }
