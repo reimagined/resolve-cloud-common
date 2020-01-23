@@ -1,5 +1,5 @@
 export function getAccountIdFromLambdaContext(lambdaContext: {
-  invokedFunctionArn: string;
+  invokedFunctionArn: string
 }): string {
-  return lambdaContext.invokedFunctionArn.split(":")[4];
+  return lambdaContext.invokedFunctionArn.split(':')[4]
 }
