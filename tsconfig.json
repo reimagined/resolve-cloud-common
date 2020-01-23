@@ -4,8 +4,8 @@
     "target": "es2018",
     "declaration": true,
     "lib": ["es2018"],
-    "rootDir": "utils/src",
-    "outDir": "utils/lib",
+    "rootDir": "src",
+    "outDir": "lib",
     "strict": false,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
@@ -16,6 +16,7 @@
     "moduleResolution": "node",
     "removeComments": false,
     "resolveJsonModule": true,
-    "types": ["node", "jest", "lodash"]
+    "types": ["node", "jest", "lodash"],
+    "allowJs": true
   }
 }
