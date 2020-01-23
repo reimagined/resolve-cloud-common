@@ -17,6 +17,7 @@
     "removeComments": false,
     "resolveJsonModule": true,
     "types": ["node", "jest", "lodash"],
-    "allowJs": true
+    "allowJs": true,
+    "checkJs": true
   }
 }

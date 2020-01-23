@@ -1,9 +1,5 @@
 const Lambda = require('aws-sdk/clients/lambda')
 
-// const {
-//   LAMBDA_DEFAULTS: { MEMORY_SIZE, RUNTIME, TIMEOUT }
-// } = require('../constants')
-
 const MEMORY_SIZE = 512
 const RUNTIME= 'nodejs10.x'
 const TIMEOUT = 900
