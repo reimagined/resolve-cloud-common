@@ -1,7 +1,7 @@
 import S3 from 'aws-sdk/clients/s3'
 import { Readable } from 'stream'
 
-import { getLog, Log } from '../utils'
+import { getLog, Log } from '../../utils'
 
 interface TMethod {
   (

@@ -1,6 +1,6 @@
 import S3 from 'aws-sdk/clients/s3'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log } from '../../utils'
 
 interface TMethod {
   (
