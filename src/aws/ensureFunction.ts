@@ -16,11 +16,12 @@ async function updateFunctionCode(
     Region: string
     FunctionName: string
     S3Bucket: string
-    S3Key: string
+    S3Key: string,
+    Publish?: boolean
   },
   log: Log
-): Promise<void> {
-  const { Region, FunctionName, S3Bucket, S3Key } = params
+): Promise<string> {
+  const { Region, FunctionName, S3Bucket, S3Key, Publish } = params
 
   const lambda = new Lambda({ region: Region })
 
@@ -29,11 +30,19 @@ async function updateFunctionCode(
     lambda.updateFunctionCode,
     Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
   )
-  await setFunctionCode({
+
+  const { Version } = await setFunctionCode({
     FunctionName,
     S3Bucket,
-    S3Key
+    S3Key,
+    Publish
   })
+
+  if (Version == null) {
+    throw new Error('Unknown function version')
+  }
+
+  return Version
 }
 
 async function createFunction(
@@ -50,10 +59,11 @@ async function createFunction(
     Runtime: string
     Timeout: number
     MemorySize: number
-    Layers?: Array<string>
+    Layers?: Array<string>,
+    Publish?: boolean
   },
   log: Log
-): Promise<string> {
+): Promise<TResponse> {
   const {
     Region,
     FunctionName,
@@ -67,13 +77,15 @@ async function createFunction(
     Runtime,
     Timeout,
     MemorySize,
-    Layers
+    Layers,
+    Publish
   } = params
 
   const lambda = new Lambda({ region: Region })
 
   const addFunction = retry(lambda, lambda.createFunction, Options.Defaults.override({ log }))
-  const { FunctionArn } = await addFunction({
+
+  const { FunctionArn, Version } = await addFunction({
     FunctionName,
     Handler,
     Role: RoleArn,
@@ -87,14 +99,18 @@ async function createFunction(
     Tags,
     Description,
     Environment,
-    Layers
+    Layers,
+    Publish
   })
 
   if (FunctionArn == null) {
     throw new Error('Unknown function ARN')
   }
 
-  return FunctionArn
+  return {
+    FunctionArn,
+    Version
+  }
 }
 
 async function listTags(
@@ -162,6 +178,11 @@ async function untagResource(
   })
 }
 
+interface TResponse {
+  FunctionArn: string,
+  Version?: string
+}
+
 interface TMethod {
   (
     params: {
@@ -177,10 +198,11 @@ interface TMethod {
       Runtime?: string
       Timeout?: number
       MemorySize?: number
-      Layers?: Array<string>
+      Layers?: Array<string>,
+      Publish?: boolean
     },
     log?: Log
-  ): Promise<string>
+  ): Promise<TResponse>
 }
 
 const ensureFunction: TMethod = async (
@@ -197,7 +219,8 @@ const ensureFunction: TMethod = async (
     Tags: RawTags = {},
     Runtime = LambdaDefaults.RUNTIME,
     Timeout = LambdaDefaults.TIMEOUT,
-    MemorySize = LambdaDefaults.MEMORY_SIZE
+    MemorySize = LambdaDefaults.MEMORY_SIZE,
+    Publish
   },
   log: Log = getLog('ENSURE-FUNCTION')
 ) => {
@@ -231,15 +254,18 @@ const ensureFunction: TMethod = async (
     log.debug(`Update function configuration`)
 
     const lambda = new Lambda({ region: Region })
+    let FunctionVersion
 
     if (S3Key != null) {
       log.debug(`Update function code`)
-      await updateFunctionCode(
+
+      FunctionVersion = await updateFunctionCode(
         {
           Region,
           FunctionName,
           S3Bucket,
-          S3Key
+          S3Key,
+          Publish
         },
         log
       )
@@ -270,6 +296,7 @@ const ensureFunction: TMethod = async (
       lambda.updateFunctionConfiguration,
       Options.Defaults.override({ log, silent: true })
     )
+
     const { FunctionArn } = await updateFunctionConfiguration({
       Description,
       FunctionName,
@@ -281,6 +308,7 @@ const ensureFunction: TMethod = async (
       Environment,
       Layers
     })
+
     log.debug(`Function configuration has been updated`)
 
     if (FunctionArn == null) {
@@ -290,6 +318,7 @@ const ensureFunction: TMethod = async (
     }
 
     log.debug(`Find tags`)
+
     const prevTags = await listTags(
       {
         Region,
@@ -341,11 +370,15 @@ const ensureFunction: TMethod = async (
       log.debug(`Tags have been deleted`)
     }
 
-    return FunctionArn
+    return {
+      FunctionArn,
+      Version: FunctionVersion
+    }
   } catch (error) {
     if (error.code === 'ResourceNotFoundException' && S3Key != null) {
       log.debug(`Create function`)
-      const FunctionArn = await createFunction(
+
+      const { FunctionArn, Version } = await createFunction(
         {
           FunctionName,
           Description,
@@ -359,13 +392,18 @@ const ensureFunction: TMethod = async (
           Runtime,
           Timeout,
           MemorySize,
-          Layers
+          Layers,
+          Publish
         },
         log
       )
+
       log.debug(`Function has been created with ARN "${FunctionArn}"`)
 
-      return FunctionArn
+      return {
+        FunctionArn,
+        Version
+      }
     }
     log.debug(`Failed to ensure function`)
     throw error
