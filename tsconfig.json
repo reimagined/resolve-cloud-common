@@ -16,8 +16,6 @@
     "moduleResolution": "node",
     "removeComments": false,
     "resolveJsonModule": true,
-    "types": ["node", "jest", "lodash"],
-    "allowJs": true,
-    "checkJs": true
+    "types": ["node", "jest", "lodash"]
   }
 }
