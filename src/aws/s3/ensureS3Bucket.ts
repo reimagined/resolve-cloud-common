@@ -2,6 +2,8 @@ import S3 from 'aws-sdk/clients/s3'
 
 import { retry, Options, getLog, Log } from '../../utils'
 
+const DEFAULT_BUCKET_REGION = 'us-east-1'
+
 const checkIfBucketExists = async (
   { Region, BucketName }: { Region: string, BucketName: string },
   log: Log
@@ -62,10 +64,19 @@ const ensureS3Bucket: TMethod = async (
     if (!doesBucketExist) {
       log.debug(`Bucket not found. Create "${BucketName}" bucket`)
 
-      const params = {
+      const params: {
+        Bucket: string,
+        ACL: string,
+        CreateBucketConfiguration?: {
+          LocationConstraint: string
+        }
+      } = {
         Bucket: BucketName,
-        ACL,
-        CreateBucketConfiguration: {
+        ACL
+      }
+
+      if (Region !== DEFAULT_BUCKET_REGION) {
+        params.CreateBucketConfiguration = {
           LocationConstraint: Region
         }
       }
