@@ -1,9 +1,8 @@
 {
   "name": "resolve-cloud-common",
   "version": "0.0.4",
-  "main": "lib/utils/index.js",
-  "types": "lib/utils/index.d.ts",
-  "typings": "lib/utils/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.2",
@@ -11,9 +10,10 @@
     "lodash.isempty": "^4.4.0"
   },
   "scripts": {
-    "prepare": "tsc",
-    "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}'",
+    "prepare": "node prepare.js",
+    "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}' && tsc --noEmit",
     "prettier": "prettier --write \"**/**.{ts,json}\"",
+    "clean": "rimraf lib",
     "test": "jest",
     "test:f": "echo || exit 0"
   },
@@ -23,8 +23,12 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "testMatch": [
+      "**/__tests__/**/*.unit.test.[jt]s?(x)",
+      "**/?(*.)+(spec|test).unit.test.[jt]s?(x)"
+    ],
     "roots": [
-      "<rootDir>/utils/src"
+      "<rootDir>/src"
     ]
   },
   "devDependencies": {

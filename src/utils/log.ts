@@ -16,8 +16,9 @@ const logLevels: Array<[string, Chalk]> = [
 ]
 const emptyFunction = Function() // eslint-disable-line no-new-func
 
-const createLogger = (namespace, getCorrelationId) => {
+const createLogger = (namespace, getCorrelationId): any => {
   let logLevel = 'info'
+  // eslint-disable-next-line no-prototype-builtins
   if (process.env.hasOwnProperty(EnvVar.logLevel)) {
     logLevel = process.env[EnvVar.logLevel] as string
   }
@@ -27,6 +28,7 @@ const createLogger = (namespace, getCorrelationId) => {
     throw new Error(`Log level ${logLevel} is not found in allowed levels`)
   }
 
+  // eslint-disable-next-line no-prototype-builtins
   if (!process.env.hasOwnProperty(EnvVar.debugNamespaces)) {
     debug.enable(`${logRootNamespace}:*`)
   } else {
@@ -40,7 +42,7 @@ const createLogger = (namespace, getCorrelationId) => {
 
   for (const [levelName, levelColor] of logLevels) {
     if (allowedLevels.indexOf(levelName) > -1) {
-      leveledLogger[levelName] = (...args) => {
+      leveledLogger[levelName] = (...args): any => {
         originalLogger(
           `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map(arg =>
             Object(arg) === arg ? util.inspect(arg) : arg

@@ -1,4 +1,4 @@
-utils/src
+src
 .idea
 tsconfig.json
 .eslintrc.yml

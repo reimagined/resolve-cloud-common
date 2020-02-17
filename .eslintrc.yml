@@ -17,7 +17,6 @@ env:
   jest: true
 rules:
   newline-per-chained-call: ['warn', { ignoreChainWithDepth: 2 } ]
-  no-console: 'off'
   no-plusplus: 'off'
   no-param-reassign: ['error', { props: false }]
   no-restricted-syntax: ['off', 'ForInStatement', 'ForOfStatement']
@@ -30,6 +29,7 @@ rules:
   import/prefer-default-export: 'off'
   import/no-extraneous-dependencies: 'off'
   max-classes-per-file: 'off'
+  import/extensions: 'off'
   '@typescript-eslint/no-explicit-any': 'off'
   '@typescript-eslint/member-delimiter-style':
     - error
