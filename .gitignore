@@ -87,3 +87,8 @@ lib/
 build
 .assets
 .release-meta
+
+**/*.d.ts
+**/*.js
+**/*.js.map
+!scripts

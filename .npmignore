@@ -1,5 +1,10 @@
-utils/src
 .idea
 tsconfig.json
 .eslintrc.yml
 .lintstagedrc.yml
+.prettierignore
+.prettierrc.yml
+__mocks__
+__tests__
+scripts
+**/*.ts

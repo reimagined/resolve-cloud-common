@@ -4,8 +4,8 @@
     "target": "es2018",
     "declaration": true,
     "lib": ["es2018"],
-    "rootDir": "src",
-    "outDir": "lib",
+    "baseUrl": "./",
+    "outDir": "./",
     "strict": false,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
@@ -17,5 +17,7 @@
     "removeComments": false,
     "resolveJsonModule": true,
     "types": ["node", "jest", "lodash"]
-  }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/__mocks__"]
 }
