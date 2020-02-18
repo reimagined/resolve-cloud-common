@@ -10,10 +10,10 @@
     "lodash.isempty": "^4.4.0"
   },
   "scripts": {
-    "prepare": "node prepare.js",
+    "prepare": "node scripts/prepare.js",
+    "clear": "node scripts/clear.js",
     "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}' && tsc --noEmit",
     "prettier": "prettier --write \"**/**.{ts,json}\"",
-    "clean": "rimraf lib",
     "test": "jest",
     "test:f": "echo || exit 0"
   },
@@ -28,7 +28,7 @@
       "**/?(*.)+(spec|test).unit.test.[jt]s?(x)"
     ],
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>"
     ]
   },
   "devDependencies": {

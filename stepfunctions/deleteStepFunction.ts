@@ -2,7 +2,7 @@ import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-import { ignoreNotFoundException } from '../ignoreNotFoundException'
+import { ignoreNotFoundException } from '../utils/ignoreNotFoundException'
 
 interface TParams {
   Region: string
