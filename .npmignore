@@ -8,3 +8,4 @@ __mocks__
 __tests__
 scripts
 **/*.ts
+!**/*.d.ts
