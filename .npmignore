@@ -1,3 +1,5 @@
+**/*.ts
+!**/*.d.ts
 .idea
 tsconfig.json
 .eslintrc.yml
@@ -7,5 +9,3 @@ tsconfig.json
 __mocks__
 __tests__
 scripts
-**/*.ts
-!**/*.d.ts

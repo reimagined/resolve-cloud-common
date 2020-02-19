@@ -1,4 +1,9 @@
-import { getLog, setLogCorrelationId, resetLogCorrelationId, logRootNamespace } from '../utils'
+import {
+  getLog,
+  setLogCorrelationId,
+  resetLogCorrelationId,
+  logRootNamespace
+} from '../../utils/index'
 
 const prettify = ({ mock }): any => mock.calls.join('\n').replace(/\+\d+ms/gi, '+0ms')
 
