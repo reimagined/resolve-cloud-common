@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "prepare": "node scripts/prepare.js",
     "clear": "node scripts/clear.js",
     "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}' && tsc --noEmit",
-    "prettier": "prettier --write \"**/**.{ts,json}\"",
+    "prettier": "prettier --write \"**/**.{js,ts,json}\"",
     "test": "jest",
     "test:f": "echo || exit 0"
   },
@@ -37,7 +37,7 @@
     "@types/node": "^10.17.9",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
     "@typescript-eslint/parser": "^2.3.3",
-    "aws-sdk": "^2.608.0",
+    "aws-sdk": "2.585.0",
     "jest": "^24.9.0",
     "lodash": "^4.17.15",
     "prettier": "1.19.1",

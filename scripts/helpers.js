@@ -12,6 +12,7 @@ const rootPath = path.join(__dirname, '..')
 const ignoreRegExp = /(node_modules|__tests__|__mocks__|\.d\.ts)/
 const finishTs = /\.ts$/
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type,func-names
 module.exports.clear = function() {
   for (const filePath of find('./**/*.ts', {
     cwd: rootPath,
@@ -31,6 +32,7 @@ module.exports.clear = function() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type,func-names
 module.exports.compile = function() {
   try {
     execSync(`tsc`, { stdio: 'inherit', cwd: rootPath })

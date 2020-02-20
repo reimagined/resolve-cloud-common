@@ -1,5 +1,5 @@
-import { retry, Options } from '../utils/retry'
-import { getLog } from '../utils/log'
+import { retry, Options } from '../../utils/retry'
+import { getLog } from '../../utils/log'
 
 describe('Options', () => {
   test('defaults are all set', () => {
