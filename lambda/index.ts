@@ -5,6 +5,7 @@ import deleteFunctionPermission from './deleteFunctionPermission'
 import deleteFunctionWithRole from './deleteFunctionWithRole'
 import ensureFunction from './ensureFunction'
 import getFunctionConcurrency from './getFunctionConcurrency'
+import getFunctionConfiguration from './getFunctionConfiguration'
 import getFunctionRole from './getFunctionRole'
 import invokeFunction from './invokeFunction'
 import setFunctionConcurrency from './setFunctionConcurrency'
@@ -20,6 +21,7 @@ export {
   deleteFunctionWithRole,
   ensureFunction,
   getFunctionConcurrency,
+  getFunctionConfiguration,
   getFunctionRole,
   invokeFunction,
   setFunctionConcurrency,
