@@ -1,4 +1,9 @@
-import CloudFront, { DistributionConfig as Config, Distribution } from 'aws-sdk/clients/cloudfront'
+import CloudFront, {
+  DistributionConfig as Config,
+  Distribution,
+  UpdateDistributionRequest,
+  UpdateDistributionResult
+} from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, Log } from '../utils'
 
@@ -8,7 +13,7 @@ interface TMethod {
       Region: string
       DistributionConfig: Config
       Id: string
-      IfMatch: boolean
+      IfMatch?: string
     },
     log?: Log
   ): Promise<{ Distribution?: Distribution; ETag?: string }>
@@ -22,7 +27,7 @@ const updateCloudFrontDistribution: TMethod = async ({
 }) => {
   const cloudFront = new CloudFront({ region: Region })
 
-  const updateDistribution = retry(
+  const updateDistribution = retry<UpdateDistributionRequest, UpdateDistributionResult>(
     cloudFront,
     cloudFront.updateDistribution,
     Options.Defaults.override({
