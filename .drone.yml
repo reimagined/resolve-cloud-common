@@ -96,6 +96,8 @@ steps:
       NPM_AUTH_TOKEN:
         from_secret: publish_npm_token
     commands:
+      - yarn
+      - yarn prepare
       - echo "//registry.npmjs.org/:_authToken=$${NPM_AUTH_TOKEN}" > ~/.npmrc
       - npm publish --access=public
 
