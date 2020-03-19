@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`log should not write to scope "test-scope" 1`] = `""`;
+
+exports[`log should write to scope "resolve:*" (log,error,warn,debug,info,verbose) (resolve:*) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;
+
+exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;
+
+exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;
+
+exports[`log with correlationId should not write to scope "test-scope" 1`] = `""`;
+
+exports[`log with correlationId should write to scope "resolve:*" (log,error,warn,debug,info,verbose) (resolve:*) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;
+
+exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;
+
+exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
+"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+"
+`;

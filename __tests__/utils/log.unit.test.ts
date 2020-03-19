@@ -5,7 +5,14 @@ import {
   logRootNamespace
 } from '../../utils/index'
 
-const prettify = ({ mock }): any => mock.calls.join('\n').replace(/\+\d+ms/gi, '+0ms')
+const prettify = ({ mock }): any =>
+  mock.calls
+    .join('\n')
+    .replace(
+      /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/gi,
+      new Date(0).toISOString()
+    )
+    .replace(/\+\d+ms/gi, '+0ms')
 
 const writeTestLogs = (log): any => {
   const largeObject = {
