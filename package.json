@@ -14,7 +14,7 @@
     "clear": "node scripts/clear.js",
     "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}' && tsc --noEmit",
     "prettier": "prettier --write \"**/**.{js,ts,json}\"",
-    "test": "jest",
+    "test": "yarn clear && jest",
     "test:f": "echo || exit 0"
   },
   "jest": {
