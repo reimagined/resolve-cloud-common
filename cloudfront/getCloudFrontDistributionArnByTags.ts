@@ -1,5 +1,6 @@
 // TODO: unit tests
-import { differenceWith, isEqual } from 'lodash'
+import isEqual from 'lodash.isequal'
+import differenceWith from 'lodash.differencewith'
 import CloudFront from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
