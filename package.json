@@ -4,18 +4,39 @@
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "debug": "^4.1.1",
-    "lodash.isempty": "^4.4.0"
-  },
   "scripts": {
     "prepare": "node scripts/prepare.js",
     "clear": "node scripts/clear.js",
-    "lint": "eslint --ignore-path=.prettierignore './**/*.{js,ts,tsx}' && tsc --noEmit",
-    "prettier": "prettier --write \"**/**.{js,ts,json}\"",
+    "lint": "eslint --ignore-path=.prettierignore './**/*.{ts,tsx}' && tsc --noEmit",
+    "prettier": "prettier --write \"**/**.{ts,tsx,json}\"",
+    "prettier:scripts": "prettier --write \"**/scripts/**.js\"",
     "test": "yarn clear && jest",
     "test:f": "echo || exit 0"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "debug": "^4.1.1",
+    "lodash.isequal":"^4.5.0",
+    "lodash.differencewith": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^10.17.17",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "aws-sdk": "2.585.0",
+    "jest": "^25.1.0",
+    "lodash": "^4.17.15",
+    "prettier": "^1.19.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "lint-staged": "^10.0.8",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
   },
   "jest": {
     "verbose": true,
@@ -24,31 +45,11 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testMatch": [
-      "**/__tests__/**/*.unit.test.[jt]s?(x)",
-      "**/?(*.)+(spec|test).unit.test.[jt]s?(x)"
+      "**/__tests__/**/*.unit.test.ts?(x)",
+      "**/?(*.)+(spec|test).unit.test.ts?(x)"
     ],
     "roots": [
       "<rootDir>"
     ]
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "@types/lodash": "^4.14.144",
-    "@types/node": "^10.17.9",
-    "@typescript-eslint/eslint-plugin": "^2.3.3",
-    "@typescript-eslint/parser": "^2.3.3",
-    "aws-sdk": "2.585.0",
-    "jest": "^24.9.0",
-    "lodash": "^4.17.15",
-    "prettier": "1.19.1",
-    "prettier-eslint-cli": "^5.0.0",
-    "eslint": "6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
-    "lint-staged": "^9.4.2",
-    "ts-jest": "^24.3.0",
-    "typescript": "^3.6.4"
   }
 }
