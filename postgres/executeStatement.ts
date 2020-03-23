@@ -10,7 +10,7 @@ const coercer = ({
   booleanValue,
   isNull,
   ...rest
-}: any): any => {
+}: any): number | string | boolean | null => {
   if (intValue != null) {
     return Number(intValue)
   }
@@ -36,7 +36,7 @@ interface TMethod {
   (
     params: { Region: string; ResourceArn: string; SecretArn: string; Sql: string },
     log?: Log
-  ): Promise<Array<any>>
+  ): Promise<Array<{ [key: string]: any }>>
 }
 
 const executeStatement: TMethod = async (
@@ -68,7 +68,7 @@ const executeStatement: TMethod = async (
     return []
   }
 
-  const rows: Array<any> = []
+  const rows: Array<{ [key: string]: any }> = []
   for (const record of records) {
     const row: { [key: string]: any } = {}
     for (let i = 0; i < columnMetadata.length; i++) {

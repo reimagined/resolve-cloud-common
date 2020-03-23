@@ -8,7 +8,7 @@ const putRetentionPolicy = async (logGroupNameEnv: string): Promise<void> => {
     .promise()
 }
 
-export const setupRetentionLogs = (handler: any): any => {
+export const setupRetentionLogs = (handler: Function) => {
   const logGroupNameEnv = process.env.AWS_LAMBDA_LOG_GROUP_NAME
   const resolveRetentionLogs = process.env.RESOLVE_RETENTION_LOGS
   const Region = process.env.AWS_REGION
