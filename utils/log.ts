@@ -75,6 +75,7 @@ export type Log = {
   debug: (...args: Array<any>) => void
   info: (...args: Array<any>) => void
   verbose: (...args: Array<any>) => void
+  verboseInspect: (...args: Array<any>) => void
 }
 
 export const getLog = (scope: string): Log => {
