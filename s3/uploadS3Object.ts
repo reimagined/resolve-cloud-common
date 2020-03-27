@@ -10,7 +10,7 @@ interface TMethod {
       Bucket: string
       Key: string
       Body: Writable
-      ContentType: string
+      ContentType?: string
     },
     log?: Log
   ): Promise<void>
