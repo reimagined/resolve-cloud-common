@@ -6,6 +6,8 @@ import listObjects from './listObjects'
 import putS3BucketCors from './putS3BucketCors'
 import putS3PublicAccessBlock from './putS3PublicAccessBlock'
 import uploadS3Object from './uploadS3Object'
+import createPresignedPut from './createPresignedPut'
+import createPresignedPost from './createPresignedPost'
 
 export {
   createS3Bucket,
@@ -15,5 +17,7 @@ export {
   listObjects,
   putS3PublicAccessBlock,
   putS3BucketCors,
-  uploadS3Object
+  uploadS3Object,
+  createPresignedPut,
+  createPresignedPost
 }

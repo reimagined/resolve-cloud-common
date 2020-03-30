@@ -8,7 +8,7 @@ interface TMethod {
       Region: string
       BucketName: string
       Key: string
-      /* in seconds */ Expires?: number
+      Expires?: number /* in seconds */
       MaxSize?: number
       ContentType?: string
       Metadata?: { [key: string]: string }
