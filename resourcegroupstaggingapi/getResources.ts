@@ -1,4 +1,6 @@
-import ResourceGroupsTaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
+import ResourceGroupsTaggingAPI, {
+  GetResourcesOutput
+} from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -10,7 +12,7 @@ interface TMethod {
       ResourceTypeFilters: Array<string>
     },
     log?: Log
-  ): Promise<any>
+  ): Promise<GetResourcesOutput>
 }
 
 const getResources: TMethod = async (
