@@ -22,13 +22,7 @@ interface TMethod {
 const listObjects: TMethod = ({ Region, BucketName, Prefix = '', Delimiter = '' }) => {
   const s3 = new S3({ region: Region })
 
-  const listAll = async (
-    acc: TResult = {
-      Contents: [],
-      CommonPrefixes: []
-    },
-    token?: string
-  ) => {
+  const listAll = async (acc: TResult, token?: string): Promise<TResult> => {
     const { IsTruncated, NextContinuationToken, Contents, CommonPrefixes } = await s3
       .listObjectsV2({
         Bucket: BucketName,
@@ -53,7 +47,10 @@ const listObjects: TMethod = ({ Region, BucketName, Prefix = '', Delimiter = '' 
     return acc
   }
 
-  return listAll()
+  return listAll({
+    Contents: [],
+    CommonPrefixes: []
+  })
 }
 
 export default listObjects
