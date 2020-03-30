@@ -9,7 +9,7 @@ interface TMethod {
       BucketName: string
       Key: string
       Expires?: number /* in seconds */
-      MaxSize?: number
+      ContentLength?: number
       ContentType?: string
       Metadata?: { [key: string]: string }
     },
@@ -18,7 +18,7 @@ interface TMethod {
 }
 
 const createPresignedPut: TMethod = async (
-  { Region, BucketName, Key, Expires, Metadata, ContentType },
+  { Region, BucketName, Key, Expires, Metadata, ContentType, ContentLength },
   log = getLog(`CREATE-PRESIGNED-PUT`)
 ) => {
   const s3 = new S3({
@@ -34,7 +34,8 @@ const createPresignedPut: TMethod = async (
       Key,
       Expires,
       Metadata,
-      ContentType
+      ContentType,
+      ContentLength
     })
   } catch (error) {
     log.error('Signed url creating is failed')
