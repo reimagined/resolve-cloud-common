@@ -22,8 +22,8 @@ const listDirectory: TMethod = async ({ Region, BucketName, Prefix, Delimiter })
   })
 
   return CommonPrefixes.reduce(
-    (acc, { Prefix: prefix }) => (prefix != null ? acc.concat(prefix) : acc),
-    [] as Array<string>
+    (acc: Array<string>, { Prefix: prefix }) => (prefix != null ? acc.concat(prefix) : acc),
+    []
   )
 }
 
