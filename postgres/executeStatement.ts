@@ -2,47 +2,46 @@ import RDSDataService from 'aws-sdk/clients/rdsdataservice'
 
 import { getLog, retry, Options, Log } from '../utils'
 
-const coercer = ({
-  intValue,
-  stringValue,
-  bigIntValue,
-  longValue,
-  booleanValue,
-  isNull,
-  ...rest
-}: any): number | string | boolean | null => {
-  if (intValue != null) {
-    return Number(intValue)
+function coercer(field: {
+  intValue?: number
+  stringValue?: string
+  bigIntValue?: number
+  longValue?: number
+  doubleValue?: number
+  booleanValue?: boolean
+  isNull?: boolean
+  [key: string]: any
+}): number | string | boolean | null {
+  if (field.intValue != null) {
+    return Number(field.intValue)
   }
-  if (bigIntValue != null) {
-    return Number(bigIntValue)
+  if (field.bigIntValue != null) {
+    return Number(field.bigIntValue)
   }
-  if (longValue != null) {
-    return Number(longValue)
+  if (field.longValue != null) {
+    return Number(field.longValue)
   }
-  if (stringValue != null) {
-    return String(stringValue)
+  if (field.doubleValue != null) {
+    return Number(field.doubleValue)
   }
-  if (booleanValue != null) {
-    return Boolean(booleanValue)
+  if (field.stringValue != null) {
+    return String(field.stringValue)
   }
-  if (isNull != null) {
+  if (field.booleanValue != null) {
+    return Boolean(field.booleanValue)
+  }
+  if (field.isNull != null) {
     return null
   }
-  throw new Error(`Unknown type ${JSON.stringify(rest)}`)
+  throw new Error(`Unknown type ${JSON.stringify(field)}`)
 }
 
-interface TMethod {
-  (
-    params: { Region: string; ResourceArn: string; SecretArn: string; Sql: string },
-    log?: Log
-  ): Promise<Array<{ [key: string]: any }>>
-}
+async function executeStatement<T extends object>(
+  params: { Region: string; ResourceArn: string; SecretArn: string; Sql: string },
+  log: Log = getLog('EXECUTE_STATEMENT')
+): Promise<Array<T>> {
+  const { Region, ResourceArn, SecretArn, Sql } = params
 
-const executeStatement: TMethod = async (
-  { Region, ResourceArn, SecretArn, Sql },
-  log = getLog('EXECUTE_STATEMENT')
-) => {
   const rdsDataService = new RDSDataService({
     region: Region
   })
@@ -68,9 +67,9 @@ const executeStatement: TMethod = async (
     return []
   }
 
-  const rows: Array<{ [key: string]: any }> = []
+  const rows: Array<T> = []
   for (const record of records) {
-    const row: { [key: string]: any } = {}
+    const row = {} as T
     for (let i = 0; i < columnMetadata.length; i++) {
       const meta = columnMetadata[i]
       if (meta.name != null) {
