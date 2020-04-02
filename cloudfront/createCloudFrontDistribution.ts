@@ -1,10 +1,6 @@
-import CloudFront from 'aws-sdk/clients/cloudfront'
+import CloudFront, { Distribution as CloudFrontDistribution } from 'aws-sdk/clients/cloudfront'
 
-import { retry, Options, getLog, Log } from '../utils'
-
-interface TResponse {
-  DomainName: string
-}
+import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
 interface TMethod {
   (
@@ -14,7 +10,7 @@ interface TMethod {
       Tags: object
     },
     log?: Log
-  ): Promise<TResponse>
+  ): Promise<CloudFrontDistribution>
 }
 
 const createCloudFrontDistribution: TMethod = async (
@@ -43,14 +39,10 @@ const createCloudFrontDistribution: TMethod = async (
     })
 
     if (Distribution == null) {
-      throw new Error('Unknown resource distribution')
+      throw new NotFoundError('Unknown resource distribution', 'NoSuchDistribution')
     }
 
-    const { DomainName } = Distribution
-
-    return {
-      DomainName
-    }
+    return Distribution
   } catch (error) {
     log.error(`Failed to create cloud front distribution`)
     throw error

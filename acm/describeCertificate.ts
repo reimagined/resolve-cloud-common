@@ -1,6 +1,6 @@
-import ACM from 'aws-sdk/clients/acm'
+import ACM, { CertificateDetail } from 'aws-sdk/clients/acm'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
 interface TMethod {
   (
@@ -9,7 +9,7 @@ interface TMethod {
       CertificateArn: string
     },
     log?: Log
-  ): Promise<any>
+  ): Promise<CertificateDetail>
 }
 
 const describeCertificate: TMethod = async (
@@ -27,15 +27,15 @@ const describeCertificate: TMethod = async (
       Options.Defaults.override({ log })
     )
 
-    const describeResult = await describeCertificateExecutor({ CertificateArn })
+    const { Certificate } = await describeCertificateExecutor({ CertificateArn })
 
-    if (describeResult == null) {
-      throw new Error('Describe certificate not found')
+    if (Certificate == null) {
+      throw new NotFoundError('Certificate was not found', 'ResourceNotFoundException')
     }
 
     log.debug(`Describe certificate have been got`)
 
-    return describeResult
+    return Certificate
   } catch (error) {
     log.debug(`Failed to get describe certificate`)
 

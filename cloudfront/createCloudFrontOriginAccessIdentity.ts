@@ -1,11 +1,8 @@
-import CloudFront from 'aws-sdk/clients/cloudfront'
+import CloudFront, {
+  CloudFrontOriginAccessIdentity as AccessIdentity
+} from 'aws-sdk/clients/cloudfront'
 
-import { retry, Options, Log, getLog } from '../utils'
-
-interface TResponse {
-  Id: string
-  S3CanonicalUserId: string
-}
+import { retry, Options, Log, getLog, NotFoundError } from '../utils'
 
 interface TMethod {
   (
@@ -14,7 +11,7 @@ interface TMethod {
       Comment: string
     },
     log?: Log
-  ): Promise<TResponse>
+  ): Promise<AccessIdentity>
 }
 
 const createCloudFrontOriginAccessIdentity: TMethod = async (
@@ -40,17 +37,15 @@ const createCloudFrontOriginAccessIdentity: TMethod = async (
     })
 
     if (CloudFrontOriginAccessIdentity == null) {
-      throw new Error('CloudFrontOriginAccessIdentity not found')
+      throw new NotFoundError(
+        'CloudFrontOriginAccessIdentity was not found',
+        'NoSuchCloudFrontOriginAccessIdentity'
+      )
     }
 
     log.debug('Cloud front origin access identity created')
 
-    const { Id, S3CanonicalUserId } = CloudFrontOriginAccessIdentity
-
-    return {
-      Id,
-      S3CanonicalUserId
-    }
+    return CloudFrontOriginAccessIdentity
   } catch (error) {
     log.error('Cloud front origin access identity creation failed')
     throw error
