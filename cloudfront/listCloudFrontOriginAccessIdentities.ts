@@ -1,4 +1,4 @@
-import CloudFront, { CloudFrontOriginAccessIdentityList } from 'aws-sdk/clients/cloudfront'
+import CloudFront, { ListCloudFrontOriginAccessIdentitiesResult } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -10,7 +10,7 @@ interface TMethod {
       MaxItems?: string
     },
     log?: Log
-  ): Promise<{ CloudFrontOriginAccessIdentityList?: CloudFrontOriginAccessIdentityList }>
+  ): Promise<ListCloudFrontOriginAccessIdentitiesResult>
 }
 
 const listCloudFrontOriginAccessIdentities: TMethod = async (

@@ -1,6 +1,6 @@
 import ACM from 'aws-sdk/clients/acm'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
 interface TMethod {
   (
@@ -12,7 +12,7 @@ interface TMethod {
       CertificateChain?: string
     },
     log?: Log
-  ): Promise<any>
+  ): Promise<string>
 }
 
 const importCertificate: TMethod = async (
@@ -30,16 +30,20 @@ const importCertificate: TMethod = async (
       Options.Defaults.override({ log })
     )
 
-    const importResult = await importCertificateExecutor({
+    const { CertificateArn: ImportedCertificateArn } = await importCertificateExecutor({
       Certificate,
       PrivateKey,
       CertificateArn,
       CertificateChain
     })
 
+    if (ImportedCertificateArn == null) {
+      throw new NotFoundError('Imported certificate was not found', 'ResourceNotFoundException')
+    }
+
     log.debug(`Certificate import successful`)
 
-    return importResult
+    return ImportedCertificateArn
   } catch (error) {
     log.debug(`Failed to import certificate`)
 
