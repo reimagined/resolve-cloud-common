@@ -141,10 +141,11 @@ async function createStepFunction(
     Definition: object
     Name: string
     RoleArn: string
+    Type: string
   },
   log: Log
 ): Promise<string> {
-  const { Region, Tags, Definition, Name, RoleArn } = params
+  const { Region, Tags, Definition, Name, RoleArn, Type } = params
 
   const sf = new StepFunctions({ region: Region })
 
@@ -153,7 +154,8 @@ async function createStepFunction(
     name: Name,
     roleArn: RoleArn,
     definition: JSON.stringify(Definition),
-    tags: Tags
+    tags: Tags,
+    type: Type
   })
 
   return stateMachineArn
@@ -238,13 +240,14 @@ interface TMethod {
       Definition: object
       Name: string
       RoleArn: string
+      Type?: string
     },
     log?: Log
   ): Promise<string>
 }
 
 const ensureStepFunction: TMethod = async (
-  { Region, Tags: { ...RawTags } = {}, Definition, Name, RoleArn },
+  { Region, Tags: { ...RawTags } = {}, Definition, Name, RoleArn, Type = 'STANDARD' },
   log = getLog('ENSURE-STEP-FUNCTION')
 ) => {
   delete RawTags.Owner
@@ -381,7 +384,8 @@ const ensureStepFunction: TMethod = async (
           Tags,
           Definition,
           Name,
-          RoleArn
+          RoleArn,
+          Type
         },
         log
       )
