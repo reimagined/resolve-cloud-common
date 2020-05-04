@@ -40,7 +40,7 @@ const invokeFunction: TMethod = async (
     }
 
     const result =
-      InvocationType === ('RequestResponse' || InvocationType == null) && ResponsePayload != null
+      (InvocationType === 'RequestResponse' || InvocationType == null) && ResponsePayload != null
         ? JSON.parse(ResponsePayload.toString())
         : null
 
