@@ -1,5 +1,6 @@
 import RDSDataService from 'aws-sdk/clients/rdsdataservice'
 import { getLog, Log, Options, retry } from '../utils'
+import { highloadExecute } from './highloadExecute'
 
 async function beginTransaction(
   params: {
@@ -20,7 +21,7 @@ async function beginTransaction(
   try {
     const execute = retry(
       rdsDataService,
-      rdsDataService.beginTransaction,
+      highloadExecute(rdsDataService.beginTransaction),
       Options.Defaults.override({ log, maxAttempts: 1 })
     )
     const result = await execute({
