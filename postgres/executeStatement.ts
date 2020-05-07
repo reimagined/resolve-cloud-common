@@ -1,6 +1,6 @@
 import RDSDataService from 'aws-sdk/clients/rdsdataservice'
-
 import { getLog, retry, Options, Log } from '../utils'
+import { highloadExecute } from './highloadExecute'
 
 function coercer(field: {
   intValue?: number
@@ -49,7 +49,7 @@ async function executeStatement<T extends object>(
 
   const execute = retry(
     rdsDataService,
-    rdsDataService.executeStatement,
+    highloadExecute(rdsDataService.executeStatement),
     Options.Defaults.override({ log, maxAttempts: 1 })
   )
   const result = await execute({
