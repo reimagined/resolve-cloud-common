@@ -1,5 +1,4 @@
 import debug from 'debug'
-import util from 'util'
 import chalk, { Chalk } from 'chalk'
 
 import { EnvVar } from './env'
@@ -45,7 +44,7 @@ const createLogger = (namespace, getCorrelationId): any => {
       leveledLogger[levelName] = (...args): any => {
         originalLogger(
           `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map(arg =>
-            Object(arg) === arg ? util.inspect(arg) : arg
+            Object(arg) === arg ? JSON.stringify(arg) : arg
           )}`
         )
       }

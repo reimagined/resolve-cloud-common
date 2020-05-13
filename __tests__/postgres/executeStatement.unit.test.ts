@@ -6,7 +6,7 @@ import executeStatement from '../../postgres/executeStatement'
 jest.mock('../../utils')
 
 jest.mock('../../postgres/highloadExecute', () => ({
-  highloadExecute: f => f
+  highloadExecute: (f: any): any => f
 }))
 
 const mockExecuteStatement = mockedSdkFunction(RDSDataService.prototype.executeStatement)

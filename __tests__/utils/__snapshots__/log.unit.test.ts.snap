@@ -7,73 +7,73 @@ exports[`log should write to scope "resolve:*" (log,error,warn,debug,info,verbos
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;
 
@@ -82,13 +82,13 @@ exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (l
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;
 
@@ -97,31 +97,31 @@ exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (l
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;
 
@@ -132,73 +132,73 @@ exports[`log with correlationId should write to scope "resolve:*" (log,error,war
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;
 
@@ -207,13 +207,13 @@ exports[`log with correlationId should write to scope "resolve:cloud:lambda:envi
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;
 
@@ -222,30 +222,30 @@ exports[`log with correlationId should write to scope "resolve:cloud:lambda:envi
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
 
 1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> { a: { b: { c: [Object] } } }
+1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 "
 `;

@@ -1,9 +1,19 @@
-function highloadExecute(method: Function) {
-  return function(params: object) {
+function highloadExecute(
+  method: Function
+): (
+  params: object
+) => {
+  promise(): Promise<any>
+} {
+  return function wrapper(
+    params: object
+  ): {
+    promise(): Promise<any>
+  } {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const target = this
     return {
-      async promise() {
+      async promise(): Promise<any> {
         try {
           return await method.call(target, params).promise()
         } catch (error) {
