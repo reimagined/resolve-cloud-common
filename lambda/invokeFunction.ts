@@ -1,23 +1,19 @@
+import { EOL } from 'os'
 import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      Payload: object
-      InvocationType?: 'Event' | 'RequestResponse' | 'DryRun'
-    },
-    log?: Log
-  ): Promise<object | null>
-}
+async function invokeFunction<Response extends object | null>(
+  params: {
+    Region: string
+    FunctionName: string
+    Payload: object
+    InvocationType?: 'Event' | 'RequestResponse' | 'DryRun'
+  },
+  log: Log = getLog('INVOKE-FUNCTION')
+): Promise<Response> {
+  const { Payload, FunctionName, Region, InvocationType } = params
 
-const invokeFunction: TMethod = async (
-  { Region, FunctionName, Payload, InvocationType },
-  log = getLog('INVOKE-FUNCTION')
-) => {
   const lambda = new Lambda({ region: Region })
 
   log.debug(`Invoke lambda ${JSON.stringify(FunctionName)}`)
@@ -32,14 +28,18 @@ const invokeFunction: TMethod = async (
     })
 
     if (FunctionError != null && (InvocationType === 'RequestResponse' || InvocationType == null)) {
-      const { errorMessage } =
+      const { errorMessage, trace } =
         ResponsePayload == null
-          ? { errorMessage: 'Unknown error' }
+          ? { errorMessage: 'Unknown error', trace: null }
           : JSON.parse(ResponsePayload.toString())
-      throw new Error(errorMessage)
+      const error = new Error(errorMessage)
+      error.stack = Array.isArray(trace)
+        ? trace.join(EOL)
+        : `Error: ${errorMessage} at "${FunctionName}"`
+      throw error
     }
 
-    const result =
+    const result: Response =
       (InvocationType === 'RequestResponse' || InvocationType == null) && ResponsePayload != null
         ? JSON.parse(ResponsePayload.toString())
         : null
