@@ -1,6 +1,7 @@
 import Lambda from 'aws-sdk/clients/lambda'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options } from '../utils/retry'
+import { getLog, Log } from '../utils/log'
 
 interface TMethod {
   (
