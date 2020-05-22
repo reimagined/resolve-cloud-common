@@ -348,30 +348,34 @@ const ensureStepFunction: TMethod = async (
     )
     log.debug('Function tags have been deleted')
 
-    for (;;) {
-      log.debug('List running executions')
-      const executionArns = await listRunningExecutions({ Region, StepFunctionArn }, log)
-      log.debug(`Running executions have been listed in amount of ${executionArns.length}`)
+    if (Type !== 'EXPRESS') {
+      for (;;) {
+        log.debug('List running executions')
+        const executionArns = await listRunningExecutions({ Region, StepFunctionArn }, log)
+        log.debug(`Running executions have been listed in amount of ${executionArns.length}`)
 
-      log.verbose(executionArns)
+        log.verbose(executionArns)
 
-      if (executionArns.length === 0) {
-        break
-      }
+        if (executionArns.length === 0) {
+          break
+        }
 
-      log.debug('Stop running executions')
-      await Promise.all(
-        executionArns.map(executionArn =>
-          stopExecution(
-            {
-              Region,
-              ExecutionArn: executionArn
-            },
-            log
+        log.debug('Stop running executions')
+        await Promise.all(
+          executionArns.map(executionArn =>
+            stopExecution(
+              {
+                Region,
+                ExecutionArn: executionArn
+              },
+              log
+            )
           )
         )
-      )
-      log.debug('Running executions have been stopped')
+        log.debug('Running executions have been stopped')
+      }
+    } else {
+      log.debug('Skip stopping of running executions for EXPRESS type')
     }
 
     return StepFunctionArn
