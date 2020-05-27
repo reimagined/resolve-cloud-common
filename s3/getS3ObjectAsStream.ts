@@ -3,56 +3,40 @@ import { Readable } from 'stream'
 
 import { getLog, Log } from '../utils'
 
-// TODO @deprecated
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Bucket: string
-      Key: string
-    },
-    log?: Log
-  ): Readable
-}
+async function getS3ObjectAsStream(
+  params: {
+    Region: string
+    BucketName: string
+    FileKey: string
+    Skip?: number
+    Limit?: number
+  },
+  log: Log = getLog('GET-S3-OBJECT-AS-STREAM')
+): Promise<Readable> {
+  const { Region, BucketName, FileKey, Skip = null, Limit = null } = params
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      BucketName: string
-      Key: string
-    },
-    log?: Log
-  ): Readable
-}
-
-const getS3ObjectAsStream: TMethod = (
-  { Region, Bucket, BucketName: OriginalBucketName, Key },
-  log = getLog('GET-S3-OBJECT-AS-STREAM')
-) => {
-  if (Bucket != null) {
-    log.warn('The parameter "Bucket" is deprecated')
+  let Range: string | undefined
+  if ((Skip == null) !== (Limit == null)) {
+    throw new Error(`Incorrect params ${JSON.stringify({ Skip, Limit })}`)
   }
-  if (OriginalBucketName == null) {
-    log.warn('The parameter "BucketName" is required')
+  if (Skip != null && Limit != null) {
+    Range = `bytes=${Skip}-${Skip + Limit}`
   }
 
-  const BucketName = OriginalBucketName || Bucket
+  log.debug(`Get the S3 object "${FileKey}" from "${BucketName}"`)
 
   const s3 = new S3({ region: Region })
 
   try {
-    log.debug(`Get the S3 object "${Key}" from "${BucketName}"`)
-
     return s3
       .getObject({
         Bucket: BucketName,
-        Key,
-        RequestPayer: 'requester'
+        Key: FileKey,
+        Range
       })
       .createReadStream()
   } catch (error) {
-    log.debug(`Failed to get the S3 object "${Key}" from "${BucketName}"`)
+    log.debug(`Failed to get the S3 object "${FileKey}" from "${BucketName}"`)
     throw error
   }
 }
