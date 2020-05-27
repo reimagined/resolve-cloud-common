@@ -25,7 +25,7 @@ describe('uploadS3Object', () => {
     await uploadS3Object({
       Region: 'region',
       BucketName: 'bucket',
-      Key: 'key',
+      FileKey: 'key',
       Body: body,
       ContentType: 'content-type'
     })
@@ -53,7 +53,7 @@ describe('uploadS3Object', () => {
       await uploadS3Object({
         Region: 'region',
         BucketName: 'bucket',
-        Key: 'key',
+        FileKey: 'key',
         Body: body,
         ContentType: 'content-type'
       })
