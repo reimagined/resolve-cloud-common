@@ -3,7 +3,7 @@ import { Readable } from 'stream'
 
 import { getLog, Log } from '../utils'
 
-async function getS3ObjectAsStream(
+function getS3ObjectAsStream(
   params: {
     Region: string
     BucketName: string
@@ -12,7 +12,7 @@ async function getS3ObjectAsStream(
     Limit?: number
   },
   log: Log = getLog('GET-S3-OBJECT-AS-STREAM')
-): Promise<Readable> {
+): Readable {
   const { Region, BucketName, FileKey, Skip = null, Limit = null } = params
 
   let Range: string | undefined
