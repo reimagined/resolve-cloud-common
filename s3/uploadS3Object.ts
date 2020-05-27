@@ -3,45 +3,17 @@ import { Writable } from 'stream'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-// TODO @deprecated
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Bucket: string
-      Key: string
-      Body: Writable
-      ContentType?: string
-    },
-    log?: Log
-  ): Promise<void>
-}
-
-interface TMethod {
-  (
-    params: {
-      Region: string
-      BucketName: string
-      Key: string
-      Body: Writable
-      ContentType?: string
-    },
-    log?: Log
-  ): Promise<void>
-}
-
-const uploadS3Object: TMethod = async (
-  { Region, Bucket, BucketName: OriginalBucketName, Key, Body, ContentType },
-  log = getLog('UPLOAD-S3-OBJECT')
-) => {
-  if (Bucket != null) {
-    log.warn('The parameter "Bucket" is deprecated')
-  }
-  if (OriginalBucketName == null) {
-    log.warn('The parameter "BucketName" is required')
-  }
-
-  const BucketName = OriginalBucketName || Bucket
+async function uploadS3Object(
+  params: {
+    Region: string
+    BucketName: string
+    Key: string
+    Body: Writable
+    ContentType?: string
+  },
+  log: Log = getLog('UPLOAD-S3-OBJECT')
+): Promise<void> {
+  const { Region, BucketName, Key, Body, ContentType } = params
 
   const s3 = new S3({ region: Region })
 
