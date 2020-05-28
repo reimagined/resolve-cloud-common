@@ -4,6 +4,13 @@ import { retry, Options, getLog, Log } from '../utils'
 
 const DEFAULT_BUCKET_REGION = 'us-east-1'
 
+enum AmazonACL {
+  'PRIVATE' = 'private',
+  'PUBLIC_READ' = 'public-read',
+  'PUBLIC_READ_WRITE' = 'public-read-write',
+  'AUTHENTICATED_READ' = 'authenticated-read'
+}
+
 const checkIfBucketExists = async (
   { Region, BucketName }: { Region: string; BucketName: string },
   log: Log
@@ -11,7 +18,7 @@ const checkIfBucketExists = async (
   const s3 = new S3({ region: Region })
 
   try {
-    log.debug(`Get "${BucketName}" bucket head`)
+    log.debug(`Get the bucket "${BucketName}" head`)
 
     const headBucket = retry(
       s3,
@@ -26,39 +33,44 @@ const checkIfBucketExists = async (
       Bucket: BucketName
     })
 
-    log.debug(`Head got successfully`)
+    log.debug(`The bucket "${BucketName}" has been got`)
     return true
   } catch (error) {
     if (error.code === 'NotFound') {
-      log.debug(`Bucket is not found`)
+      log.debug(`The bucket "${BucketName}" was not found`)
       return false
     }
     throw error
   }
 }
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      BucketName: string
-      ACL: string
-      TagSet: Array<{ Key: string; Value: string }>
-      Policy: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+async function ensureS3Bucket(
+  params: {
+    Region
+    BucketName
+    ACL?: AmazonACL
+    Tags?: { [key: string]: string }
+    Policy?: object
+  },
+  log: Log = getLog('ENSURE-S3-BUCKET')
+): Promise<void> {
+  const { Region, BucketName, ACL, Tags = {}, Policy } = params
 
-const ensureS3Bucket: TMethod = async (
-  { Region, BucketName, ACL, TagSet, Policy },
-  log = getLog('ENSURE-S3-BUCKET')
-) => {
+  const TagSet: Array<{ Key: string; Value: string }> = [
+    ...Array.from(Object.entries(Tags)).map(([Key, Value]) => ({
+      Key,
+      Value
+    })),
+    {
+      Key: 'Owner',
+      Value: 'reimagined'
+    }
+  ]
+
   const s3 = new S3({ region: Region })
 
   try {
-    log.debug(`Ensuring "${BucketName}" S3 bucket`)
-    log.debug(`Check bucket existing by head request`)
+    log.debug(`Ensure the bucket "${BucketName}"`)
 
     const doesBucketExist = await checkIfBucketExists(
       {
@@ -69,11 +81,11 @@ const ensureS3Bucket: TMethod = async (
     )
 
     if (!doesBucketExist) {
-      log.debug(`Bucket not found. Create "${BucketName}" bucket`)
+      log.debug(`Bucket was not found. Create the bucket "${BucketName}"`)
 
-      const params: {
+      const createBucketParams: {
         Bucket: string
-        ACL: string
+        ACL?: AmazonACL
         CreateBucketConfiguration?: {
           LocationConstraint: string
         }
@@ -83,7 +95,7 @@ const ensureS3Bucket: TMethod = async (
       }
 
       if (Region !== DEFAULT_BUCKET_REGION) {
-        params.CreateBucketConfiguration = {
+        createBucketParams.CreateBucketConfiguration = {
           LocationConstraint: Region
         }
       }
@@ -97,9 +109,11 @@ const ensureS3Bucket: TMethod = async (
         })
       )
 
-      await createBucket(params)
+      await createBucket(createBucketParams)
 
-      log.debug(`"${BucketName}" created. Tagging the bucket`)
+      log.debug(`The bucket "${BucketName}" has been created`)
+
+      log.debug(`Setup the bucket "${BucketName}" tags`)
 
       const putBucketTagging = retry(s3, s3.putBucketTagging)
 
@@ -110,22 +124,25 @@ const ensureS3Bucket: TMethod = async (
         }
       })
 
-      log.debug(`The bucket tagged successfully`)
+      log.debug(`The bucket "${BucketName}" tags has been setup`)
     }
 
-    log.debug(`Updating "${BucketName}" bucket policy`)
+    log.debug(`Update the bucket "${BucketName}" policy`)
 
-    const putBucketPolicy = retry(s3, s3.putBucketPolicy)
+    if (Policy == null) {
+      const putBucketPolicy = retry(s3, s3.putBucketPolicy)
 
-    await putBucketPolicy({
-      Bucket: BucketName,
-      Policy
-    })
+      await putBucketPolicy({
+        Bucket: BucketName,
+        Policy: JSON.stringify(Policy)
+      })
 
-    log.debug(`"${BucketName}" bucket policy updated`)
-    log.debug(`"${BucketName}" bucket ensured successfully`)
+      log.debug(`The bucket "${BucketName}" policy has been updated`)
+    }
+
+    log.debug(`The bucket "${BucketName}" has been ensured`)
   } catch (error) {
-    log.error(`"${BucketName}" bucket creation failed`)
+    log.error(`Failed to ensure the bucket "${BucketName}"`)
     throw error
   }
 }

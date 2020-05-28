@@ -2,7 +2,6 @@ import completeMultipartUpload from './completeMultipartUpload'
 import createMultipartUpload from './createMultipartUpload'
 import createPresignedPost from './createPresignedPost'
 import createPresignedPut from './createPresignedPut'
-import createS3Bucket from './createS3Bucket'
 import ensureS3Bucket from './ensureS3Bucket'
 import getFileSize from './getFileSize'
 import getS3ObjectAsStream from './getS3ObjectAsStream'
@@ -18,7 +17,6 @@ export {
   createMultipartUpload,
   createPresignedPost,
   createPresignedPut,
-  createS3Bucket,
   ensureS3Bucket,
   getFileSize,
   getS3ObjectAsStream,
