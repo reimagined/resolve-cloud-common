@@ -4,12 +4,7 @@ import { retry, Options, getLog, Log } from '../utils'
 
 const DEFAULT_BUCKET_REGION = 'us-east-1'
 
-enum AmazonACL {
-  'PRIVATE' = 'private',
-  'PUBLIC_READ' = 'public-read',
-  'PUBLIC_READ_WRITE' = 'public-read-write',
-  'AUTHENTICATED_READ' = 'authenticated-read'
-}
+type AmazonACL = 'private' | 'public-read' | 'public-read-write' | 'authenticated-read'
 
 const checkIfBucketExists = async (
   { Region, BucketName }: { Region: string; BucketName: string },
