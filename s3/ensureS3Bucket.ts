@@ -124,7 +124,7 @@ async function ensureS3Bucket(
 
     log.debug(`Update the bucket "${BucketName}" policy`)
 
-    if (Policy == null) {
+    if (Policy != null) {
       const putBucketPolicy = retry(s3, s3.putBucketPolicy)
 
       await putBucketPolicy({
@@ -132,7 +132,9 @@ async function ensureS3Bucket(
         Policy: JSON.stringify(Policy)
       })
 
-      log.debug(`The bucket "${BucketName}" policy has been updated`)
+      log.debug(`The "${BucketName}" bucket policy has been updated`)
+    } else {
+      log.debug(`No "${BucketName}" bucket policy specified`)
     }
 
     log.debug(`The bucket "${BucketName}" has been ensured`)
