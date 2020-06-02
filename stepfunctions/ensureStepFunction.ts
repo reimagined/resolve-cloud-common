@@ -58,10 +58,11 @@ async function updateStepFunction(
     StepFunctionArn: string
     Definition: object
     RoleArn: string
+    LoggingConfiguration?: object
   },
   log: Log
 ): Promise<void> {
-  const { Region, StepFunctionArn, Definition, RoleArn } = params
+  const { Region, StepFunctionArn, Definition, RoleArn, LoggingConfiguration } = params
 
   const sf = new StepFunctions({ region: Region })
 
@@ -69,7 +70,8 @@ async function updateStepFunction(
   await putStateMachine({
     stateMachineArn: StepFunctionArn,
     definition: JSON.stringify(Definition),
-    roleArn: RoleArn
+    roleArn: RoleArn,
+    loggingConfiguration: LoggingConfiguration
   })
 }
 
@@ -142,10 +144,11 @@ async function createStepFunction(
     Name: string
     RoleArn: string
     Type: string
+    LoggingConfiguration?: object
   },
   log: Log
 ): Promise<string> {
-  const { Region, Tags, Definition, Name, RoleArn, Type } = params
+  const { Region, Tags, Definition, Name, RoleArn, Type, LoggingConfiguration } = params
 
   const sf = new StepFunctions({ region: Region })
 
@@ -155,7 +158,8 @@ async function createStepFunction(
     roleArn: RoleArn,
     definition: JSON.stringify(Definition),
     tags: Tags,
-    type: Type
+    type: Type,
+    loggingConfiguration: LoggingConfiguration
   })
 
   return stateMachineArn
@@ -241,13 +245,22 @@ interface TMethod {
       Name: string
       RoleArn: string
       Type?: string
+      LoggingConfiguration?: object
     },
     log?: Log
   ): Promise<string>
 }
 
 const ensureStepFunction: TMethod = async (
-  { Region, Tags: { ...RawTags } = {}, Definition, Name, RoleArn, Type = 'STANDARD' },
+  {
+    Region,
+    Tags: { ...RawTags } = {},
+    Definition,
+    Name,
+    RoleArn,
+    Type = 'STANDARD',
+    LoggingConfiguration
+  },
   log = getLog('ENSURE-STEP-FUNCTION')
 ) => {
   delete RawTags.Owner
@@ -288,7 +301,8 @@ const ensureStepFunction: TMethod = async (
         Region,
         StepFunctionArn,
         Definition,
-        RoleArn
+        RoleArn,
+        LoggingConfiguration
       },
       log
     )
@@ -389,7 +403,8 @@ const ensureStepFunction: TMethod = async (
           Definition,
           Name,
           RoleArn,
-          Type
+          Type,
+          LoggingConfiguration
         },
         log
       )
