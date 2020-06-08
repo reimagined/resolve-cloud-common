@@ -16,7 +16,7 @@ interface TMethod {
 
 const ensureDBCluster: TMethod = async (
   { Region, DBClusterIdentifier, MinCapacity = 2, MaxCapacity = 2 },
-  log = getLog('CREATE-DATABASE-CLUSTER')
+  log = getLog('ENSURE-DATABASE-CLUSTER')
 ) => {
   const rds = new RDS({ region: Region })
 
