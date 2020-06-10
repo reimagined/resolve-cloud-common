@@ -105,9 +105,6 @@ describe('ensureFunction', () => {
         S3Key: 's3Key'
       },
       Description: 'description',
-      Environment: {
-        Variables: {}
-      },
       FunctionName: 'functionName',
       Handler: 'handler',
       Role: 'roleArn',

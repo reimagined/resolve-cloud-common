@@ -54,7 +54,7 @@ async function createFunction(
     RoleArn: string
     S3Bucket: string
     S3Key: string
-    Environment: object
+    Environment?: object
     Tags: { [key: string]: string }
     Runtime: string
     Timeout: number
@@ -215,7 +215,7 @@ const ensureFunction: TMethod = async (
     S3Bucket,
     S3Key,
     Layers,
-    Variables = {},
+    Variables,
     Tags: RawTags = {},
     Runtime = LambdaDefaults.RUNTIME,
     Timeout = LambdaDefaults.TIMEOUT,
@@ -232,7 +232,7 @@ const ensureFunction: TMethod = async (
           return acc
         }, {})
       }
-    : {}
+    : undefined
 
   log.verbose({
     FunctionName,
