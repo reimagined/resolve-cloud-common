@@ -28,11 +28,12 @@ async function invokeFunction<Response extends object | null>(
     })
 
     if (FunctionError != null && (InvocationType === 'RequestResponse' || InvocationType == null)) {
-      const { errorMessage, trace } =
+      const { errorMessage, trace, errorType } =
         ResponsePayload == null
-          ? { errorMessage: 'Unknown error', trace: null }
+          ? { errorMessage: 'Unknown error', trace: null, errorType: 'Error' }
           : JSON.parse(ResponsePayload.toString())
       const error = new Error(errorMessage)
+      error.name = errorType
       error.stack = Array.isArray(trace)
         ? trace.join(EOL)
         : `Error: ${errorMessage} at "${FunctionName}"`
