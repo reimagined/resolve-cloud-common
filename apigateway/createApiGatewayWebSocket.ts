@@ -66,7 +66,6 @@ const createApiGatewayWebSocket: TMethod = async (
     log.debug(`Create route "$disconnect"`)
     await createRouteExecutor({
       ApiId,
-      ApiKeyRequired: true,
       RouteKey: '$disconnect',
       Target: `integrations/${connectIntegrationId}`
     })
@@ -74,7 +73,6 @@ const createApiGatewayWebSocket: TMethod = async (
     log.debug(`Create route "$default"`)
     await createRouteExecutor({
       ApiId,
-      ApiKeyRequired: true,
       RouteKey: '$default',
       Target: `integrations/${connectIntegrationId}`
     })
