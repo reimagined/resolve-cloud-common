@@ -5,6 +5,7 @@ import createApiGatewayResource from './createApiGatewayResource'
 import deleteApiGatewayResource from './deleteApiGatewayResource'
 import getApiGatewayResource from './getApiGatewayResource'
 import getApiGatewayRootResource from './getApiGatewayRootResource'
+import createApiGatewayWebSocket from './createApiGatewayWebSocket'
 
 export {
   createApiGatewayDeployment,
@@ -13,5 +14,6 @@ export {
   createApiGatewayResource,
   deleteApiGatewayResource,
   getApiGatewayResource,
-  getApiGatewayRootResource
+  getApiGatewayRootResource,
+  createApiGatewayWebSocket
 }
