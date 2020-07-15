@@ -1,4 +1,4 @@
-import APIGateway from 'aws-sdk/clients/apigateway'
+import ApiGateway from 'aws-sdk/clients/apigateway'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -18,7 +18,7 @@ const createApiGatewayDeployment: TMethod = async (
   { Region, RestApiId, Stage, Description },
   log = getLog(`CREATE-API-GATEWAY-DEPLOYMENT`)
 ) => {
-  const gw = new APIGateway({ region: Region })
+  const gw = new ApiGateway({ region: Region })
 
   try {
     log.debug(`Create a api gateway "${RestApiId}" deployment on the stage "${Stage}"`)

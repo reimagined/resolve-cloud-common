@@ -1,4 +1,4 @@
-import Apigatewayv2 from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -15,11 +15,14 @@ interface TMethod {
   ): Promise<{ ApiId: string; ApiEndpoint: string; ApiKeySelectionExpression: string }>
 }
 
-const createApiGatewayWebSocket: TMethod = async (
+const buildIntegrationUri = (region: string, lambdaArn: string): string =>
+  `arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`
+
+const createWebSocketApi: TMethod = async (
   { Region, Name, RouteSelectionExpression, Stage, LambdaArn },
   log = getLog(`CREATE-WEBSOCKET-API`)
 ) => {
-  const agv2 = new Apigatewayv2({ region: Region })
+  const agv2 = new ApiGatewayV2({ region: Region })
 
   try {
     log.debug(`Create a websocket api "${Name}"`)
@@ -48,10 +51,11 @@ const createApiGatewayWebSocket: TMethod = async (
       agv2.createIntegration,
       Options.Defaults.override({ log })
     )
+
     const { IntegrationId: connectIntegrationId } = await createIntegrationExecutor({
       ApiId,
       IntegrationType: 'AWS',
-      IntegrationUri: LambdaArn
+      IntegrationUri: buildIntegrationUri(Region, LambdaArn)
     })
 
     log.debug(`Create route "$connect"`)
@@ -97,4 +101,4 @@ const createApiGatewayWebSocket: TMethod = async (
   }
 }
 
-export default createApiGatewayWebSocket
+export default createWebSocketApi
