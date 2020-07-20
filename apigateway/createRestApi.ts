@@ -12,13 +12,14 @@ interface TMethod {
   ): Promise<{ Id?: string; Name: string }>
 }
 
-const createRestApi: TMethod = async (
-  { Region, Name },
-  log = getLog(`CREATE-REST-API`)
-) => {
+const createRestApi: TMethod = async ({ Region, Name }, log = getLog(`CREATE-REST-API`)) => {
   const gateway = new ApiGateway({ region: Region })
 
-  const createApiExecutor = retry(gateway, gateway.createRestApi, Options.Defaults.override({ log }))
+  const createApiExecutor = retry(
+    gateway,
+    gateway.createRestApi,
+    Options.Defaults.override({ log })
+  )
 
   try {
     log.debug(`Create the "${Name}" Rest API`)

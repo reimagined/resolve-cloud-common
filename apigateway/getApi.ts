@@ -1,7 +1,6 @@
 import ApiGatewayV2, { Api, ProtocolType } from 'aws-sdk/clients/apigatewayv2'
 
-import { Log, Options, retry } from '../utils'
-import { getLog } from '../utils'
+import { Log, Options, retry, getLog } from '../utils'
 
 interface TMethod {
   (
@@ -14,7 +13,10 @@ interface TMethod {
   ): Promise<Api | null>
 }
 
-const getApi: TMethod = async ({ Region, Name, ProtocolType: Protocol }, log = getLog('GET_API')) => {
+const getApi: TMethod = async (
+  { Region, Name, ProtocolType: Protocol },
+  log = getLog('GET_API')
+) => {
   let nextToken
   let items
 
@@ -28,7 +30,9 @@ const getApi: TMethod = async ({ Region, Name, ProtocolType: Protocol }, log = g
       NextToken: nextToken
     }))
 
-    const api = items?.find(item => (Protocol == null || item.Protocol === Protocol) && item.Name === Name)
+    const api = items?.find(
+      item => (Protocol == null || item.Protocol === Protocol) && item.Name === Name
+    )
 
     if (api) {
       return api

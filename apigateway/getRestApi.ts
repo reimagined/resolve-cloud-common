@@ -1,7 +1,6 @@
 import ApiGateway, { RestApi } from 'aws-sdk/clients/apigateway'
 
-import { Log, Options, retry } from '../utils'
-import { getLog } from '../utils'
+import { Log, Options, retry, getLog } from '../utils'
 
 interface TMethod {
   (
