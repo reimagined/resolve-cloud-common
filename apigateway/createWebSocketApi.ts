@@ -62,7 +62,7 @@ const createWebSocketApi: TMethod = async (
     const createRouteExecutor = retry(agv2, agv2.createRoute, Options.Defaults.override({ log }))
     await createRouteExecutor({
       ApiId,
-      ApiKeyRequired: true,
+      ApiKeyRequired: false,
       RouteKey: '$connect',
       Target: `integrations/${connectIntegrationId}`
     })
