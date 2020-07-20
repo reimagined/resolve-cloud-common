@@ -1,6 +1,6 @@
 // const { items: resourceItems } = await gateway.getResources({ restApiId }).promise()
 
-import APIGateway, { Resource } from 'aws-sdk/clients/apigateway'
+import ApiGateway, { Resource } from 'aws-sdk/clients/apigateway'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -19,7 +19,7 @@ const getApiGatewayResource: TMethod = async (
   { Region, RestApiId, PathPart },
   log = getLog(`GET-API-GATEWAY-RESOURCE`)
 ) => {
-  const gw = new APIGateway({ region: Region })
+  const gw = new ApiGateway({ region: Region })
 
   try {
     log.debug(`Find a api gateway resource`)
