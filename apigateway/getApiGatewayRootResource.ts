@@ -1,4 +1,4 @@
-import APIGateway, { Resource } from 'aws-sdk/clients/apigateway'
+import ApiGateway, { Resource } from 'aws-sdk/clients/apigateway'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -16,7 +16,7 @@ const getApiGatewayRootResource: TMethod = async (
   { Region, RestApiId },
   log = getLog(`GET-API-GATEWAY-ROOT-RESOURCE`)
 ) => {
-  const gw = new APIGateway({ region: Region })
+  const gw = new ApiGateway({ region: Region })
 
   try {
     log.debug(`Find a root api gateway resource`)

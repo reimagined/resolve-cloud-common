@@ -1,4 +1,4 @@
-import APIGateway from 'aws-sdk/clients/apigateway'
+import ApiGateway from 'aws-sdk/clients/apigateway'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -17,7 +17,7 @@ const deleteApiGatewayResource: TMethod = async (
   { Region, RestApiId, ResourceId },
   log = getLog(`DELETE-API-GATEWAY-RESOURCE`)
 ) => {
-  const gw = new APIGateway({ region: Region })
+  const gw = new ApiGateway({ region: Region })
 
   try {
     log.debug(`Delete the rest api "${RestApiId}" resource "${ResourceId}"`)
