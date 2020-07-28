@@ -5,7 +5,7 @@ import { retry, Options, getLog, Log } from '../utils'
 interface TMethod {
   (
     params: {
-      Region: string
+      Endpoint: string
       ConnectionId: string
     },
     log?: Log
@@ -13,10 +13,10 @@ interface TMethod {
 }
 
 const deleteConnection: TMethod = async (
-  { Region, ConnectionId },
+  { Endpoint, ConnectionId },
   log = getLog(`POST-TO-CONNECTION`)
 ) => {
-  const managementApi = new Apigatewaymanagementapi({ region: Region })
+  const managementApi = new Apigatewaymanagementapi({ endpoint: Endpoint })
 
   try {
     log.debug(`Delete connection "${ConnectionId}"`)
