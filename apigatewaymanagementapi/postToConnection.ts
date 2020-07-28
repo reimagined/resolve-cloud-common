@@ -5,7 +5,7 @@ import { retry, Options, getLog, Log } from '../utils'
 interface TMethod {
   (
     params: {
-      Region: string
+      Endpoint: string
       ConnectionId: string
       Data: string
     },
@@ -14,10 +14,10 @@ interface TMethod {
 }
 
 const postToConnection: TMethod = async (
-  { Region, ConnectionId, Data },
+  { Endpoint, ConnectionId, Data },
   log = getLog(`POST-TO-CONNECTION`)
 ) => {
-  const managementApi = new Apigatewaymanagementapi({ region: Region })
+  const managementApi = new Apigatewaymanagementapi({ endpoint: Endpoint })
 
   try {
     log.debug(`Post data to connection "${ConnectionId}"`)
