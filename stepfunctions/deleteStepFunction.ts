@@ -92,7 +92,7 @@ const deleteStepFunction: TMethod = async (
       ) {
         break
       }
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
     log.debug(`Step function "${StepFunctionArn}" has been deleted`)

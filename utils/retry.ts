@@ -71,7 +71,7 @@ export function retry<TParams extends object, TResponse extends object>(
         const nextAttempt = attempt + (error.code && toleratedErrors.includes(error.code) ? 0 : 1)
 
         if (nextAttempt > attempt) {
-          await new Promise(resolve => setTimeout(resolve, delay))
+          await new Promise((resolve) => setTimeout(resolve, delay))
         }
 
         if (!silent) {

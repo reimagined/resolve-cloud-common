@@ -31,7 +31,7 @@ const getApiGatewayRootResource: TMethod = async (
         position
       })
 
-      resource = items.find(item => item.parentId == null)
+      resource = items.find((item) => item.parentId == null)
 
       if (resource != null) {
         break

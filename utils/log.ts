@@ -43,7 +43,7 @@ const createLogger = (namespace, getCorrelationId): any => {
     if (allowedLevels.indexOf(levelName) > -1) {
       leveledLogger[levelName] = (...args): any => {
         originalLogger(
-          `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map(arg =>
+          `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map((arg) =>
             Object(arg) === arg ? JSON.stringify(arg) : arg
           )}`
         )

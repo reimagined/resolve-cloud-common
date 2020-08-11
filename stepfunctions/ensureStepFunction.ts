@@ -376,7 +376,7 @@ const ensureStepFunction: TMethod = async (
 
         log.debug('Stop running executions')
         await Promise.all(
-          executionArns.map(executionArn =>
+          executionArns.map((executionArn) =>
             stopExecution(
               {
                 Region,

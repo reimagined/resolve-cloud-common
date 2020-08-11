@@ -19,7 +19,7 @@ const processPage = async (
   const deleteRolePolicy = retry(iam, iam.deleteRolePolicy, Options.Defaults.override({ log }))
 
   await Promise.all(
-    result.PolicyNames.map(async PolicyName => {
+    result.PolicyNames.map(async (PolicyName) => {
       log.debug(`Delete the role "${RoleName}" inline policy "${PolicyName}"`)
 
       await deleteRolePolicy({

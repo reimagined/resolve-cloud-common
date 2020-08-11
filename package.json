@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "aws-sdk": "2.631.0",
     "jest": "^25.5.4",
     "lodash": "^4.17.15",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",

@@ -31,7 +31,7 @@ const getApi: TMethod = async (
     }))
 
     const api = items?.find(
-      item => (Protocol == null || item.Protocol === Protocol) && item.Name === Name
+      (item) => (Protocol == null || item.Protocol === Protocol) && item.Name === Name
     )
 
     if (api) {
