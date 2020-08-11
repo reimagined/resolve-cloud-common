@@ -10,5 +10,6 @@ Lambda.prototype.createFunction = jest.fn()
 Lambda.prototype.listTags = jest.fn()
 Lambda.prototype.tagResource = jest.fn()
 Lambda.prototype.untagResource = jest.fn()
+Lambda.prototype.putFunctionEventInvokeConfig = jest.fn()
 
 export default Lambda

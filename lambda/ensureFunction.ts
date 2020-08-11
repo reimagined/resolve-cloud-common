@@ -11,6 +11,30 @@ const LambdaDefaults = {
   RUNTIME: 'nodejs10.x'
 }
 
+async function setupFunctionEventInvokeConfig(
+  params: {
+    Region: string
+    FunctionName: string
+  },
+  log: Log
+): Promise<void> {
+  const { Region, FunctionName } = params
+
+  const lambda = new Lambda({ region: Region })
+
+  const putFunctionEventInvokeConfig = retry(
+    lambda,
+    lambda.putFunctionEventInvokeConfig,
+    Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
+  )
+
+  await putFunctionEventInvokeConfig({
+    FunctionName,
+    MaximumEventAgeInSeconds: 21600,
+    MaximumRetryAttempts: 0
+  })
+}
+
 async function updateFunctionCode(
   params: {
     Region: string
@@ -309,13 +333,23 @@ const ensureFunction: TMethod = async (
       Layers
     })
 
-    log.debug(`Function configuration has been updated`)
-
     if (FunctionArn == null) {
       const error: Error & { code?: string } = new Error('Unknown function ARN')
       error.code = 'ResourceNotFoundException'
       throw error
     }
+
+    log.debug(`Function configuration has been updated`)
+
+    log.debug(`Update function event invoke config`)
+    await setupFunctionEventInvokeConfig(
+      {
+        Region,
+        FunctionName
+      },
+      log
+    )
+    log.debug(`Function event invoke config has been updated`)
 
     log.debug(`Find tags`)
 
@@ -399,6 +433,16 @@ const ensureFunction: TMethod = async (
       )
 
       log.debug(`Function has been created with ARN "${FunctionArn}"`)
+
+      log.debug(`Update function event invoke config`)
+      await setupFunctionEventInvokeConfig(
+        {
+          Region,
+          FunctionName
+        },
+        log
+      )
+      log.debug(`Function event invoke config has been updated`)
 
       return {
         FunctionArn,

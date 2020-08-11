@@ -5,6 +5,9 @@ import ensureFunction from '../../lambda/ensureFunction'
 
 jest.mock('../../utils')
 
+const mockPutFunctionEventInvokeConfig = mockedSdkFunction(
+  Lambda.prototype.putFunctionEventInvokeConfig
+)
 const mockUpdateFunctionCode = mockedSdkFunction(Lambda.prototype.updateFunctionCode)
 const mockCreateFunction = mockedSdkFunction(Lambda.prototype.createFunction)
 const mockListTags = mockedSdkFunction(Lambda.prototype.listTags)
@@ -26,6 +29,7 @@ describe('ensureFunction', () => {
     mockDeleteFunctionConcurrency.mockClear()
     mockPutFunctionConcurrency.mockClear()
     mockUpdateFunctionConfiguration.mockClear()
+    mockPutFunctionEventInvokeConfig.mockClear()
   })
   test('should function has been ensure', async () => {
     mockUpdateFunctionConfiguration.mockResolvedValue({ FunctionArn: 'functionArn' })
@@ -38,6 +42,7 @@ describe('ensureFunction', () => {
     })
     mockTagResource.mockResolvedValue({})
     mockUntagResource.mockResolvedValue({})
+    mockPutFunctionEventInvokeConfig.mockResolvedValue({})
 
     const result = await ensureFunction({
       Region: 'region',
@@ -63,6 +68,7 @@ describe('ensureFunction', () => {
       Resource: 'functionArn',
       TagKeys: ['tag1', 'tag2']
     })
+    expect(mockPutFunctionEventInvokeConfig).toHaveBeenCalled()
     expect(mockPutFunctionConcurrency).toHaveBeenCalled()
     expect(mockDeleteFunctionConcurrency).toHaveBeenCalled()
     expect(result).toEqual({ FunctionArn: 'functionArn', Version: 'version' })
