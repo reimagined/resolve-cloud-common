@@ -84,7 +84,7 @@ for (const { describeName, prepare } of [
     let originalStandardWrite
     let originalErrorWrite
     // eslint-disable-next-line func-names
-    const write = jest.fn().mockImplementation(function(...args) {
+    const write = jest.fn().mockImplementation(function (...args) {
       originalStandardWrite.call(this, ...args)
     })
     beforeAll(() => {

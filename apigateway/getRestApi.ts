@@ -26,7 +26,7 @@ const getRestApi: TMethod = async ({ Region, Name }, log = getLog('GET_REST_API'
       position: nextPosition
     }))
 
-    const restApi = items?.find(item => item.name === Name)
+    const restApi = items?.find((item) => item.name === Name)
 
     if (restApi) {
       return restApi

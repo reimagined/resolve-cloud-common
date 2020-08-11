@@ -31,7 +31,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
 
     const { IsTruncated, NextMarker, Items = [] } = CloudFrontOriginAccessIdentityList
 
-    const identity = Items.find(item => item.Comment === Comment)
+    const identity = Items.find((item) => item.Comment === Comment)
 
     if (identity != null) {
       log.debug('identity successfully found')

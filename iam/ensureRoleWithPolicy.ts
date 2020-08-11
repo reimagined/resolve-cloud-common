@@ -403,7 +403,7 @@ const ensureRoleWithPolicy: TMethod = async (
 
   log.debug('Delete a role policies')
   await Promise.all(
-    rolePolicies.map(policyName =>
+    rolePolicies.map((policyName) =>
       deleteRolePolicy(
         {
           Region,
