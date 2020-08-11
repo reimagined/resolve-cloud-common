@@ -23,7 +23,7 @@ const getRestApi: TMethod = async ({ Region, Name }, log = getLog('GET_REST_API'
   do {
     ;({ position: nextPosition, items } = await getRestApis({
       limit: 100,
-      position: nextPosition,
+      position: nextPosition
     }))
 
     const restApi = items?.find((item) => item.name === Name)

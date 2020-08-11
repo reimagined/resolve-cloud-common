@@ -1,5 +1,5 @@
 import CloudFront, {
-  CloudFrontOriginAccessIdentity as AccessIdentity,
+  CloudFrontOriginAccessIdentity as AccessIdentity
 } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, Log, getLog, NotFoundError } from '../utils'
@@ -32,8 +32,8 @@ const createCloudFrontOriginAccessIdentity: TMethod = async (
     const { CloudFrontOriginAccessIdentity } = await createCloudFrontAccessIdentity({
       CloudFrontOriginAccessIdentityConfig: {
         CallerReference: Comment,
-        Comment,
-      },
+        Comment
+      }
     })
 
     if (CloudFrontOriginAccessIdentity == null) {

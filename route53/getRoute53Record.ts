@@ -21,22 +21,22 @@ const getRoute53Record: TMethod = async ({ HostedZoneId, RecordName, RecordType 
     route53.listResourceRecordSets,
     Options.Defaults.override({
       maxAttempts: 5,
-      delay: 1000,
+      delay: 1000
     })
   )
 
   const {
-    ResourceRecordSets: [record],
+    ResourceRecordSets: [record]
   } = await listResourceRecordSets({
     HostedZoneId,
     MaxItems: '1',
     StartRecordName: RecordName,
-    StartRecordType: RecordType,
+    StartRecordType: RecordType
   })
 
   if (record != null && record.Type === RecordType && record.AliasTarget != null) {
     return {
-      DNSName: record.AliasTarget.DNSName,
+      DNSName: record.AliasTarget.DNSName
     }
   }
 

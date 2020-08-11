@@ -27,7 +27,7 @@ const createApiGatewayDeployment: TMethod = async (
     await createDeployment({
       restApiId: RestApiId,
       stageName: Stage,
-      description: Description,
+      description: Description
     })
 
     log.debug(`The api gateway "${RestApiId}" deployment on the stage "${Stage}" has been created`)

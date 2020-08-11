@@ -27,8 +27,8 @@ const createRestApi: TMethod = async ({ Region, Name }, log = getLog(`CREATE-RES
     const { id: restApiId } = await createApiExecutor({
       name: Name,
       endpointConfiguration: {
-        types: ['REGIONAL'],
-      },
+        types: ['REGIONAL']
+      }
     })
 
     log.debug(`The Rest API has been created`)

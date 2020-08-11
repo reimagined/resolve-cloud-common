@@ -17,13 +17,13 @@ describe('invokeFunction', () => {
       Region: 'region',
       FunctionName: 'functionName',
       Payload: {},
-      InvocationType: 'RequestResponse',
+      InvocationType: 'RequestResponse'
     })
 
     expect(mockInvoke).toHaveBeenCalledWith({
       FunctionName: 'functionName',
       Payload: JSON.stringify({}),
-      InvocationType: 'RequestResponse',
+      InvocationType: 'RequestResponse'
     })
     expect(result).toEqual({})
   })
@@ -35,7 +35,7 @@ describe('invokeFunction', () => {
         Region: 'region',
         FunctionName: 'functionName',
         Payload: {},
-        InvocationType: 'RequestResponse',
+        InvocationType: 'RequestResponse'
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
@@ -49,7 +49,7 @@ describe('invokeFunction', () => {
         Region: 'region',
         FunctionName: 'functionName',
         Payload: {},
-        InvocationType: 'RequestResponse',
+        InvocationType: 'RequestResponse'
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

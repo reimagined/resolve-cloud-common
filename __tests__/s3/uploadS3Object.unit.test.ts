@@ -16,8 +16,8 @@ describe('uploadS3Object', () => {
         Bucket: 'bucket',
         ETag: 'etag',
         Key: 'key',
-        Location: 'location',
-      }),
+        Location: 'location'
+      })
     } as ManagedUpload)
 
     const body = new Writable()
@@ -27,14 +27,14 @@ describe('uploadS3Object', () => {
       BucketName: 'bucket',
       FileKey: 'key',
       Body: body,
-      ContentType: 'content-type',
+      ContentType: 'content-type'
     })
 
     expect(mockS3.upload).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Key: 'key',
       Body: body,
-      ContentType: 'content-type',
+      ContentType: 'content-type'
     })
   })
 
@@ -46,7 +46,7 @@ describe('uploadS3Object', () => {
     mockS3.upload.mockReturnValue({
       promise: async (): Promise<any> => {
         throw error
-      },
+      }
     } as ManagedUpload)
 
     try {
@@ -55,7 +55,7 @@ describe('uploadS3Object', () => {
         BucketName: 'bucket',
         FileKey: 'key',
         Body: body,
-        ContentType: 'content-type',
+        ContentType: 'content-type'
       })
       return Promise.reject(new Error('Test failed'))
     } catch (err) {

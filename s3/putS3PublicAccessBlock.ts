@@ -27,13 +27,13 @@ const putS3PublicAccessBlock: TMethod = async (
       s3.putPublicAccessBlock,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000,
+        delay: 1000
       })
     )
 
     await putPublicAccessBlock({
       Bucket: BucketName,
-      PublicAccessBlockConfiguration: configuration,
+      PublicAccessBlockConfiguration: configuration
     })
 
     log.debug(`Public access put successfully`)

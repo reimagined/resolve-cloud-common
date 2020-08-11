@@ -25,7 +25,7 @@ const deleteApiGatewayResource: TMethod = async (
     const deleteResource = retry(gw, gw.deleteResource, Options.Defaults.override({ log }))
     await deleteResource({
       restApiId: RestApiId,
-      resourceId: ResourceId,
+      resourceId: ResourceId
     })
 
     log.debug(`The rest api "${RestApiId}" resource "${ResourceId}" has been deleted`)

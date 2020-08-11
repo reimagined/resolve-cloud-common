@@ -15,12 +15,12 @@ describe('deleteSecret', () => {
     mockDeleteSecret.mockResolvedValue({})
     await deleteSecret({
       Region: 'region',
-      Name: 'name',
+      Name: 'name'
     })
 
     expect(mockDeleteSecret).toHaveBeenCalledWith({
       SecretId: 'name',
-      ForceDeleteWithoutRecovery: true,
+      ForceDeleteWithoutRecovery: true
     })
   })
 
@@ -29,7 +29,7 @@ describe('deleteSecret', () => {
     try {
       await deleteSecret({
         Region: 'region',
-        Name: 'name',
+        Name: 'name'
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

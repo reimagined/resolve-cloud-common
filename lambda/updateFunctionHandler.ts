@@ -29,7 +29,7 @@ const updateFunctionHandler: TMethod = async (
     )
     await updateFunctionConfiguration({
       FunctionName,
-      Handler,
+      Handler
     })
     log.debug(`The function "${FunctionName}" handler has been updated`)
   } catch (error) {

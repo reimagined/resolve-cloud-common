@@ -27,7 +27,7 @@ const createApiGatewayResource: TMethod = async (
     const { id } = await createResource({
       restApiId: RestApiId,
       parentId: ParentId,
-      pathPart: PathPart,
+      pathPart: PathPart
     })
 
     if (id == null) {

@@ -37,8 +37,8 @@ export function setupRetentionLogs<Event, Context, Result>(
         Region,
         FunctionName,
         Variables: {
-          RESOLVE_RETENTION_LOGS: 'true',
-        },
+          RESOLVE_RETENTION_LOGS: 'true'
+        }
       })
     }
   }

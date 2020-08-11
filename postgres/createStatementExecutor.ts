@@ -16,7 +16,7 @@ const createStatementExecutor: TMethod = ({ Region, ResourceArn, SecretArn }) =>
         Region,
         ResourceArn,
         SecretArn,
-        Sql: sql,
+        Sql: sql
       },
       log
     )

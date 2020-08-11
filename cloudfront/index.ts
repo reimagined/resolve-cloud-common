@@ -13,5 +13,5 @@ export {
   getCloudFrontDistributionById,
   getCloudFrontOriginAccessIdentity,
   listCloudFrontOriginAccessIdentities,
-  updateCloudFrontDistribution,
+  updateCloudFrontDistribution
 }

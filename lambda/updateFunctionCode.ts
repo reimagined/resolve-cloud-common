@@ -31,7 +31,7 @@ const updateFunctionCode: TMethod = async (
     await setFunctionCode({
       FunctionName,
       S3Bucket,
-      S3Key,
+      S3Key
     })
     log.debug(`The function "${FunctionName}" code has been updated`)
   } catch (error) {

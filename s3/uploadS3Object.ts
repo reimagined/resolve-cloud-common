@@ -30,7 +30,7 @@ async function uploadS3Object(
       Bucket: BucketName,
       Key: FileKey,
       Body,
-      ContentType,
+      ContentType
     })
   } catch (error) {
     log.debug(`Failed to upload the S3 object "${FileKey}" to "${BucketName}"`)

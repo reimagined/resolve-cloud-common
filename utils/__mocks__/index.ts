@@ -7,7 +7,7 @@ Object.assign(getLog, {
   info: getLog,
   verbose: getLog,
   error: getLog,
-  warn: getLog,
+  warn: getLog
 })
 
 export const getAccountIdFromLambdaContext = jest.fn().mockReturnValue('accountId')
@@ -18,6 +18,6 @@ export const setLogCorrelationId = jest.fn()
 
 export const Options = {
   Defaults: {
-    override: jest.fn(),
-  },
+    override: jest.fn()
+  }
 }

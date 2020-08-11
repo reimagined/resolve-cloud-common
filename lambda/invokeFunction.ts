@@ -24,7 +24,7 @@ async function invokeFunction<Response extends object | null>(
     const { FunctionError, Payload: ResponsePayload } = await invoke({
       FunctionName,
       InvocationType,
-      Payload: JSON.stringify(Payload),
+      Payload: JSON.stringify(Payload)
     })
 
     if (FunctionError != null && (InvocationType === 'RequestResponse' || InvocationType == null)) {

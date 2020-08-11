@@ -29,7 +29,7 @@ const createRoute53Record: TMethod = async (
       route53.changeResourceRecordSets,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000,
+        delay: 1000
       })
     )
 
@@ -43,14 +43,14 @@ const createRoute53Record: TMethod = async (
               AliasTarget: {
                 DNSName,
                 EvaluateTargetHealth: false,
-                HostedZoneId: AliasHostedZoneId,
+                HostedZoneId: AliasHostedZoneId
               },
               Name: RecordName,
-              Type: RecordType,
-            },
-          },
-        ],
-      },
+              Type: RecordType
+            }
+          }
+        ]
+      }
     })
 
     log.debug('Change resource record sets')

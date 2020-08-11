@@ -22,7 +22,7 @@ const deleteFunction: TMethod = async (
     log.debug(`Delete the function "${FunctionName}"`)
     const removeFunction = retry(lambda, lambda.deleteFunction, Options.Defaults.override({ log }))
     await removeFunction({
-      FunctionName,
+      FunctionName
     })
     log.debug(`The function "${FunctionName}" has been deleted`)
   } catch (error) {

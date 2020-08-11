@@ -24,7 +24,7 @@ const processPage = async (
 
       await deleteRolePolicy({
         RoleName,
-        PolicyName,
+        PolicyName
       })
 
       log.debug(`The role "${RoleName}" inline policy "${PolicyName}" has been deleted`)

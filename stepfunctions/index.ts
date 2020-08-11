@@ -7,5 +7,5 @@ export {
   deleteStepFunction,
   describeStepFunctionExecution,
   ensureStepFunction,
-  startStepFunctionExecution,
+  startStepFunctionExecution
 }

@@ -28,7 +28,7 @@ const deleteFunctionPermission: TMethod = async (
     )
     await removePermission({
       FunctionName,
-      StatementId,
+      StatementId
     })
     log.debug(`The function "${FunctionName}" permission has been deleted`)
   } catch (error) {

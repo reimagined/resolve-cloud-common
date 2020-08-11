@@ -17,14 +17,14 @@ describe('createSecret', () => {
       Region: 'region',
       Name: 'name',
       Description: 'description',
-      SecretString: 'secretString',
+      SecretString: 'secretString'
     })
 
     expect(mockCreateSecret).toHaveBeenCalledWith({
       Name: 'name',
       Description: 'description',
       SecretString: 'secretString',
-      Tags: [{ Key: 'Owner', Value: 'reimagined' }],
+      Tags: [{ Key: 'Owner', Value: 'reimagined' }]
     })
     expect(result).toEqual('arn')
   })
@@ -36,7 +36,7 @@ describe('createSecret', () => {
         Region: 'region',
         Name: 'name',
         Description: 'description',
-        SecretString: 'secretString',
+        SecretString: 'secretString'
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
@@ -50,7 +50,7 @@ describe('createSecret', () => {
         Region: 'region',
         Name: 'name',
         Description: 'description',
-        SecretString: 'secretString',
+        SecretString: 'secretString'
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

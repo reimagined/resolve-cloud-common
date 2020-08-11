@@ -29,10 +29,10 @@ const updateFunctionEnvironment: TMethod = async (
     Options.Defaults.override({ log })
   )
   const {
-    Environment: { Variables: currentVars } = { Variables: {} },
+    Environment: { Variables: currentVars } = { Variables: {} }
   } = await getFunctionConfiguration({
     FunctionName,
-    Qualifier: '$LATEST',
+    Qualifier: '$LATEST'
   })
 
   log.debug(`Function environment variables have been got`)
@@ -56,8 +56,8 @@ const updateFunctionEnvironment: TMethod = async (
     await updateFunctionConfiguration({
       FunctionName,
       Environment: {
-        Variables: nextVariables,
-      },
+        Variables: nextVariables
+      }
     })
   } catch (error) {
     log.debug(`Failed to update function environment variables`)

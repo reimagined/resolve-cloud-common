@@ -27,15 +27,15 @@ const createCloudFrontDistribution: TMethod = async (
       cf.createDistributionWithTags,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000,
+        delay: 1000
       })
     )
 
     const { Distribution } = await createDistributionWithTags({
       DistributionConfigWithTags: {
         DistributionConfig,
-        Tags,
-      },
+        Tags
+      }
     })
 
     if (Distribution == null) {

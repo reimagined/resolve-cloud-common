@@ -22,7 +22,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
 
     const { CloudFrontOriginAccessIdentityList } = await listCloudFrontOriginAccessIdentities({
       Region,
-      Marker,
+      Marker
     })
 
     if (CloudFrontOriginAccessIdentityList == null) {
@@ -38,7 +38,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
 
       return {
         id: identity.Id,
-        s3UserId: identity.S3CanonicalUserId,
+        s3UserId: identity.S3CanonicalUserId
       }
     }
 
@@ -48,7 +48,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
       return await getCloudFrontOriginAccessIdentity({
         Region,
         Comment,
-        Marker: NextMarker,
+        Marker: NextMarker
       })
     }
 

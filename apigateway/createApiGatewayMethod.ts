@@ -27,7 +27,7 @@ const createApiGatewayMethod: TMethod = async (
       restApiId: RestApiId,
       resourceId: ResourceId,
       httpMethod: 'ANY',
-      authorizationType: 'AWS_IAM',
+      authorizationType: 'AWS_IAM'
     })
 
     log.debug(`The rest api http method "ANY" has been created`)

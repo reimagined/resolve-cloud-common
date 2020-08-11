@@ -27,7 +27,7 @@ const getApi: TMethod = async (
   do {
     ;({ NextToken: nextToken, Items: items } = await getRestApis({
       MaxResults: '100',
-      NextToken: nextToken,
+      NextToken: nextToken
     }))
 
     const api = items?.find(

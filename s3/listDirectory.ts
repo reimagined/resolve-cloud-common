@@ -18,7 +18,7 @@ const listDirectory: TMethod = async ({ Region, BucketName, Prefix, Delimiter })
     Region,
     BucketName,
     Prefix,
-    Delimiter,
+    Delimiter
   })
 
   return CommonPrefixes.reduce(

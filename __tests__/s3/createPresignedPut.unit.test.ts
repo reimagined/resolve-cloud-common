@@ -15,12 +15,12 @@ describe('createPresignedPost', () => {
     await createPresignedPut({
       Region: 'region',
       BucketName: 'bucket',
-      Key: 'key',
+      Key: 'key'
     })
 
     expect(mockS3.getSignedUrl).toHaveBeenCalledWith('putObject', {
       Bucket: 'bucket',
-      Key: 'key',
+      Key: 'key'
     })
   })
 
@@ -35,7 +35,7 @@ describe('createPresignedPost', () => {
       await createPresignedPut({
         Region: 'region',
         BucketName: 'bucket',
-        Key: 'key',
+        Key: 'key'
       })
       return Promise.reject(new Error('Test failed'))
     } catch (err) {

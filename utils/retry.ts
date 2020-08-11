@@ -6,7 +6,7 @@ const toleratedErrors: Array<string> = [
   'RequestLimitExceeded',
   'ThrottlingException',
   'TooManyRequestsException',
-  'NetworkingError',
+  'NetworkingError'
 ]
 
 interface OptionsStruct {
@@ -35,7 +35,7 @@ export class Options implements OptionsStruct {
   public override(opts: OptionsStruct): Options {
     return new Options({
       ...this,
-      ...opts,
+      ...opts
     })
   }
 }

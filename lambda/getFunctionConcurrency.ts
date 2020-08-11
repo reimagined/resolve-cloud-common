@@ -28,7 +28,7 @@ const getFunctionConcurrency: TMethod = async (
       Options.Defaults.override({ log, maxAttempts: 1 })
     )
     const { Concurrency } = await getFunction({
-      FunctionName,
+      FunctionName
     })
 
     log.debug(`The function "${FunctionName}" concurrency has been got`)

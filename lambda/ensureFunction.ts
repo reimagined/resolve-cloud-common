@@ -8,7 +8,7 @@ import deleteFunctionConcurrency from './deleteFunctionConcurrency'
 const LambdaDefaults = {
   MEMORY_SIZE: 512,
   TIMEOUT: 900,
-  RUNTIME: 'nodejs10.x',
+  RUNTIME: 'nodejs10.x'
 }
 
 async function setupFunctionEventInvokeConfig(
@@ -31,7 +31,7 @@ async function setupFunctionEventInvokeConfig(
   await putFunctionEventInvokeConfig({
     FunctionName,
     MaximumEventAgeInSeconds: 21600,
-    MaximumRetryAttempts: 0,
+    MaximumRetryAttempts: 0
   })
 }
 
@@ -59,7 +59,7 @@ async function updateFunctionCode(
     FunctionName,
     S3Bucket,
     S3Key,
-    Publish,
+    Publish
   })
 
   if (Version == null) {
@@ -102,7 +102,7 @@ async function createFunction(
     Timeout,
     MemorySize,
     Layers,
-    Publish,
+    Publish
   } = params
 
   const lambda = new Lambda({ region: Region })
@@ -116,7 +116,7 @@ async function createFunction(
     Runtime,
     Code: {
       S3Bucket,
-      S3Key,
+      S3Key
     },
     Timeout,
     MemorySize,
@@ -124,7 +124,7 @@ async function createFunction(
     Description,
     Environment,
     Layers,
-    Publish,
+    Publish
   })
 
   if (FunctionArn == null) {
@@ -133,7 +133,7 @@ async function createFunction(
 
   return {
     FunctionArn,
-    Version,
+    Version
   }
 }
 
@@ -154,7 +154,7 @@ async function listTags(
     Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
   )
   const { Tags } = await getTags({
-    Resource,
+    Resource
   })
 
   return Tags
@@ -179,7 +179,7 @@ async function tagResource(
   )
   await setTags({
     Resource,
-    Tags,
+    Tags
   })
 }
 
@@ -198,7 +198,7 @@ async function untagResource(
   )
   await unsetTags({
     Resource,
-    TagKeys,
+    TagKeys
   })
 }
 
@@ -244,7 +244,7 @@ const ensureFunction: TMethod = async (
     Runtime = LambdaDefaults.RUNTIME,
     Timeout = LambdaDefaults.TIMEOUT,
     MemorySize = LambdaDefaults.MEMORY_SIZE,
-    Publish,
+    Publish
   },
   log: Log = getLog('ENSURE-FUNCTION')
 ) => {
@@ -254,7 +254,7 @@ const ensureFunction: TMethod = async (
         Variables: Object.keys(Variables).reduce((acc: { [key: string]: string }, key: string) => {
           acc[key] = `${Variables[key]}`
           return acc
-        }, {}),
+        }, {})
       }
     : undefined
 
@@ -271,7 +271,7 @@ const ensureFunction: TMethod = async (
     Runtime,
     Timeout,
     MemorySize,
-    Layers,
+    Layers
   })
 
   try {
@@ -289,7 +289,7 @@ const ensureFunction: TMethod = async (
           FunctionName,
           S3Bucket,
           S3Key,
-          Publish,
+          Publish
         },
         log
       )
@@ -302,7 +302,7 @@ const ensureFunction: TMethod = async (
       {
         Region,
         FunctionName,
-        Concurrency: 0,
+        Concurrency: 0
       },
       log
     )
@@ -310,7 +310,7 @@ const ensureFunction: TMethod = async (
     await deleteFunctionConcurrency(
       {
         Region,
-        FunctionName,
+        FunctionName
       },
       log
     )
@@ -330,7 +330,7 @@ const ensureFunction: TMethod = async (
       Runtime,
       Timeout,
       Environment,
-      Layers,
+      Layers
     })
 
     if (FunctionArn == null) {
@@ -345,7 +345,7 @@ const ensureFunction: TMethod = async (
     await setupFunctionEventInvokeConfig(
       {
         Region,
-        FunctionName,
+        FunctionName
       },
       log
     )
@@ -356,7 +356,7 @@ const ensureFunction: TMethod = async (
     const prevTags = await listTags(
       {
         Region,
-        Resource: FunctionArn,
+        Resource: FunctionArn
       },
       log
     )
@@ -377,7 +377,7 @@ const ensureFunction: TMethod = async (
       prevTags,
       nextTags: Tags,
       ensuredTags,
-      dropTags,
+      dropTags
     })
 
     log.debug(`Update tags`)
@@ -385,7 +385,7 @@ const ensureFunction: TMethod = async (
       {
         Region,
         Resource: FunctionArn,
-        Tags: ensuredTags,
+        Tags: ensuredTags
       },
       log
     )
@@ -397,7 +397,7 @@ const ensureFunction: TMethod = async (
         {
           Region,
           Resource: FunctionArn,
-          TagKeys: dropTags,
+          TagKeys: dropTags
         },
         log
       )
@@ -406,7 +406,7 @@ const ensureFunction: TMethod = async (
 
     return {
       FunctionArn,
-      Version: FunctionVersion,
+      Version: FunctionVersion
     }
   } catch (error) {
     if (error.code === 'ResourceNotFoundException' && S3Key != null) {
@@ -427,7 +427,7 @@ const ensureFunction: TMethod = async (
           Timeout,
           MemorySize,
           Layers,
-          Publish,
+          Publish
         },
         log
       )
@@ -438,7 +438,7 @@ const ensureFunction: TMethod = async (
       await setupFunctionEventInvokeConfig(
         {
           Region,
-          FunctionName,
+          FunctionName
         },
         log
       )
@@ -446,7 +446,7 @@ const ensureFunction: TMethod = async (
 
       return {
         FunctionArn,
-        Version,
+        Version
       }
     }
     log.debug(`Failed to ensure function`)

@@ -11,7 +11,7 @@ async function createMultipartUpload(
   log.debug(`Create a multipart upload`)
 
   const s3 = new S3({
-    region: Region,
+    region: Region
   })
 
   const create = retry(s3, s3.createMultipartUpload, Options.Defaults.override({ log }))
@@ -19,7 +19,7 @@ async function createMultipartUpload(
   try {
     const { UploadId } = await create({
       Bucket: BucketName,
-      Key: FileKey,
+      Key: FileKey
     })
 
     if (UploadId == null) {

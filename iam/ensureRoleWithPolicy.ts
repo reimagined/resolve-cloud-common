@@ -21,7 +21,7 @@ async function updateAssumeRolePolicy(
   )
   await setAssumeRolePolicy({
     RoleName,
-    PolicyDocument: JSON.stringify(PolicyDocument),
+    PolicyDocument: JSON.stringify(PolicyDocument)
   })
 }
 
@@ -40,7 +40,7 @@ async function updateRole(
   const setRole = retry(iam, iam.updateRole, Options.Defaults.override({ log }))
   await setRole({
     RoleName,
-    Description,
+    Description
   })
 }
 
@@ -60,12 +60,12 @@ async function createRole(
 
   const addRole = retry(iam, iam.createRole, Options.Defaults.override({ log, maxAttempts: 1 }))
   const {
-    Role: { Arn },
+    Role: { Arn }
   } = await addRole({
     AssumeRolePolicyDocument: JSON.stringify(AssumeRolePolicyDocument),
     RoleName,
     Description,
-    Tags,
+    Tags
   })
 
   return Arn
@@ -86,7 +86,7 @@ async function tagRole(
   const addTags = retry(iam, iam.tagRole, Options.Defaults.override({ log, maxAttempts: 1 }))
   await addTags({
     RoleName,
-    Tags,
+    Tags
   })
 }
 
@@ -105,7 +105,7 @@ async function untagRole(
   const removeTags = retry(iam, iam.untagRole, Options.Defaults.override({ log, maxAttempts: 1 }))
   await removeTags({
     RoleName,
-    TagKeys,
+    TagKeys
   })
 }
 
@@ -132,7 +132,7 @@ async function ensureRole(
       Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
     )
     const {
-      Role: { Arn, Tags: prevTags = [] },
+      Role: { Arn, Tags: prevTags = [] }
     } = await getRole({ RoleName })
 
     log.debug(`RoleArn ${JSON.stringify(Arn)} by RoleName "${RoleName}" has been found`)
@@ -162,7 +162,7 @@ async function ensureRole(
       prevTags,
       nextTags,
       ensuredTags,
-      dropTags,
+      dropTags
     })
 
     log.debug(`Update tags`)
@@ -170,7 +170,7 @@ async function ensureRole(
       {
         Region,
         RoleName,
-        Tags: ensuredTags,
+        Tags: ensuredTags
       },
       log
     )
@@ -181,7 +181,7 @@ async function ensureRole(
       {
         Region,
         RoleName,
-        TagKeys: dropTags,
+        TagKeys: dropTags
       },
       log
     )
@@ -192,7 +192,7 @@ async function ensureRole(
       {
         Region,
         RoleName,
-        PolicyDocument: AssumeRolePolicyDocument,
+        PolicyDocument: AssumeRolePolicyDocument
       },
       log
     )
@@ -203,7 +203,7 @@ async function ensureRole(
       {
         Region,
         RoleName,
-        Description,
+        Description
       },
       log
     )
@@ -222,7 +222,7 @@ async function ensureRole(
         AssumeRolePolicyDocument,
         RoleName,
         Description,
-        Tags,
+        Tags
       },
       log
     )
@@ -253,7 +253,7 @@ async function putRolePolicy(
   await addRolePolicy({
     RoleName,
     PolicyName,
-    PolicyDocument: JSON.stringify(PolicyDocument),
+    PolicyDocument: JSON.stringify(PolicyDocument)
   })
 }
 
@@ -276,7 +276,7 @@ async function deleteRolePolicy(
   )
   await removeRolePolicy({
     RoleName,
-    PolicyName,
+    PolicyName
   })
 }
 
@@ -306,7 +306,7 @@ const listRolePoliciesLoop: ListRolePoliciesLoop = async (
   )
   const { PolicyNames = [], IsTruncated, Marker: NextMarker } = await getRolePolicies({
     RoleName,
-    Marker,
+    Marker
   })
 
   Result.push(...PolicyNames)
@@ -363,7 +363,7 @@ const ensureRoleWithPolicy: TMethod = async (
     PolicyName,
     PolicyDocument,
     Description = '',
-    Tags: { ...RawTags } = {},
+    Tags: { ...RawTags } = {}
   },
   log = getLog('ENSURE-ROLE-WITH-POLICY')
 ) => {
@@ -372,12 +372,12 @@ const ensureRoleWithPolicy: TMethod = async (
   const Tags = [
     ...Array.from(Object.entries(RawTags)).map(([Key, Value]) => ({
       Key,
-      Value,
+      Value
     })),
     {
       Key: 'Owner',
-      Value: 'reimagined',
-    },
+      Value: 'reimagined'
+    }
   ]
 
   log.verbose({
@@ -387,7 +387,7 @@ const ensureRoleWithPolicy: TMethod = async (
     PolicyName,
     PolicyDocument,
     Description,
-    Tags,
+    Tags
   })
 
   log.debug('Ensure the role')
@@ -408,7 +408,7 @@ const ensureRoleWithPolicy: TMethod = async (
         {
           Region,
           RoleName,
-          PolicyName: policyName,
+          PolicyName: policyName
         },
         log
       )

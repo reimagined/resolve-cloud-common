@@ -30,7 +30,7 @@ const addFunctionPermission: TMethod = async (
       Action,
       Principal,
       StatementId,
-      SourceArn,
+      SourceArn
     })
   } catch (error) {
     log.debug(`Failed to add the function "${FunctionName}" permission "${Action}"`)

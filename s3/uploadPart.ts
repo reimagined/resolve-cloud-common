@@ -19,7 +19,7 @@ async function uploadPart(
   log.debug(`Upload the part UploadId = "${UploadId}" / PartNumber = "${PartNumber}"`)
 
   const s3 = new S3({
-    region: Region,
+    region: Region
   })
 
   const upload = retry(s3, s3.uploadPart, Options.Defaults.override({ log }))
@@ -30,7 +30,7 @@ async function uploadPart(
       Key: FileKey,
       UploadId,
       PartNumber,
-      Body,
+      Body
     })
 
     log.verbose(`UploadId = "${UploadId}"`)
@@ -38,7 +38,7 @@ async function uploadPart(
 
     Parts.push({
       ETag,
-      PartNumber,
+      PartNumber
     })
 
     log.verbose(`Parts = ${JSON.stringify(Parts)}`)

@@ -17,7 +17,7 @@ async function completeMultipartUpload(
   log.debug(`Complete the multipart upload "${UploadId}"`)
 
   const s3 = new S3({
-    region: Region,
+    region: Region
   })
 
   const complete = retry(s3, s3.completeMultipartUpload, Options.Defaults.override({ log }))
@@ -27,7 +27,7 @@ async function completeMultipartUpload(
       Bucket: BucketName,
       Key: FileKey,
       MultipartUpload: { Parts },
-      UploadId,
+      UploadId
     })
 
     log.debug(`The multipart upload "${UploadId}" has been completed`)

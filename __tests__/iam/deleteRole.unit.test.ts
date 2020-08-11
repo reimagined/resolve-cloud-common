@@ -19,22 +19,22 @@ describe('deleteRole', () => {
     mockListRolePolicies.mockResolvedValueOnce({
       PolicyNames: ['policyName'],
       IsTruncated: true,
-      Marker: 'marker',
+      Marker: 'marker'
     })
     mockListRolePolicies.mockResolvedValue({ PolicyNames: ['policyName'] })
     await deleteRole({
       Region: 'region',
-      RoleName: 'roleName',
+      RoleName: 'roleName'
     })
 
     expect(mockListRolePolicies).toHaveBeenNthCalledWith(1, { RoleName: 'roleName' })
     expect(mockListRolePolicies).toHaveBeenNthCalledWith(2, {
       RoleName: 'roleName',
-      Marker: 'marker',
+      Marker: 'marker'
     })
     expect(mockDeleteRolePolicy).toHaveBeenCalledWith({
       RoleName: 'roleName',
-      PolicyName: 'policyName',
+      PolicyName: 'policyName'
     })
     expect(mockDeleteRole).toHaveBeenCalledWith({ RoleName: 'roleName' })
   })

@@ -31,7 +31,7 @@ const createWebSocketApi: TMethod = async (
     const { ApiId, ApiEndpoint, ApiKeySelectionExpression } = await createApiExecutor({
       ProtocolType: 'WEBSOCKET',
       Name,
-      RouteSelectionExpression,
+      RouteSelectionExpression
     })
 
     if (ApiId == null || ApiEndpoint == null || ApiKeySelectionExpression == null) {
@@ -42,7 +42,7 @@ const createWebSocketApi: TMethod = async (
     const createStageExecutor = retry(agv2, agv2.createStage, Options.Defaults.override({ log }))
     await createStageExecutor({
       ApiId,
-      StageName: Stage,
+      StageName: Stage
     })
 
     log.debug(`Create lambda integration`)
@@ -55,7 +55,7 @@ const createWebSocketApi: TMethod = async (
     const { IntegrationId: connectIntegrationId } = await createIntegrationExecutor({
       ApiId,
       IntegrationType: 'AWS',
-      IntegrationUri: buildIntegrationUri(Region, LambdaArn),
+      IntegrationUri: buildIntegrationUri(Region, LambdaArn)
     })
 
     log.debug(`Create route "$connect"`)
@@ -64,21 +64,21 @@ const createWebSocketApi: TMethod = async (
       ApiId,
       ApiKeyRequired: false,
       RouteKey: '$connect',
-      Target: `integrations/${connectIntegrationId}`,
+      Target: `integrations/${connectIntegrationId}`
     })
 
     log.debug(`Create route "$disconnect"`)
     await createRouteExecutor({
       ApiId,
       RouteKey: '$disconnect',
-      Target: `integrations/${connectIntegrationId}`,
+      Target: `integrations/${connectIntegrationId}`
     })
 
     log.debug(`Create route "$default"`)
     await createRouteExecutor({
       ApiId,
       RouteKey: '$default',
-      Target: `integrations/${connectIntegrationId}`,
+      Target: `integrations/${connectIntegrationId}`
     })
 
     log.debug(`Create deployment API`)
@@ -90,7 +90,7 @@ const createWebSocketApi: TMethod = async (
     await createDeploymentExecutor({
       ApiId,
       StageName: Stage,
-      Description: `resolve-api-websocket-${Stage}`,
+      Description: `resolve-api-websocket-${Stage}`
     })
 
     log.debug(`The WebSocket API has been created`)
