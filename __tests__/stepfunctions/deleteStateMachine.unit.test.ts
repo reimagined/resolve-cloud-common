@@ -27,10 +27,10 @@ describe('deleteStepFunction', () => {
           stateMachineArn: 'stateMachineArn',
           name: 'name',
           status: 'status',
-          startDate: new Date()
-        }
+          startDate: new Date(),
+        },
       ],
-      nextToken: 'nextToken'
+      nextToken: 'nextToken',
     })
     mockListExecutions.mockResolvedValue({
       executions: [
@@ -39,9 +39,9 @@ describe('deleteStepFunction', () => {
           stateMachineArn: 'stateMachineArn',
           name: 'name',
           status: 'status',
-          startDate: new Date()
-        }
-      ]
+          startDate: new Date(),
+        },
+      ],
     })
     mockDescribeStateMachine.mockResolvedValueOnce({
       status: 'DELETING',
@@ -50,7 +50,7 @@ describe('deleteStepFunction', () => {
       creationDate: new Date(),
       definition: 'definition',
       roleArn: 'roleArn',
-      type: 'STANDARD'
+      type: 'STANDARD',
     })
     mockDescribeStateMachine.mockRejectedValue(
       (function StateMachineDoesNotExist(): AWSError {
@@ -61,23 +61,23 @@ describe('deleteStepFunction', () => {
     )
     await deleteStepFunction({
       Region: 'region',
-      StepFunctionArn: 'stateMachineArn'
+      StepFunctionArn: 'stateMachineArn',
     })
 
     expect(mockListExecutions).toHaveBeenNthCalledWith(1, {
       stateMachineArn: 'stateMachineArn',
       statusFilter: 'RUNNING',
-      maxResults: 30
+      maxResults: 30,
     })
     expect(mockListExecutions).toHaveBeenNthCalledWith(2, {
       stateMachineArn: 'stateMachineArn',
       statusFilter: 'RUNNING',
       maxResults: 30,
-      nextToken: 'nextToken'
+      nextToken: 'nextToken',
     })
     expect(mockStopExecution).toHaveBeenCalledWith({
       executionArn: 'executionArn',
-      cause: 'Delete the step function'
+      cause: 'Delete the step function',
     })
     expect(mockDeleteStateMachine).toHaveBeenCalledWith({ stateMachineArn: 'stateMachineArn' })
   })
@@ -90,15 +90,15 @@ describe('deleteStepFunction', () => {
           stateMachineArn: 'stateMachineArn',
           name: 'name',
           status: 'status',
-          startDate: new Date()
-        }
-      ]
+          startDate: new Date(),
+        },
+      ],
     })
     mockDeleteStateMachine.mockRejectedValue(new Error())
     try {
       await deleteStepFunction({
         Region: 'region',
-        StepFunctionArn: 'stateMachineArn'
+        StepFunctionArn: 'stateMachineArn',
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

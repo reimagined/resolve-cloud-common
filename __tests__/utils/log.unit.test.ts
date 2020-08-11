@@ -2,7 +2,7 @@ import {
   getLog,
   setLogCorrelationId,
   resetLogCorrelationId,
-  logRootNamespace
+  logRootNamespace,
 } from '../../utils/index'
 
 const prettify = ({ mock }): any =>
@@ -31,14 +31,14 @@ const writeTestLogs = (log): any => {
             {
               a: {
                 b: {
-                  c: true
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
+                  c: true,
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
   }
 
   log.log('test text')
@@ -71,20 +71,20 @@ for (const { describeName, prepare } of [
     describeName: 'log',
     prepare: (): void => {
       resetLogCorrelationId()
-    }
+    },
   },
   {
     describeName: 'log with correlationId',
     prepare: (): void => {
       setLogCorrelationId('test-correlation-id')
-    }
-  }
+    },
+  },
 ]) {
   describe(describeName, () => {
     let originalStandardWrite
     let originalErrorWrite
     // eslint-disable-next-line func-names
-    const write = jest.fn().mockImplementation(function(...args) {
+    const write = jest.fn().mockImplementation(function (...args) {
       originalStandardWrite.call(this, ...args)
     })
     beforeAll(() => {

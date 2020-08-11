@@ -28,7 +28,7 @@ const getFunctionConfiguration: TMethod = async (
     )
     const functionConfiguration = await getFunctionConfig({
       FunctionName,
-      Qualifier: '$LATEST'
+      Qualifier: '$LATEST',
     })
 
     if (functionConfiguration == null) {

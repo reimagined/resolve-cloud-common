@@ -28,7 +28,7 @@ const listObjects: TMethod = ({ Region, BucketName, Prefix = '', Delimiter = '' 
         Bucket: BucketName,
         Prefix,
         Delimiter,
-        ContinuationToken: token
+        ContinuationToken: token,
       })
       .promise()
 
@@ -49,7 +49,7 @@ const listObjects: TMethod = ({ Region, BucketName, Prefix = '', Delimiter = '' 
 
   return listAll({
     Contents: [],
-    CommonPrefixes: []
+    CommonPrefixes: [],
   })
 }
 

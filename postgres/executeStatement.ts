@@ -43,7 +43,7 @@ async function executeStatement<T extends object>(
   const { Region, ResourceArn, SecretArn, Sql } = params
 
   const rdsDataService = new RDSDataService({
-    region: Region
+    region: Region,
   })
   log.verbose(Sql)
 
@@ -58,7 +58,7 @@ async function executeStatement<T extends object>(
     database: 'postgres',
     continueAfterTimeout: false,
     includeResultMetadata: true,
-    sql: Sql
+    sql: Sql,
   })
 
   const { columnMetadata, records } = result

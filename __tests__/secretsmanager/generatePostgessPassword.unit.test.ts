@@ -19,7 +19,7 @@ describe('generatePostgresPassword', () => {
       ExcludePunctuation: true,
       IncludeSpace: false,
       PasswordLength: 30,
-      RequireEachIncludedType: true
+      RequireEachIncludedType: true,
     })
     expect(result).toEqual('RandomPassword')
   })

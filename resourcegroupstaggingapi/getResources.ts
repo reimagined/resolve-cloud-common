@@ -1,5 +1,5 @@
 import ResourceGroupsTaggingAPI, {
-  GetResourcesOutput
+  GetResourcesOutput,
 } from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'

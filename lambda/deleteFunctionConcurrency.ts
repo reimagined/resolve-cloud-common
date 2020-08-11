@@ -26,7 +26,7 @@ const deleteFunctionConcurrency: TMethod = async (
       Options.Defaults.override({ log, maxAttempts: 1 })
     )
     await removeFunctionConcurrency({
-      FunctionName
+      FunctionName,
     })
     log.debug(`Function concurrency "${FunctionName}" has been deleted`)
   } catch (error) {

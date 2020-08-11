@@ -20,12 +20,12 @@ const checkIfBucketExists = async (
       s3.headBucket,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
       })
     )
 
     await headBucket({
-      Bucket: BucketName
+      Bucket: BucketName,
     })
 
     log.debug(`The bucket "${BucketName}" has been got`)
@@ -54,12 +54,12 @@ async function ensureS3Bucket(
   const TagSet: Array<{ Key: string; Value: string }> = [
     ...Array.from(Object.entries(Tags)).map(([Key, Value]) => ({
       Key,
-      Value
+      Value,
     })),
     {
       Key: 'Owner',
-      Value: 'reimagined'
-    }
+      Value: 'reimagined',
+    },
   ]
 
   const s3 = new S3({ region: Region })
@@ -70,7 +70,7 @@ async function ensureS3Bucket(
     const doesBucketExist = await checkIfBucketExists(
       {
         Region,
-        BucketName
+        BucketName,
       },
       log
     )
@@ -86,12 +86,12 @@ async function ensureS3Bucket(
         }
       } = {
         Bucket: BucketName,
-        ACL
+        ACL,
       }
 
       if (Region !== DEFAULT_BUCKET_REGION) {
         createBucketParams.CreateBucketConfiguration = {
-          LocationConstraint: Region
+          LocationConstraint: Region,
         }
       }
 
@@ -100,7 +100,7 @@ async function ensureS3Bucket(
         s3.createBucket,
         Options.Defaults.override({
           maxAttempts: 5,
-          delay: 1000
+          delay: 1000,
         })
       )
 
@@ -115,8 +115,8 @@ async function ensureS3Bucket(
       await putBucketTagging({
         Bucket: BucketName,
         Tagging: {
-          TagSet
-        }
+          TagSet,
+        },
       })
 
       log.debug(`The bucket "${BucketName}" tags has been setup`)
@@ -129,7 +129,7 @@ async function ensureS3Bucket(
 
       await putBucketPolicy({
         Bucket: BucketName,
-        Policy: JSON.stringify(Policy)
+        Policy: JSON.stringify(Policy),
       })
 
       log.debug(`The "${BucketName}" bucket policy has been updated`)

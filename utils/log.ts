@@ -11,7 +11,7 @@ const logLevels: Array<[string, Chalk]> = [
   ['warn', chalk.yellow.inverse],
   ['debug', chalk.white],
   ['info', chalk.green],
-  ['verbose', chalk.white]
+  ['verbose', chalk.white],
 ]
 const emptyFunction = Function() // eslint-disable-line no-new-func
 
@@ -43,7 +43,7 @@ const createLogger = (namespace, getCorrelationId): any => {
     if (allowedLevels.indexOf(levelName) > -1) {
       leveledLogger[levelName] = (...args): any => {
         originalLogger(
-          `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map(arg =>
+          `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map((arg) =>
             Object(arg) === arg ? JSON.stringify(arg) : arg
           )}`
         )

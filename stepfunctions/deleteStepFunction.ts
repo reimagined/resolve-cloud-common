@@ -32,7 +32,7 @@ async function processPage(
     stateMachineArn: StepFunctionArn,
     statusFilter: 'RUNNING',
     maxResults: 30,
-    ...page
+    ...page,
   })
 
   await Promise.all(
@@ -46,7 +46,7 @@ async function processPage(
       )
       return stopExecution({
         executionArn,
-        cause: 'Delete the step function'
+        cause: 'Delete the step function',
       })
     })
   )
@@ -74,7 +74,7 @@ const deleteStepFunction: TMethod = async (
       Options.Defaults.override({ log })
     )
     await removeStateMachine({
-      stateMachineArn: StepFunctionArn
+      stateMachineArn: StepFunctionArn,
     })
 
     const describeStateMachine = retry(
@@ -87,12 +87,12 @@ const deleteStepFunction: TMethod = async (
     for (;;) {
       if (
         (await describeStateMachine({
-          stateMachineArn: StepFunctionArn
+          stateMachineArn: StepFunctionArn,
         }).catch(ignoreNotFoundException)) == null
       ) {
         break
       }
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
     log.debug(`Step function "${StepFunctionArn}" has been deleted`)

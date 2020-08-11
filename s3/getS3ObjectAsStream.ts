@@ -32,7 +32,7 @@ function getS3ObjectAsStream(
       .getObject({
         Bucket: BucketName,
         Key: FileKey,
-        Range
+        Range,
       })
       .createReadStream()
   } catch (error) {

@@ -63,7 +63,7 @@ const createPresignedPost: TMethod = async (
   const s3 = new S3({
     region: Region,
     signatureVersion: 'v4',
-    useAccelerateEndpoint: true
+    useAccelerateEndpoint: true,
   })
 
   try {
@@ -72,14 +72,14 @@ const createPresignedPost: TMethod = async (
     const presignedPost = s3.createPresignedPost({
       Bucket: BucketName,
       Fields: {
-        Key
+        Key,
       },
       Expires,
       Conditions: getConditions({
         ContentType,
         MaxSize,
-        Metadata
-      })
+        Metadata,
+      }),
     })
 
     assignMetadata(presignedPost, Metadata)

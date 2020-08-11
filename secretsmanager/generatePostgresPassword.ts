@@ -29,7 +29,7 @@ const generatePostgresPassword: TMethod = async (
       ExcludePunctuation: true,
       IncludeSpace: false,
       PasswordLength: 30,
-      RequireEachIncludedType: true
+      RequireEachIncludedType: true,
     })
 
     log.debug('The password has been generated')

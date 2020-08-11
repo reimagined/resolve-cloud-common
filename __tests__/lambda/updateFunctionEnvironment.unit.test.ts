@@ -17,24 +17,24 @@ describe('updateFunctionEnvironment', () => {
   })
   test('should function environment variables have been updated', async () => {
     mockGetFunctionConfiguration.mockResolvedValue({
-      Environment: { Variables: { testEnv1: 'testEnv1' } }
+      Environment: { Variables: { testEnv1: 'testEnv1' } },
     })
     mockUpdateFunctionConfiguration.mockResolvedValue({})
     await updateFunctionEnvironment({
       Region: 'region',
       FunctionName: 'functionName',
-      Variables: { testEnv2: 'testEnv2' }
+      Variables: { testEnv2: 'testEnv2' },
     })
 
     expect(mockGetFunctionConfiguration).toHaveBeenCalledWith({
       FunctionName: 'functionName',
-      Qualifier: '$LATEST'
+      Qualifier: '$LATEST',
     })
     expect(mockUpdateFunctionConfiguration).toHaveBeenCalledWith({
       FunctionName: 'functionName',
       Environment: {
-        Variables: { testEnv1: 'testEnv1', testEnv2: 'testEnv2' }
-      }
+        Variables: { testEnv1: 'testEnv1', testEnv2: 'testEnv2' },
+      },
     })
   })
 
@@ -44,7 +44,7 @@ describe('updateFunctionEnvironment', () => {
       await updateFunctionEnvironment({
         Region: 'region',
         FunctionName: 'functionName',
-        Variables: {}
+        Variables: {},
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

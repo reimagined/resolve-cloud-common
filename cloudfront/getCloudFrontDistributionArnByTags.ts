@@ -16,7 +16,7 @@ const findDistribution = async (
     cf.listDistributions,
     Options.Defaults.override({
       maxAttempts: 5,
-      delay: 1000
+      delay: 1000,
     })
   )
 
@@ -39,21 +39,21 @@ const findDistribution = async (
     cf.listTagsForResource,
     Options.Defaults.override({
       maxAttempts: 5,
-      delay: 1000
+      delay: 1000,
     })
   )
 
   for (const { ARN: arn } of Items) {
     const {
-      Tags: { Items: tags }
+      Tags: { Items: tags },
     } = await listTagsForResource({
-      Resource: arn
+      Resource: arn,
     })
 
     if (tags != null) {
       taggedResources.push({
         arn,
-        tags
+        tags,
       })
     }
   }

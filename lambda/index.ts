@@ -27,5 +27,5 @@ export {
   setFunctionConcurrency,
   updateFunctionCode,
   updateFunctionEnvironment,
-  updateFunctionHandler
+  updateFunctionHandler,
 }

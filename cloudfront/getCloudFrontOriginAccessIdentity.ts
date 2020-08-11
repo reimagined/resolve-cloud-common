@@ -22,7 +22,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
 
     const { CloudFrontOriginAccessIdentityList } = await listCloudFrontOriginAccessIdentities({
       Region,
-      Marker
+      Marker,
     })
 
     if (CloudFrontOriginAccessIdentityList == null) {
@@ -31,14 +31,14 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
 
     const { IsTruncated, NextMarker, Items = [] } = CloudFrontOriginAccessIdentityList
 
-    const identity = Items.find(item => item.Comment === Comment)
+    const identity = Items.find((item) => item.Comment === Comment)
 
     if (identity != null) {
       log.debug('identity successfully found')
 
       return {
         id: identity.Id,
-        s3UserId: identity.S3CanonicalUserId
+        s3UserId: identity.S3CanonicalUserId,
       }
     }
 
@@ -48,7 +48,7 @@ const getCloudFrontOriginAccessIdentity: TMethod = async (
       return await getCloudFrontOriginAccessIdentity({
         Region,
         Comment,
-        Marker: NextMarker
+        Marker: NextMarker,
       })
     }
 

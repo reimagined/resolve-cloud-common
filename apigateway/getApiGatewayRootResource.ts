@@ -28,10 +28,10 @@ const getApiGatewayRootResource: TMethod = async (
     do {
       const { position: nextPosition, items = [] } = await getResources({
         restApiId: RestApiId,
-        position
+        position,
       })
 
-      resource = items.find(item => item.parentId == null)
+      resource = items.find((item) => item.parentId == null)
 
       if (resource != null) {
         break

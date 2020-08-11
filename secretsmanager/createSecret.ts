@@ -23,12 +23,12 @@ const createSecret: TMethod = async (
   const Tags = [
     ...Array.from(Object.entries(RawTags)).map(([Key, Value]) => ({
       Key,
-      Value
+      Value,
     })),
     {
       Key: 'Owner',
-      Value: 'reimagined'
-    }
+      Value: 'reimagined',
+    },
   ]
 
   const secretsManager = new SecretsManager({ region: Region })

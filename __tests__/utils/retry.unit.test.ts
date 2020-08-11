@@ -64,7 +64,7 @@ describe('retry', () => {
     opts = Options.Defaults.override({
       maxAttempts: 2,
       delay: 1,
-      silent: true
+      silent: true,
     })
     mockSdk = new MockSdk('region')
   })
@@ -87,7 +87,7 @@ describe('retry', () => {
     const wrapper = retry<MockRequest, MockResponse>(mockSdk, mockSdk.invoke, opts)
 
     await expect(wrapper({ requestData: 'data' })).resolves.toEqual({
-      responseData: 'response-data'
+      responseData: 'response-data',
     })
     expect(mockSdk.method).toHaveBeenCalledWith({ requestData: 'data' })
     expect(response.promise).toHaveBeenCalled()

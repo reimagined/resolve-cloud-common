@@ -33,7 +33,7 @@ const startStepFunctionExecution: TMethod = async (
     const { executionArn } = await startExecution({
       stateMachineArn: StepFunctionArn,
       name: ExecutionName,
-      input: JSON.stringify(Input)
+      input: JSON.stringify(Input),
     })
     log.debug(`The execution "${executionArn}" has been started`)
     return executionArn

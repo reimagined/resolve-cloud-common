@@ -30,7 +30,7 @@ const createApiGatewayLambdaIntegration: TMethod = async (
       uri: URI,
       integrationHttpMethod: 'POST',
       type: 'AWS_PROXY',
-      httpMethod: 'ANY'
+      httpMethod: 'ANY',
     })
 
     log.debug(`The api gateway lambda integration has been created`)

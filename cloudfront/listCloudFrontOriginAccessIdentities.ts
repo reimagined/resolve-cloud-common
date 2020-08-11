@@ -27,13 +27,13 @@ const listCloudFrontOriginAccessIdentities: TMethod = async (
       cloudFront.listCloudFrontOriginAccessIdentities,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
       })
     )
 
     const result = await listCloudFrontOriginAccessIdentitiesResult({
       Marker,
-      MaxItems
+      MaxItems,
     })
 
     log.debug('list successfully got')

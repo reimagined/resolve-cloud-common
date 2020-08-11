@@ -15,7 +15,7 @@ async function beginTransaction(
   const { Region, ResourceArn, SecretArn, Database, Schema } = params
 
   const rdsDataService = new RDSDataService({
-    region: Region
+    region: Region,
   })
 
   try {
@@ -28,7 +28,7 @@ async function beginTransaction(
       resourceArn: ResourceArn,
       secretArn: SecretArn,
       database: Database,
-      schema: Schema
+      schema: Schema,
     })
 
     const { transactionId } = result

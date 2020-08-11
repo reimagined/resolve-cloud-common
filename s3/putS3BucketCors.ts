@@ -26,7 +26,7 @@ const putS3BucketCors: TMethod = async (
       s3.putBucketCors,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
       })
     )
 
@@ -38,10 +38,10 @@ const putS3BucketCors: TMethod = async (
             AllowedOrigins: ['*'],
             AllowedMethods: ['GET', 'HEAD'],
             MaxAgeSeconds: 3000,
-            AllowedHeaders: ['Authorization']
-          }
-        ]
-      }
+            AllowedHeaders: ['Authorization'],
+          },
+        ],
+      },
     })
 
     log.debug('Bucket CORS put successfully')

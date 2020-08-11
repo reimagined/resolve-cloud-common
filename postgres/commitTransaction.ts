@@ -14,7 +14,7 @@ async function commitTransaction(
   const { Region, ResourceArn, SecretArn, TransactionId } = params
 
   const rdsDataService = new RDSDataService({
-    region: Region
+    region: Region,
   })
 
   try {
@@ -29,7 +29,7 @@ async function commitTransaction(
       secretArn: SecretArn,
       continueAfterTimeout: false,
       includeResultMetadata: false,
-      sql: 'SELECT 0'
+      sql: 'SELECT 0',
     })
 
     const execute = retry(
@@ -40,7 +40,7 @@ async function commitTransaction(
     const result = await execute({
       resourceArn: ResourceArn,
       secretArn: SecretArn,
-      transactionId: TransactionId
+      transactionId: TransactionId,
     })
 
     const { transactionStatus } = result

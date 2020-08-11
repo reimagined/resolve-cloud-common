@@ -31,10 +31,10 @@ const getApiGatewayResource: TMethod = async (
     do {
       const { position: nextPosition, items = [] } = await getResources({
         restApiId: RestApiId,
-        position
+        position,
       })
 
-      resource = items.find(item => item.pathPart === PathPart)
+      resource = items.find((item) => item.pathPart === PathPart)
 
       if (resource != null) {
         break

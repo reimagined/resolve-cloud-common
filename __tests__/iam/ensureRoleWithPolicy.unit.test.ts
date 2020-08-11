@@ -31,13 +31,13 @@ describe('ensureRoleWithPolicy', () => {
         Arn: 'roleArn',
         Tags: [
           { Key: 'key1', Value: 'value1' },
-          { Key: 'key2', Value: 'value2' }
+          { Key: 'key2', Value: 'value2' },
         ],
         Path: 'path',
         RoleName: 'roleName',
         RoleId: 'roleId',
-        CreateDate: new Date()
-      }
+        CreateDate: new Date(),
+      },
     })
     mockTagRole.mockResolvedValue({})
     mockUntagRole.mockResolvedValue({})
@@ -46,7 +46,7 @@ describe('ensureRoleWithPolicy', () => {
     mockListRolePolicies.mockResolvedValueOnce({
       PolicyNames: ['policyName'],
       IsTruncated: true,
-      Marker: 'marker'
+      Marker: 'marker',
     })
     mockListRolePolicies.mockResolvedValue({ PolicyNames: ['policyName'] })
     mockPutRolePolicy.mockResolvedValue({})
@@ -55,48 +55,48 @@ describe('ensureRoleWithPolicy', () => {
       Region: 'region',
       AssumeRolePolicyDocument: {
         Version: '1.2.3',
-        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
       },
       RoleName: 'roleName',
       PolicyName: 'policyName',
       PolicyDocument: {
         Version: '1.2.3',
-        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
-      }
+        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }],
+      },
     })
 
     expect(mockGetRole).toHaveBeenCalledWith({ RoleName: 'roleName' })
     expect(mockTagRole).toHaveBeenCalledWith({
       RoleName: 'roleName',
-      Tags: [{ Key: 'Owner', Value: 'reimagined' }]
+      Tags: [{ Key: 'Owner', Value: 'reimagined' }],
     })
     expect(mockUntagRole).toHaveBeenCalledWith({
       RoleName: 'roleName',
-      TagKeys: ['key1', 'key2']
+      TagKeys: ['key1', 'key2'],
     })
     expect(mockUpdateAssumeRolePolicy).toHaveBeenCalledWith({
       RoleName: 'roleName',
       PolicyDocument: JSON.stringify({
         Version: '1.2.3',
-        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
-      })
+        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
+      }),
     })
     expect(mockUpdateRole).toHaveBeenCalledWith({
       RoleName: 'roleName',
-      Description: ''
+      Description: '',
     })
     expect(mockListRolePolicies).toHaveBeenNthCalledWith(1, { RoleName: 'roleName' })
     expect(mockListRolePolicies).toHaveBeenNthCalledWith(2, {
       RoleName: 'roleName',
-      Marker: 'marker'
+      Marker: 'marker',
     })
     expect(mockPutRolePolicy).toHaveBeenCalledWith({
       RoleName: 'roleName',
       PolicyName: 'policyName',
       PolicyDocument: JSON.stringify({
         Version: '1.2.3',
-        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
-      })
+        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }],
+      }),
     })
     expect(mockCreateRole).not.toHaveBeenCalled()
     expect(result).toEqual('roleArn')
@@ -112,30 +112,30 @@ describe('ensureRoleWithPolicy', () => {
         Path: 'path',
         RoleName: 'roleName',
         RoleId: 'roleId',
-        CreateDate: new Date()
-      }
+        CreateDate: new Date(),
+      },
     })
     const result = await ensureRoleWithPolicy({
       Region: 'region',
       AssumeRolePolicyDocument: {
         Version: '1.2.3',
-        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
       },
       RoleName: 'roleName',
       PolicyName: 'policyName',
       PolicyDocument: {
         Version: '1.2.3',
-        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
-      }
+        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }],
+      },
     })
     expect(mockCreateRole).toHaveBeenCalledWith({
       AssumeRolePolicyDocument: JSON.stringify({
         Version: '1.2.3',
-        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
       }),
       RoleName: 'roleName',
       Description: '',
-      Tags: [{ Key: 'Owner', Value: 'reimagined' }]
+      Tags: [{ Key: 'Owner', Value: 'reimagined' }],
     })
     expect(result).toEqual('roleArn')
   })
@@ -147,14 +147,14 @@ describe('ensureRoleWithPolicy', () => {
         Region: 'region',
         AssumeRolePolicyDocument: {
           Version: '1.2.3',
-          Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+          Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
         },
         RoleName: 'roleName',
         PolicyName: 'policyName',
         PolicyDocument: {
           Version: '1.2.3',
-          Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
-        }
+          Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }],
+        },
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
@@ -167,13 +167,13 @@ describe('ensureRoleWithPolicy', () => {
         Arn: 'roleArn',
         Tags: [
           { Key: 'key1', Value: 'value1' },
-          { Key: 'key2', Value: 'value2' }
+          { Key: 'key2', Value: 'value2' },
         ],
         Path: 'path',
         RoleName: 'roleName',
         RoleId: 'roleId',
-        CreateDate: new Date()
-      }
+        CreateDate: new Date(),
+      },
     })
     mockGetRole.mockRejectedValue(new Error())
     try {
@@ -181,14 +181,14 @@ describe('ensureRoleWithPolicy', () => {
         Region: 'region',
         AssumeRolePolicyDocument: {
           Version: '1.2.3',
-          Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+          Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }],
         },
         RoleName: 'roleName',
         PolicyName: 'policyName',
         PolicyDocument: {
           Version: '1.2.3',
-          Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
-        }
+          Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }],
+        },
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

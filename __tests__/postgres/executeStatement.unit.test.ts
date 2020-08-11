@@ -6,7 +6,7 @@ import executeStatement from '../../postgres/executeStatement'
 jest.mock('../../utils')
 
 jest.mock('../../postgres/highloadExecute', () => ({
-  highloadExecute: (f: any): any => f
+  highloadExecute: (f: any): any => f,
 }))
 
 const mockExecuteStatement = mockedSdkFunction(RDSDataService.prototype.executeStatement)
@@ -17,8 +17,8 @@ describe('executeStatement', () => {
       columnMetadata: [{ name: 'a' }, { name: 'b' }, { name: 'c' }, { name: 'd' }],
       records: [
         [{ booleanValue: true }, { longValue: 42 }, { stringValue: 'str-1' }, { isNull: true }],
-        [{ booleanValue: false }, { doubleValue: 1.5 }, { stringValue: 'str-2' }, { isNull: true }]
-      ]
+        [{ booleanValue: false }, { doubleValue: 1.5 }, { stringValue: 'str-2' }, { isNull: true }],
+      ],
     })
 
     const result: Array<{
@@ -30,7 +30,7 @@ describe('executeStatement', () => {
       Sql: 'SELECT * FROM "database"."table"',
       Region: 'region',
       ResourceArn: 'resourceArn',
-      SecretArn: 'secretArn'
+      SecretArn: 'secretArn',
     })
 
     expect(result[0].a).toEqual(true)

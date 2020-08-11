@@ -28,7 +28,7 @@ const setFunctionConcurrency: TMethod = async (
     )
     await putFunctionConcurrency({
       FunctionName,
-      ReservedConcurrentExecutions: Concurrency
+      ReservedConcurrentExecutions: Concurrency,
     })
     log.debug(`The function concurrency ${JSON.stringify(FunctionName)} has been set`)
   } catch (error) {

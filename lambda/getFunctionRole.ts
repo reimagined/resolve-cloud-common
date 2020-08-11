@@ -27,7 +27,7 @@ const getFunctionRole: TMethod = async (
       Options.Defaults.override({ log, maxAttempts: 1 })
     )
     const { Role: RoleArn } = await getFunctionConfiguration({
-      FunctionName
+      FunctionName,
     })
 
     if (RoleArn == null) {

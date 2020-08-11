@@ -15,11 +15,11 @@ describe.only('deleteFunctionConcurrency', () => {
     mockDeleteFunctionConcurrency.mockResolvedValue({})
     await deleteFunctionConcurrency({
       Region: 'region',
-      FunctionName: 'functionName'
+      FunctionName: 'functionName',
     })
 
     expect(mockDeleteFunctionConcurrency).toHaveBeenCalledWith({
-      FunctionName: 'functionName'
+      FunctionName: 'functionName',
     })
   })
 
@@ -28,7 +28,7 @@ describe.only('deleteFunctionConcurrency', () => {
     try {
       await deleteFunctionConcurrency({
         Region: 'region',
-        FunctionName: 'functionName'
+        FunctionName: 'functionName',
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

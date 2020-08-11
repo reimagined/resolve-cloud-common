@@ -13,5 +13,5 @@ export {
   createStatementExecutor,
   beginTransaction,
   commitTransaction,
-  rollbackTransaction
+  rollbackTransaction,
 }

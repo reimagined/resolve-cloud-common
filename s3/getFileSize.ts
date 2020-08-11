@@ -11,7 +11,7 @@ async function getFileSize(
   log.debug(`Get a file size for "${BucketName}"/$"{FileKey}"`)
 
   const s3 = new S3({
-    region: Region
+    region: Region,
   })
 
   const headObject = retry(s3, s3.headObject, Options.Defaults.override({ log }))
@@ -19,7 +19,7 @@ async function getFileSize(
   try {
     const { ContentLength } = await headObject({
       Bucket: BucketName,
-      Key: FileKey
+      Key: FileKey,
     })
 
     if (ContentLength == null) {

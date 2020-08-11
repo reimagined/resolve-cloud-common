@@ -25,5 +25,5 @@ export {
   putS3BucketCors,
   putS3PublicAccessBlock,
   uploadPart,
-  uploadS3Object
+  uploadS3Object,
 }

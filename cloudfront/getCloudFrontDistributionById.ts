@@ -26,12 +26,12 @@ const getCloudFrontDistributionById: TMethod = async (
       cloudFront.getDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
       })
     )
 
     const result = await getDistribution({
-      Id
+      Id,
     })
 
     log.debug('distribution found')

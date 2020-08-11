@@ -34,7 +34,7 @@ const importCertificate: TMethod = async (
       Certificate,
       PrivateKey,
       CertificateArn,
-      CertificateChain
+      CertificateChain,
     })
 
     if (ImportedCertificateArn == null) {

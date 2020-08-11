@@ -13,22 +13,22 @@ describe('createPresignedPost', () => {
     mockS3.createPresignedPost.mockReturnValue({
       fields: {
         Policy: 'policy',
-        'X-Amz-Signature': 'x-amz-signature'
+        'X-Amz-Signature': 'x-amz-signature',
       },
-      url: 'url'
+      url: 'url',
     })
 
     await createPresignedPost({
       Region: 'region',
       BucketName: 'bucket',
-      Key: 'key'
+      Key: 'key',
     })
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Fields: {
-        Key: 'key'
-      }
+        Key: 'key',
+      },
     })
   })
 
@@ -36,24 +36,24 @@ describe('createPresignedPost', () => {
     mockS3.createPresignedPost.mockReturnValue({
       fields: {
         Policy: 'policy',
-        'X-Amz-Signature': 'x-amz-signature'
+        'X-Amz-Signature': 'x-amz-signature',
       },
-      url: 'url'
+      url: 'url',
     })
 
     await createPresignedPost({
       Region: 'region',
       BucketName: 'bucket',
       Key: 'key',
-      Expires: 60 // sec
+      Expires: 60, // sec
     })
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Fields: {
-        Key: 'key'
+        Key: 'key',
       },
-      Expires: 60
+      Expires: 60,
     })
   })
 
@@ -61,24 +61,24 @@ describe('createPresignedPost', () => {
     mockS3.createPresignedPost.mockReturnValue({
       fields: {
         Policy: 'policy',
-        'X-Amz-Signature': 'x-amz-signature'
+        'X-Amz-Signature': 'x-amz-signature',
       },
-      url: 'url'
+      url: 'url',
     })
 
     await createPresignedPost({
       Region: 'region',
       BucketName: 'bucket',
       Key: 'key',
-      ContentType: 'image/'
+      ContentType: 'image/',
     })
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Fields: {
-        Key: 'key'
+        Key: 'key',
       },
-      Conditions: [['starts-with', '$Content-Type', 'image/']]
+      Conditions: [['starts-with', '$Content-Type', 'image/']],
     })
   })
 
@@ -86,24 +86,24 @@ describe('createPresignedPost', () => {
     mockS3.createPresignedPost.mockReturnValue({
       fields: {
         Policy: 'policy',
-        'X-Amz-Signature': 'x-amz-signature'
+        'X-Amz-Signature': 'x-amz-signature',
       },
-      url: 'url'
+      url: 'url',
     })
 
     await createPresignedPost({
       Region: 'region',
       BucketName: 'bucket',
       Key: 'key',
-      ContentType: 'image/jpeg'
+      ContentType: 'image/jpeg',
     })
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Fields: {
-        Key: 'key'
+        Key: 'key',
       },
-      Conditions: [['eq', '$Content-Type', 'image/jpeg']]
+      Conditions: [['eq', '$Content-Type', 'image/jpeg']],
     })
   })
 
@@ -111,9 +111,9 @@ describe('createPresignedPost', () => {
     mockS3.createPresignedPost.mockReturnValue({
       fields: {
         Policy: 'policy',
-        'X-Amz-Signature': 'x-amz-signature'
+        'X-Amz-Signature': 'x-amz-signature',
       },
-      url: 'url'
+      url: 'url',
     })
 
     const result = await createPresignedPost({
@@ -122,19 +122,19 @@ describe('createPresignedPost', () => {
       Key: 'key',
       Metadata: {
         userId: 'userId',
-        deploymentId: 'deploymentId'
-      }
+        deploymentId: 'deploymentId',
+      },
     })
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
       Fields: {
-        Key: 'key'
+        Key: 'key',
       },
       Conditions: [
         ['eq', '$x-amz-meta-userId', 'userId'],
-        ['eq', '$x-amz-meta-deploymentId', 'deploymentId']
-      ]
+        ['eq', '$x-amz-meta-deploymentId', 'deploymentId'],
+      ],
     })
 
     expect(result.fields['x-amz-meta-userId']).toEqual('userId')
@@ -152,7 +152,7 @@ describe('createPresignedPost', () => {
       await createPresignedPost({
         Region: 'region',
         BucketName: 'bucket',
-        Key: 'key'
+        Key: 'key',
       })
       return Promise.reject(new Error('Test failed'))
     } catch (err) {

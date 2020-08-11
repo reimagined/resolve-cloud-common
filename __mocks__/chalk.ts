@@ -8,12 +8,12 @@ export interface Chalk {
 const chalk: Chalk = {
   white: jest.fn(),
   yellow: {
-    inverse: jest.fn()
+    inverse: jest.fn(),
   },
   green: jest.fn(),
   red: {
-    inverse: jest.fn()
-  }
+    inverse: jest.fn(),
+  },
 }
 
 export default chalk

@@ -16,12 +16,12 @@ describe('setFunctionConcurrency', () => {
     await setFunctionConcurrency({
       Region: 'region',
       FunctionName: 'functionName',
-      Concurrency: 1
+      Concurrency: 1,
     })
 
     expect(mockPutFunctionConcurrency).toHaveBeenCalledWith({
       FunctionName: 'functionName',
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: 1,
     })
   })
 
@@ -31,7 +31,7 @@ describe('setFunctionConcurrency', () => {
       await setFunctionConcurrency({
         Region: 'region',
         FunctionName: 'functionName',
-        Concurrency: 1
+        Concurrency: 1,
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

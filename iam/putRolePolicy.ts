@@ -34,7 +34,7 @@ const putRolePolicy: TMethod = async (
     await ensureRolePolicy({
       PolicyName,
       RoleName,
-      PolicyDocument: JSON.stringify(PolicyDocument)
+      PolicyDocument: JSON.stringify(PolicyDocument),
     })
   } catch (error) {
     log.debug(`Failed to put the role "${RoleName}" policy "${PolicyName}"`)

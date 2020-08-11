@@ -21,5 +21,5 @@ export {
   getApi,
   getRestApi,
   getApiGatewayResource,
-  getApiGatewayRootResource
+  getApiGatewayRootResource,
 }

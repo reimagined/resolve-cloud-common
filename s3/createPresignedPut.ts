@@ -23,7 +23,7 @@ const createPresignedPut: TMethod = async (
 ) => {
   const s3 = new S3({
     region: Region,
-    signatureVersion: 'v4'
+    signatureVersion: 'v4',
   })
 
   try {
@@ -35,7 +35,7 @@ const createPresignedPut: TMethod = async (
       Expires,
       Metadata,
       ContentType,
-      ContentLength
+      ContentLength,
     })
   } catch (error) {
     log.error('Signed url creating is failed')

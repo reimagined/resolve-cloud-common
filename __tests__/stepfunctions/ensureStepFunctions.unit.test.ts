@@ -32,16 +32,16 @@ describe('ensureStepFunction', () => {
           stateMachineArn: 'stateMachineArn',
           name: 'name',
           creationDate: new Date(),
-          type: 'STANDARD'
-        }
-      ]
+          type: 'STANDARD',
+        },
+      ],
     })
     mockUpdateStateMachine.mockResolvedValue({ updateDate: new Date() })
     mockListTagsForResource.mockResolvedValue({
       tags: [
         { key: 'key1', value: 'value1' },
-        { key: 'key2', value: 'value2' }
-      ]
+        { key: 'key2', value: 'value2' },
+      ],
     })
     mockTagResource.mockResolvedValue({})
     mockUntagResource.mockResolvedValue({})
@@ -52,9 +52,9 @@ describe('ensureStepFunction', () => {
           stateMachineArn: 'stateMachineArn',
           name: 'name',
           startDate: new Date(),
-          status: 'status'
-        }
-      ]
+          status: 'status',
+        },
+      ],
     })
     mockListExecutions.mockResolvedValue({ executions: [] })
     mockStopExecution.mockResolvedValue({ stopDate: new Date() })
@@ -63,14 +63,14 @@ describe('ensureStepFunction', () => {
       Region: 'region',
       RoleArn: 'roleArn',
       Definition: {},
-      Name: 'name'
+      Name: 'name',
     })
 
     expect(mockListStateMachines).toHaveBeenCalledWith({})
     expect(mockUpdateStateMachine).toHaveBeenCalledWith({
       roleArn: 'roleArn',
       definition: JSON.stringify({}),
-      stateMachineArn: 'stateMachineArn'
+      stateMachineArn: 'stateMachineArn',
     })
     expect(mockListTagsForResource).toHaveBeenCalledWith({ resourceArn: 'stateMachineArn' })
     expect(mockTagResource).toHaveBeenCalledWith({
@@ -78,20 +78,20 @@ describe('ensureStepFunction', () => {
       tags: [
         {
           key: 'Owner',
-          value: 'reimagined'
-        }
-      ]
+          value: 'reimagined',
+        },
+      ],
     })
     expect(mockUntagResource).toHaveBeenCalledWith({
       resourceArn: 'stateMachineArn',
-      tagKeys: ['key1', 'key2']
+      tagKeys: ['key1', 'key2'],
     })
     expect(mockListExecutions).toHaveBeenCalledWith({
       stateMachineArn: 'stateMachineArn',
-      statusFilter: 'RUNNING'
+      statusFilter: 'RUNNING',
     })
     expect(mockStopExecution).toHaveBeenCalledWith({
-      executionArn: 'executionArn'
+      executionArn: 'executionArn',
     })
     expect(mockCreateStateMachine).not.toHaveBeenCalled()
     expect(result).toEqual('stateMachineArn')
@@ -107,16 +107,16 @@ describe('ensureStepFunction', () => {
           type: 'STANDARD',
           stateMachineArn: 'stateMachineArn',
           name: 'name',
-          creationDate: new Date()
-        }
-      ]
+          creationDate: new Date(),
+        },
+      ],
     })
     mockUpdateStateMachine.mockResolvedValue({ updateDate: new Date() })
     mockListTagsForResource.mockResolvedValue({
       tags: [
         { key: 'key1', value: 'value1' },
-        { key: 'key2', value: 'value2' }
-      ]
+        { key: 'key2', value: 'value2' },
+      ],
     })
     mockTagResource.mockResolvedValue({})
     mockUntagResource.mockResolvedValue({})
@@ -124,14 +124,14 @@ describe('ensureStepFunction', () => {
     mockStopExecution.mockResolvedValue({ stopDate: new Date() })
     mockCreateStateMachine.mockResolvedValue({
       stateMachineArn: 'stateMachineArn',
-      creationDate: new Date()
+      creationDate: new Date(),
     })
 
     const result = await ensureStepFunction({
       Region: 'region',
       RoleArn: 'roleArn',
       Definition: {},
-      Name: 'name'
+      Name: 'name',
     })
     expect(result).toEqual('stateMachineArn')
   })
@@ -143,7 +143,7 @@ describe('ensureStepFunction', () => {
         Region: 'region',
         RoleArn: 'roleArn',
         Definition: {},
-        Name: 'name'
+        Name: 'name',
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

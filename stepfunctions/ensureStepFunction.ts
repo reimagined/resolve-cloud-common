@@ -29,7 +29,7 @@ const getStepFunctionArnLoop: GetStepFunctionArnLoop = async (
     Options.Defaults.override({ log, maxAttempts: 1 })
   )
   const { stateMachines, nextToken } = await listStateMachines({
-    nextToken: NextToken
+    nextToken: NextToken,
   })
 
   for (const stateMachine of stateMachines) {
@@ -71,7 +71,7 @@ async function updateStepFunction(
     stateMachineArn: StepFunctionArn,
     definition: JSON.stringify(Definition),
     roleArn: RoleArn,
-    loggingConfiguration: LoggingConfiguration
+    loggingConfiguration: LoggingConfiguration,
   })
 }
 
@@ -92,7 +92,7 @@ async function listStepFunctionTags(
     Options.Defaults.override({ log, maxAttempts: 1 })
   )
   const { tags = [] } = await listTags({
-    resourceArn: StepFunctionArn
+    resourceArn: StepFunctionArn,
   })
 
   return tags
@@ -113,7 +113,7 @@ async function tagStepFunction(
   const addTags = retry(sf, sf.tagResource, Options.Defaults.override({ log, maxAttempts: 1 }))
   await addTags({
     resourceArn: StepFunctionArn,
-    tags: Tags
+    tags: Tags,
   })
 }
 
@@ -132,7 +132,7 @@ async function untagStepFunction(
   const removeTags = retry(sf, sf.untagResource, Options.Defaults.override({ log, maxAttempts: 1 }))
   await removeTags({
     resourceArn: StepFunctionArn,
-    tagKeys: TagKeys
+    tagKeys: TagKeys,
   })
 }
 
@@ -159,7 +159,7 @@ async function createStepFunction(
     definition: JSON.stringify(Definition),
     tags: Tags,
     type: Type,
-    loggingConfiguration: LoggingConfiguration
+    loggingConfiguration: LoggingConfiguration,
   })
 
   return stateMachineArn
@@ -192,7 +192,7 @@ const listRunningExecutionsLoop: ListRunningExecutionsLoop = async (
   const { nextToken, executions } = await listExecutions({
     stateMachineArn: StepFunctionArn,
     nextToken: NextToken,
-    statusFilter: 'RUNNING'
+    statusFilter: 'RUNNING',
   })
 
   for (const { executionArn } of executions) {
@@ -206,7 +206,7 @@ const listRunningExecutionsLoop: ListRunningExecutionsLoop = async (
         Region,
         StepFunctionArn,
         NextToken: nextToken,
-        Result
+        Result,
       },
       log
     )
@@ -259,7 +259,7 @@ const ensureStepFunction: TMethod = async (
     Name,
     RoleArn,
     Type = 'STANDARD',
-    LoggingConfiguration
+    LoggingConfiguration,
   },
   log = getLog('ENSURE-STEP-FUNCTION')
 ) => {
@@ -268,12 +268,12 @@ const ensureStepFunction: TMethod = async (
   const Tags = [
     ...Array.from(Object.entries(RawTags)).map(([key, value]) => ({
       key,
-      value
+      value,
     })),
     {
       key: 'Owner',
-      value: 'reimagined'
-    }
+      value: 'reimagined',
+    },
   ]
 
   log.verbose({
@@ -281,7 +281,7 @@ const ensureStepFunction: TMethod = async (
     Tags,
     Definition,
     Name,
-    RoleArn
+    RoleArn,
   })
 
   try {
@@ -289,7 +289,7 @@ const ensureStepFunction: TMethod = async (
     const StepFunctionArn = await getStepFunctionArn(
       {
         Region,
-        Name
+        Name,
       },
       log
     )
@@ -302,7 +302,7 @@ const ensureStepFunction: TMethod = async (
         StepFunctionArn,
         Definition,
         RoleArn,
-        LoggingConfiguration
+        LoggingConfiguration,
       },
       log
     )
@@ -312,7 +312,7 @@ const ensureStepFunction: TMethod = async (
     const prevTags = await listStepFunctionTags(
       {
         Region,
-        StepFunctionArn
+        StepFunctionArn,
       },
       log
     )
@@ -345,7 +345,7 @@ const ensureStepFunction: TMethod = async (
       {
         Region,
         StepFunctionArn,
-        Tags: ensuredTags
+        Tags: ensuredTags,
       },
       log
     )
@@ -356,7 +356,7 @@ const ensureStepFunction: TMethod = async (
       {
         Region,
         StepFunctionArn,
-        TagKeys: dropTags
+        TagKeys: dropTags,
       },
       log
     )
@@ -376,11 +376,11 @@ const ensureStepFunction: TMethod = async (
 
         log.debug('Stop running executions')
         await Promise.all(
-          executionArns.map(executionArn =>
+          executionArns.map((executionArn) =>
             stopExecution(
               {
                 Region,
-                ExecutionArn: executionArn
+                ExecutionArn: executionArn,
               },
               log
             )
@@ -404,7 +404,7 @@ const ensureStepFunction: TMethod = async (
           Name,
           RoleArn,
           Type,
-          LoggingConfiguration
+          LoggingConfiguration,
         },
         log
       )

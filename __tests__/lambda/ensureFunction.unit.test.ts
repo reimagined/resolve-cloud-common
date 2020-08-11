@@ -37,8 +37,8 @@ describe('ensureFunction', () => {
     mockListTags.mockResolvedValue({
       Tags: {
         tag1: 'tag1',
-        tag2: 'tag2'
-      }
+        tag2: 'tag2',
+      },
     })
     mockTagResource.mockResolvedValue({})
     mockUntagResource.mockResolvedValue({})
@@ -51,22 +51,22 @@ describe('ensureFunction', () => {
       Handler: 'handler',
       RoleArn: 'roleArn',
       S3Bucket: 's3Bucket',
-      S3Key: 's3Key'
+      S3Key: 's3Key',
     })
 
     expect(mockUpdateFunctionCode).toHaveBeenCalledWith({
       FunctionName: 'functionName',
       S3Bucket: 's3Bucket',
-      S3Key: 's3Key'
+      S3Key: 's3Key',
     })
     expect(mockListTags).toHaveBeenCalledWith({ Resource: 'functionArn' })
     expect(mockTagResource).toHaveBeenCalledWith({
       Resource: 'functionArn',
-      Tags: { Owner: 'reimagined' }
+      Tags: { Owner: 'reimagined' },
     })
     expect(mockUntagResource).toHaveBeenCalledWith({
       Resource: 'functionArn',
-      TagKeys: ['tag1', 'tag2']
+      TagKeys: ['tag1', 'tag2'],
     })
     expect(mockPutFunctionEventInvokeConfig).toHaveBeenCalled()
     expect(mockPutFunctionConcurrency).toHaveBeenCalled()
@@ -84,7 +84,7 @@ describe('ensureFunction', () => {
         Handler: 'handler',
         RoleArn: 'roleArn',
         S3Bucket: 's3Bucket',
-        S3Key: 's3Key'
+        S3Key: 's3Key',
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
@@ -103,12 +103,12 @@ describe('ensureFunction', () => {
       Handler: 'handler',
       RoleArn: 'roleArn',
       S3Bucket: 's3Bucket',
-      S3Key: 's3Key'
+      S3Key: 's3Key',
     })
     expect(mockCreateFunction).toHaveBeenCalledWith({
       Code: {
         S3Bucket: 's3Bucket',
-        S3Key: 's3Key'
+        S3Key: 's3Key',
       },
       Description: 'description',
       FunctionName: 'functionName',
@@ -118,9 +118,9 @@ describe('ensureFunction', () => {
       Layers: undefined,
       Runtime: 'nodejs10.x',
       Tags: {
-        Owner: 'reimagined'
+        Owner: 'reimagined',
       },
-      Timeout: 900
+      Timeout: 900,
     })
     expect(result).toEqual({ FunctionArn: 'functionArn', Version: 'version' })
   })
@@ -138,7 +138,7 @@ describe('ensureFunction', () => {
         Handler: 'handler',
         RoleArn: 'roleArn',
         S3Bucket: 's3Bucket',
-        S3Key: 's3Key'
+        S3Key: 's3Key',
       })
     } catch (error) {
       expect(error).toBeInstanceOf(Error)

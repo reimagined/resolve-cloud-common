@@ -32,7 +32,7 @@ function highloadExecute(
             throw error
           }
         }
-      }
+      },
     }
   }
 }

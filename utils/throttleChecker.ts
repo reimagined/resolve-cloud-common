@@ -8,7 +8,7 @@ export function throttleChecker(): void {
       try {
         const concurrency = await getFunctionConcurrency({
           Region: process.env.AWS_REGION,
-          FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME
+          FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME,
         })
         if (concurrency === 0) {
           log.debug('concurrency 0')

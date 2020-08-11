@@ -27,7 +27,7 @@ const describeStepFunctionExecution: TMethod = async (
   try {
     log.debug(`Describe the execution "${ExecutionArn}" status`)
     const { status: executionStatus } = await describeExecution({
-      executionArn: ExecutionArn
+      executionArn: ExecutionArn,
     })
     log.debug(`The execution "${ExecutionArn}" status = "${executionStatus}"`)
     return executionStatus

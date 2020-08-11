@@ -1,7 +1,7 @@
 import CloudFront, {
   DistributionConfig as Config,
   UpdateDistributionRequest,
-  UpdateDistributionResult
+  UpdateDistributionResult,
 } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, Log, getLog } from '../utils'
@@ -32,14 +32,14 @@ const updateCloudFrontDistribution: TMethod = async (
       cloudFront.updateDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
       })
     )
 
     const result = await updateDistribution({
       DistributionConfig,
       Id,
-      IfMatch
+      IfMatch,
     })
 
     log.debug('Cloud front distribution successfully updated')

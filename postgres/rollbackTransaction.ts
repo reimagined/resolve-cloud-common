@@ -14,7 +14,7 @@ async function rollbackTransaction(
   const { Region, ResourceArn, SecretArn, TransactionId } = params
 
   const rdsDataService = new RDSDataService({
-    region: Region
+    region: Region,
   })
 
   try {
@@ -26,7 +26,7 @@ async function rollbackTransaction(
     const result = await execute({
       resourceArn: ResourceArn,
       secretArn: SecretArn,
-      transactionId: TransactionId
+      transactionId: TransactionId,
     })
 
     const { transactionStatus } = result
