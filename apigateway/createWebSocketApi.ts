@@ -54,7 +54,7 @@ const createWebSocketApi: TMethod = async (
 
     const { IntegrationId: connectIntegrationId } = await createIntegrationExecutor({
       ApiId,
-      IntegrationType: 'AWS',
+      IntegrationType: 'AWS_PROXY',
       IntegrationUri: buildIntegrationUri(Region, LambdaArn)
     })
 
