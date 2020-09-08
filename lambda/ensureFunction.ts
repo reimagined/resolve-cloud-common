@@ -39,13 +39,14 @@ async function updateFunctionCode(
   params: {
     Region: string
     FunctionName: string
-    S3Bucket: string
-    S3Key: string
+    S3Bucket?: string
+    S3Key?: string
+    ZipFile?: Buffer
     Publish?: boolean
   },
   log: Log
 ): Promise<string> {
-  const { Region, FunctionName, S3Bucket, S3Key, Publish } = params
+  const { Region, FunctionName, S3Bucket, S3Key, ZipFile, Publish } = params
 
   const lambda = new Lambda({ region: Region })
 
@@ -59,6 +60,7 @@ async function updateFunctionCode(
     FunctionName,
     S3Bucket,
     S3Key,
+    ZipFile,
     Publish
   })
 
@@ -76,8 +78,9 @@ async function createFunction(
     Description?: string
     Handler: string
     RoleArn: string
-    S3Bucket: string
-    S3Key: string
+    S3Bucket?: string
+    S3Key?: string
+    ZipFile?: Buffer
     Environment?: object
     Tags: { [key: string]: string }
     Runtime: string
@@ -96,6 +99,7 @@ async function createFunction(
     RoleArn,
     S3Bucket,
     S3Key,
+    ZipFile,
     Environment,
     Tags,
     Runtime,
@@ -116,7 +120,8 @@ async function createFunction(
     Runtime,
     Code: {
       S3Bucket,
-      S3Key
+      S3Key,
+      ZipFile
     },
     Timeout,
     MemorySize,
@@ -215,8 +220,9 @@ interface TMethod {
       Description?: string
       Handler: string
       RoleArn: string
-      S3Bucket: string
-      S3Key: string | null
+      S3Bucket?: string
+      S3Key?: string
+      ZipFile?: Buffer
       Variables?: { [key: string]: string }
       Tags?: { [key: string]: string }
       Runtime?: string
@@ -238,6 +244,7 @@ const ensureFunction: TMethod = async (
     RoleArn,
     S3Bucket,
     S3Key,
+    ZipFile,
     Layers,
     Variables,
     Tags: RawTags = {},
@@ -280,7 +287,7 @@ const ensureFunction: TMethod = async (
     const lambda = new Lambda({ region: Region })
     let FunctionVersion
 
-    if (S3Key != null) {
+    if (S3Key != null || ZipFile != null) {
       log.debug(`Update function code`)
 
       FunctionVersion = await updateFunctionCode(
@@ -289,6 +296,7 @@ const ensureFunction: TMethod = async (
           FunctionName,
           S3Bucket,
           S3Key,
+          ZipFile,
           Publish
         },
         log
@@ -420,6 +428,7 @@ const ensureFunction: TMethod = async (
           RoleArn,
           S3Bucket,
           S3Key,
+          ZipFile,
           Region,
           Environment,
           Tags,
