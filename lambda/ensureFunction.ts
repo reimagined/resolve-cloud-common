@@ -417,7 +417,7 @@ const ensureFunction: TMethod = async (
       Version: FunctionVersion
     }
   } catch (error) {
-    if (error.code === 'ResourceNotFoundException' && S3Key != null) {
+    if (error.code === 'ResourceNotFoundException' && (S3Key != null || ZipFile != null)) {
       log.debug(`Create function`)
 
       const { FunctionArn, Version } = await createFunction(
