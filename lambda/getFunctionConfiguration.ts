@@ -1,4 +1,4 @@
-import Lambda from 'aws-sdk/clients/lambda'
+import Lambda, { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -9,7 +9,7 @@ interface TMethod {
       FunctionName: string
     },
     log?: Log
-  ): Promise<any>
+  ): Promise<FunctionConfiguration>
 }
 
 const getFunctionConfiguration: TMethod = async (
