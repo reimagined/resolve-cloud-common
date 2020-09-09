@@ -1,23 +1,19 @@
-import CloudFront, {
-  CloudFrontOriginAccessIdentity as AccessIdentity
-} from 'aws-sdk/clients/cloudfront'
+import CloudFront from 'aws-sdk/clients/cloudfront'
 
-import { retry, Options, Log, getLog, NotFoundError } from '../utils'
+import { retry, Options, getLog, NotFoundError } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Comment: string
-    },
-    log?: Log
-  ): Promise<AccessIdentity>
-}
-
-const createCloudFrontOriginAccessIdentity: TMethod = async (
-  { Region, Comment },
+const createCloudFrontOriginAccessIdentity = async (
+  params: {
+    Region: string
+    Comment: string
+  },
   log = getLog('CREATE-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
-) => {
+): Promise<{
+  Id: string
+  S3CanonicalUserId: string
+}> => {
+  const { Region, Comment } = params
+
   const cloudFront = new CloudFront({ region: Region })
 
   try {
@@ -45,7 +41,10 @@ const createCloudFrontOriginAccessIdentity: TMethod = async (
 
     log.debug('Cloud front origin access identity created')
 
-    return CloudFrontOriginAccessIdentity
+    return {
+      Id: CloudFrontOriginAccessIdentity.Id,
+      S3CanonicalUserId: CloudFrontOriginAccessIdentity.S3CanonicalUserId
+    }
   } catch (error) {
     log.error('Cloud front origin access identity creation failed')
     throw error

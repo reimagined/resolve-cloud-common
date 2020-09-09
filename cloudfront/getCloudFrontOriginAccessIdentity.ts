@@ -2,60 +2,63 @@ import listCloudFrontOriginAccessIdentities from './listCloudFrontOriginAccessId
 
 import { Log, getLog } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Comment: string
-      Marker?: string
-    },
-    log?: Log
-  ): Promise<{ id: string; s3UserId: string } | null>
-}
+const getCloudFrontOriginAccessIdentity = async (
+  params: {
+    Region: string
+    Comment: string
+  },
+  log: Log = getLog('GET-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
+): Promise<{
+  Id: string
+  S3CanonicalUserId: string
+}> => {
+  const { Region, Comment } = params
 
-const getCloudFrontOriginAccessIdentity: TMethod = async (
-  { Region, Comment, Marker },
-  log = getLog('GET-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
-) => {
+  let Marker: string | undefined
+
   try {
-    log.debug('get list of cloud front origin access identities')
+    log.debug('Get list of cloud front origin access identities')
 
-    const { CloudFrontOriginAccessIdentityList } = await listCloudFrontOriginAccessIdentities({
-      Region,
-      Marker
-    })
+    for (;;) {
+      const { CloudFrontOriginAccessIdentityList } = await listCloudFrontOriginAccessIdentities({
+        Region,
+        Marker
+      })
 
-    if (CloudFrontOriginAccessIdentityList == null) {
-      throw new Error('Unknown cloud front origin access identity list')
-    }
+      if (CloudFrontOriginAccessIdentityList == null) {
+        throw new Error('Unknown cloud front origin access identity list')
+      }
 
-    const { IsTruncated, NextMarker, Items = [] } = CloudFrontOriginAccessIdentityList
+      const { IsTruncated, NextMarker, Items = [] } = CloudFrontOriginAccessIdentityList
 
-    const identity = Items.find((item) => item.Comment === Comment)
+      Marker = NextMarker
 
-    if (identity != null) {
-      log.debug('identity successfully found')
+      const identity = Items.find((item) => item.Comment === Comment)
 
-      return {
-        id: identity.Id,
-        s3UserId: identity.S3CanonicalUserId
+      if (identity != null) {
+        log.debug('Identity successfully found')
+
+        return {
+          Id: identity.Id,
+          S3CanonicalUserId: identity.S3CanonicalUserId
+        }
+      }
+
+      if (NextMarker == null || NextMarker === '') {
+        break
+      }
+
+      if (IsTruncated) {
+        log.debug('List is truncated, get list using marker')
+      } else {
+        break
       }
     }
 
-    if (IsTruncated) {
-      log.debug('list is truncated, get list using marker')
-
-      return await getCloudFrontOriginAccessIdentity({
-        Region,
-        Comment,
-        Marker: NextMarker
-      })
-    }
-
-    log.debug('identity is not found')
-    return null
+    log.debug('Identity is not found')
+    throw new Error('Identity is not found')
   } catch (error) {
-    log.error('getting of identity is failed')
+    log.error('Getting of identity is failed')
     throw error
   }
 }
