@@ -11,6 +11,7 @@ import getS3ObjectAsStream from './getS3ObjectAsStream'
 import listDirectory from './listDirectory'
 import listObjects from './listObjects'
 import putS3BucketCors from './putS3BucketCors'
+import putS3BucketLifecycle from './putS3BucketLifecycle'
 import putS3PublicAccessBlock from './putS3PublicAccessBlock'
 import uploadPart from './uploadPart'
 import uploadS3Object from './uploadS3Object'
@@ -29,6 +30,7 @@ export {
   listDirectory,
   listObjects,
   putS3BucketCors,
+  putS3BucketLifecycle,
   putS3PublicAccessBlock,
   uploadPart,
   uploadS3Object
