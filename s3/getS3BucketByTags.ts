@@ -8,7 +8,7 @@ async function getS3BucketByTags(
     Tags: { [key: string]: string }
   },
   log: Log = getLog('GET-S3-BUCKET-BY-TAGS')
-): Promise<string> {
+): Promise<string | null> {
   const { Region, Tags } = params
 
   const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
@@ -35,7 +35,7 @@ async function getS3BucketByTags(
   }
 
   if (resources == null || resources.length === 0) {
-    throw new Error('Resource Not Found')
+    return null
   }
   if (resources.length > 1) {
     log.verbose(resources.map(({ ResourceARN }) => ResourceARN).filter((arn) => arn != null))
@@ -44,7 +44,7 @@ async function getS3BucketByTags(
 
   const { ResourceARN } = resources[0]
   if (ResourceARN == null) {
-    throw new Error('Resource Not Found')
+    return null
   }
 
   log.verbose(ResourceARN)
