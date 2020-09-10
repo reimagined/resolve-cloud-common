@@ -1,15 +1,16 @@
 import S3 from 'aws-sdk/clients/s3'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
 const deleteS3Bucket = async (
   params: {
     Region: string
     BucketName: string
+    IfExists?: boolean
   },
   log: Log = getLog('DELETE-S3-BUCKET')
 ): Promise<void> => {
-  const { Region, BucketName } = params
+  const { Region, BucketName, IfExists = false } = params
 
   const s3 = new S3({ region: Region })
 
@@ -21,7 +22,8 @@ const deleteS3Bucket = async (
       s3.deleteBucket,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        expectedErrors: ['NoSuchBucket']
       })
     )
 
@@ -31,8 +33,13 @@ const deleteS3Bucket = async (
 
     log.debug(`The bucket "${BucketName}" has been deleted`)
   } catch (error) {
-    log.debug(`Failed to delete the bucket "${BucketName}"`)
-    throw error
+    if (IfExists) {
+      log.error(`Skip delete the bucket "${BucketName}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.error(`Failed to delete the bucket "${BucketName}"`)
+      throw error
+    }
   }
 }
 

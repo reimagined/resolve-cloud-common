@@ -1,8 +1,8 @@
 import IAM from 'aws-sdk/clients/iam'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-const processPage = async (
+const deleteRolePolicies = async (
   params: { Region: string; RoleName: string },
   log: Log,
   page?: object
@@ -13,10 +13,18 @@ const processPage = async (
 
   log.debug(`List the role inline policies`)
 
-  const listRolePolicies = retry(iam, iam.listRolePolicies, Options.Defaults.override({ log }))
+  const listRolePolicies = retry(
+    iam,
+    iam.listRolePolicies,
+    Options.Defaults.override({ log, expectedErrors: ['NoSuchEntity'] })
+  )
   const result = await listRolePolicies({ RoleName, ...page })
 
-  const deleteRolePolicy = retry(iam, iam.deleteRolePolicy, Options.Defaults.override({ log }))
+  const deleteRolePolicy = retry(
+    iam,
+    iam.deleteRolePolicy,
+    Options.Defaults.override({ log, expectedErrors: ['NoSuchEntity'] })
+  )
 
   await Promise.all(
     result.PolicyNames.map(async (PolicyName) => {
@@ -33,33 +41,46 @@ const processPage = async (
 
   const { IsTruncated, Marker } = result
   if (IsTruncated) {
-    await processPage(params, log, { Marker })
+    await deleteRolePolicies(params, log, { Marker })
   }
 }
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      RoleName: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const deleteRole = async (
+  params: {
+    Region: string
+    RoleName: string
+    IfExists?: boolean
+  },
+  log = getLog('DELETE-ROLE')
+): Promise<void> => {
+  const { Region, RoleName, IfExists } = params
 
-const deleteRole: TMethod = async ({ Region, RoleName }, log = getLog('DELETE-ROLE')) => {
   const iam = new IAM({ region: Region })
 
-  log.debug(`Delete the role "${RoleName}"`)
+  try {
+    log.debug(`Delete the role "${RoleName}"`)
 
-  log.debug(`Enumerate and delete the role inline policies`)
-  await processPage({ Region, RoleName }, log)
+    log.debug(`Enumerate and delete the role inline policies`)
+    await deleteRolePolicies({ Region, RoleName }, log)
 
-  log.debug(`Delete the role "${RoleName}" itself`)
-  const removeRole = retry(iam, iam.deleteRole, Options.Defaults.override({ log }))
-  await removeRole({ RoleName })
+    log.debug(`Delete the role "${RoleName}"`)
+    const removeRole = retry(
+      iam,
+      iam.deleteRole,
+      Options.Defaults.override({ log, expectedErrors: ['NoSuchEntity'] })
+    )
+    await removeRole({ RoleName })
 
-  log.debug(`The role "${RoleName}" has been deleted`)
+    log.debug(`The role "${RoleName}" has been deleted`)
+  } catch (error) {
+    if (IfExists) {
+      log.error(`Skip delete the role "${RoleName}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.error(`Failed to delete the role "${RoleName}"`)
+      throw error
+    }
+  }
 }
 
 export default deleteRole
