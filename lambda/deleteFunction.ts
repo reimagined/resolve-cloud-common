@@ -19,7 +19,10 @@ const deleteFunction = async (
     const removeFunction = retry(
       lambda,
       lambda.deleteFunction,
-      Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
+      Options.Defaults.override({
+        log,
+        expectedErrors: ['ResourceNotFoundException', 'InvalidParameterValueException']
+      })
     )
     await removeFunction({
       FunctionName
