@@ -58,7 +58,7 @@ const ensureDBCluster: TMethod = async (
       throw new Error('Failed to create RDS database cluster')
     }
 
-    log.debug(`RDS database cluster have been created`)
+    log.debug(`RDS database cluster has been created`)
 
     return createResult.DBCluster
   } catch (error) {
