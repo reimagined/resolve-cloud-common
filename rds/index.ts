@@ -1,3 +1,4 @@
 import ensureDBCluster from './ensureDBCluster'
+import deleteDBCluster from './deleteDBCluster'
 
-export { ensureDBCluster }
+export { ensureDBCluster, deleteDBCluster }
