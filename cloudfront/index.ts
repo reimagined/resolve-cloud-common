@@ -1,5 +1,6 @@
 import createCloudFrontDistribution from './createCloudFrontDistribution'
 import createCloudFrontOriginAccessIdentity from './createCloudFrontOriginAccessIdentity'
+import deleteCloudFrontDistribution from './deleteCloudFrontDistribution'
 import ensureOriginAccessIdentity from './ensureOriginAccessIdentity'
 import getCloudFrontDistributionById from './getCloudFrontDistributionById'
 import getCloudFrontDistributionsByTags from './getCloudFrontDistributionsByTags'
@@ -10,6 +11,7 @@ import updateCloudFrontDistribution from './updateCloudFrontDistribution'
 export {
   createCloudFrontDistribution,
   createCloudFrontOriginAccessIdentity,
+  deleteCloudFrontDistribution,
   ensureOriginAccessIdentity,
   getCloudFrontDistributionById,
   getCloudFrontDistributionsByTags,

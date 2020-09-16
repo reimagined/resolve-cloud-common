@@ -1,28 +1,31 @@
-import CloudFront, { Distribution as CloudFrontDistribution } from 'aws-sdk/clients/cloudfront'
+import CloudFront, {
+  CreateDistributionWithTagsRequest,
+  CreateDistributionWithTagsResult,
+  DistributionConfig as CloudFrontDistributionConfig,
+  Distribution as CloudFrontDistribution
+} from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      DistributionConfig: string
-      Tags: object
-    },
-    log?: Log
-  ): Promise<CloudFrontDistribution>
-}
+const createCloudFrontDistribution = async (
+  params: {
+    Region: string
+    DistributionConfig: CloudFrontDistributionConfig
+    Tags: object
+  },
+  log: Log = getLog(`CREATE-CLOUD-FRONT-DISTRIBUTION`)
+): Promise<CloudFrontDistribution> => {
+  const { Region, DistributionConfig, Tags } = params
 
-const createCloudFrontDistribution: TMethod = async (
-  { Region, DistributionConfig, Tags },
-  log = getLog(`CREATE-CLOUD-FRONT-DISTRIBUTION`)
-) => {
   const cf = new CloudFront({ region: Region })
 
   try {
     log.debug(`Create cloud front distribution with tags`)
 
-    const createDistributionWithTags = retry(
+    const createDistributionWithTags = retry<
+      CreateDistributionWithTagsRequest,
+      CreateDistributionWithTagsResult
+    >(
       cf,
       cf.createDistributionWithTags,
       Options.Defaults.override({
