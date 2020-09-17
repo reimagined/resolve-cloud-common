@@ -30,7 +30,7 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
       throw new Error('Failed to get list user pools')
     }
 
-    const foundPool = listUserPoolsResult.UserPools?.find(pool => pool.Name === PoolName)
+    const foundPool = listUserPoolsResult.UserPools?.find((pool) => pool.Name === PoolName)
 
     if (foundPool == null) {
       throw new Error(`Pool with name ${PoolName} does not exist`)

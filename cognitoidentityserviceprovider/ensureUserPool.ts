@@ -39,7 +39,7 @@ const ensureUserPool: TMethod = async (
       throw new Error('Failed to get list user pools')
     }
 
-    const foundPool = listUserPoolsResult.UserPools?.find(pool => pool.Name === PoolName)
+    const foundPool = listUserPoolsResult.UserPools?.find((pool) => pool.Name === PoolName)
 
     if (foundPool != null) {
       log.warn(`Pool with the same name already exists`)
