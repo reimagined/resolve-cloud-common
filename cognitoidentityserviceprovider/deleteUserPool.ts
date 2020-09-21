@@ -1,4 +1,6 @@
-import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider, {
+  GroupListType
+} from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -35,6 +37,57 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
     if (foundPool == null) {
       throw new Error(`Pool with name ${PoolName} does not exist`)
     }
+    const { Id: UserPoolId } = foundPool
+
+    const listGroupsExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.listGroups,
+      Options.Defaults.override({ log })
+    )
+
+    const groups: GroupListType = []
+
+    let NextToken: string | undefined
+    for (;;) {
+      try {
+        const { NextToken: FollowNextToken, Groups } = await listGroupsExecutor({
+          UserPoolId,
+          Limit: 100,
+          NextToken
+        })
+
+        if (
+          FollowNextToken == null ||
+          FollowNextToken === '' ||
+          Groups == null ||
+          Groups.length === 0
+        ) {
+          break
+        }
+
+        for (const group of Groups) {
+          groups.push(group)
+        }
+
+        NextToken = FollowNextToken
+      } catch (error) {
+        log.error(error)
+        throw error
+      }
+    }
+
+    const deleteGroupExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.deleteGroup,
+      Options.Defaults.override({ log })
+    )
+
+    for (const { GroupName } of groups) {
+      await deleteGroupExecutor({
+        UserPoolId,
+        GroupName
+      })
+    }
 
     const deleteUserPoolsExecutor = retry(
       cognitoIdentityServiceProvider,
@@ -43,7 +96,7 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
     )
 
     await deleteUserPoolsExecutor({
-      UserPoolId: foundPool.Id
+      UserPoolId
     })
   } catch (error) {
     log.debug(`Failed to delete the user pool "${PoolName}"`)
