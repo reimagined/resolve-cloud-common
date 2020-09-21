@@ -13,13 +13,14 @@ interface TMethod {
       CallbackURLs: Array<string>
       LogoutURLs: Array<string>
       Domain: string
+      Tags: { [key: string]: string }
     },
     log?: Log
   ): Promise<UserPoolType>
 }
 
 const ensureUserPool: TMethod = async (
-  { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain },
+  { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain, Tags },
   log = getLog('ENSURE_USER_POOL')
 ) => {
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
@@ -80,7 +81,8 @@ const ensureUserPool: TMethod = async (
             Priority: 2
           }
         ]
-      }
+      },
+      UserPoolTags: Tags
     })
 
     if (createUserPoolResult == null || createUserPoolResult.UserPool == null) {
