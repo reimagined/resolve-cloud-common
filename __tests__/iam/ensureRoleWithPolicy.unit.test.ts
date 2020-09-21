@@ -232,17 +232,17 @@ describe('ensureRoleWithPolicy', () => {
       }
     })
 
-    expect(mockDeleteRolePolicy).not.toBeCalledWith({
-      Region: 'region',
+    expect(mockDeleteRolePolicy).toBeCalledWith({
       RoleName: 'roleName',
       PolicyName: 'redundantPolicyName'
     })
 
-    expect(mockDeleteRolePolicy).not.toBeCalledWith({
-      Region: 'region',
-      RoleName: 'roleName',
-      PolicyName: 'policyName'
-    })
+    expect(mockDeleteRolePolicy).not.toBeCalledWith(
+      expect.objectContaining({
+        RoleName: 'roleName',
+        PolicyName: 'policyName'
+      })
+    )
 
     expect(mockDeleteRolePolicy).toBeCalledTimes(1)
   })
