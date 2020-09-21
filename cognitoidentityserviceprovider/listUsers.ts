@@ -2,18 +2,26 @@ import CognitoIdentityServiceProvider, {
   UsersListType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
+import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE } from './constants'
+
+type UserListWithAdminFlagType = Array<{
+  Username: string
+  Status: boolean
+  UserStatus: string
+  IsAdmin: boolean
+  Sub?: string
+}>
 
 const listUsers = async (
   params: {
     Region: string
     UserPoolArn: string
-    AttributesToGet?: Array<string>
-    Filter: string
+    Filter?: string
   },
   log: Log = getLog('LIST_USERS')
-): Promise<UsersListType> => {
-  const { Region, UserPoolArn, AttributesToGet, Filter } = params
+): Promise<UserListWithAdminFlagType> => {
+  const { Region, UserPoolArn, Filter } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   const listUsersExecutor = retry(
@@ -27,16 +35,16 @@ const listUsers = async (
     throw new Error(`Invalid ${UserPoolArn}`)
   }
 
-  const result: UsersListType = []
+  const users: UsersListType = []
 
   let PaginationToken: string | undefined
   for (;;) {
     try {
       const { PaginationToken: NextPaginationToken, Users } = await listUsersExecutor({
         UserPoolId,
-        AttributesToGet,
-        Filter,
         Limit: 100,
+        AttributesToGet: [SUB_ATTRIBUTE],
+        Filter,
         PaginationToken
       })
 
@@ -50,7 +58,7 @@ const listUsers = async (
       }
 
       for (const user of Users) {
-        result.push(user)
+        users.push(user)
       }
 
       PaginationToken = NextPaginationToken
@@ -59,6 +67,48 @@ const listUsers = async (
       throw error
     }
   }
+
+  const adminListGroupsForUserExecutor = retry(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.adminListGroupsForUser,
+    Options.Defaults.override({ log })
+  )
+
+  const result: UserListWithAdminFlagType = []
+  const promises: Array<Promise<any>> = []
+  const errors: Array<Error> = []
+
+  for (const { Username, Enabled: Status, UserStatus, Attributes } of users) {
+    if (Username != null && Status != null && UserStatus != null && Attributes != null) {
+      promises.push(
+        (async (): Promise<void> => {
+          try {
+            const { Groups } = await adminListGroupsForUserExecutor({
+              UserPoolId,
+              Username,
+              Limit: 1
+            })
+            const IsAdmin = (Groups?.length ?? 0) > 0 && Groups?.[0]?.GroupName === ADMIN_GROUP_NAME
+            const Sub = Attributes?.find(({ Name }) => Name === SUB_ATTRIBUTE)?.Value
+
+            result.push({ Username, Status, UserStatus, IsAdmin, Sub })
+          } catch (err) {
+            errors.push(err)
+          }
+        })()
+      )
+    } else {
+      errors.push(
+        new Error(
+          `Either ${JSON.stringify({ Username, Enabled: Status, UserStatus, Attributes })} is null`
+        )
+      )
+    }
+  }
+
+  await Promise.all(promises)
+
+  maybeThrowErrors(errors)
 
   return result
 }

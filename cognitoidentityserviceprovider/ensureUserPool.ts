@@ -2,6 +2,7 @@ import CognitoIdentityServiceProvider, {
   UserPoolType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
+import { ADMIN_GROUP_NAME, ADMIN_GROUP_DESCRIPTION } from './constants'
 import { retry, Options, getLog, Log } from '../utils'
 
 interface TMethod {
@@ -121,7 +122,27 @@ const ensureUserPool: TMethod = async (
 
     log.debug(`The user pool "${PoolName}" has been ensured`)
 
-    return createUserPoolResult.UserPool
+    const { UserPool } = createUserPoolResult
+    if (UserPool == null) {
+      throw new Error(`User pool is null`)
+    }
+    const createGroupExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.createGroup,
+      Options.Defaults.override({ log })
+    )
+
+    const groupResult = await createGroupExecutor({
+      UserPoolId: UserPool.Id,
+      GroupName: ADMIN_GROUP_NAME,
+      Description: ADMIN_GROUP_DESCRIPTION
+    })
+
+    if (groupResult == null || groupResult.Group == null) {
+      throw new Error(`Failed to create group`)
+    }
+
+    return UserPool
   } catch (error) {
     log.debug(`Failed to ensure the user pool "${PoolName}"`)
 
