@@ -402,18 +402,22 @@ const ensureRoleWithPolicy: TMethod = async (
   log.debug('The role policies have been found')
 
   log.debug('Delete a role policies')
+
   await Promise.all(
     rolePolicies.map((policyName) =>
-      deleteRolePolicy(
-        {
-          Region,
-          RoleName,
-          PolicyName: policyName
-        },
-        log
-      )
+      policyName !== PolicyName
+        ? deleteRolePolicy(
+            {
+              Region,
+              RoleName,
+              PolicyName: policyName
+            },
+            log
+          )
+        : null
     )
   )
+
   log.debug('The role policies have been deleted')
 
   log.debug('Put the policy')
