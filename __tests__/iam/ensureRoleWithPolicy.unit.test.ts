@@ -201,7 +201,7 @@ describe('ensureRoleWithPolicy', () => {
     }
   })
 
-  test('should delete ONLY redundant role policies', async () => {
+  test('should not delete role policies and should put policy only once if role is created', async () => {
     mockGetRole.mockRejectedValueOnce(new NoSuchEntityError())
     mockUpdateRole.mockRejectedValue(new NoSuchEntityError())
     mockCreateRole.mockResolvedValue({
@@ -214,7 +214,7 @@ describe('ensureRoleWithPolicy', () => {
       }
     })
     mockListRolePolicies.mockResolvedValue({
-      PolicyNames: ['policyName', 'redundantPolicyName'],
+      PolicyNames: ['policyName'],
       IsTruncated: false
     })
 
@@ -232,18 +232,7 @@ describe('ensureRoleWithPolicy', () => {
       }
     })
 
-    expect(mockDeleteRolePolicy).toBeCalledWith({
-      RoleName: 'roleName',
-      PolicyName: 'redundantPolicyName'
-    })
-
-    expect(mockDeleteRolePolicy).not.toBeCalledWith(
-      expect.objectContaining({
-        RoleName: 'roleName',
-        PolicyName: 'policyName'
-      })
-    )
-
-    expect(mockDeleteRolePolicy).toBeCalledTimes(1)
+    expect(mockPutRolePolicy).toBeCalledTimes(1)
+    expect(mockDeleteRolePolicy).not.toBeCalled()
   })
 })
