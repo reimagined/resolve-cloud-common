@@ -1,17 +1,19 @@
-import ensureUserPool from './ensureUserPool'
-import deleteUserPool from './deleteUserPool'
-import getUserPoolByTags from './getUserPoolByTags'
-import listUsers from './listUsers'
 import createUser from './createUser'
 import deleteUser from './deleteUser'
+import deleteUserPool from './deleteUserPool'
+import ensureUserPool from './ensureUserPool'
 import getUser from './getUser'
+import getUserPool from './getUserPool'
+import getUserPoolByTags from './getUserPoolByTags'
+import listUsers from './listUsers'
 
 export {
-  ensureUserPool,
-  deleteUserPool,
-  getUserPoolByTags,
-  listUsers,
-  getUser,
+  createUser,
   deleteUser,
-  createUser
+  deleteUserPool,
+  ensureUserPool,
+  getUser,
+  getUserPool,
+  getUserPoolByTags,
+  listUsers
 }
