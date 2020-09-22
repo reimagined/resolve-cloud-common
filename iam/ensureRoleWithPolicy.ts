@@ -118,7 +118,7 @@ async function ensureRole(
     Tags: Array<{ Key: string; Value: string }>
   },
   log: Log
-): Promise<string> {
+): Promise<{ Arn: string; IsCreated: boolean }> {
   const { Region, AssumeRolePolicyDocument, RoleName, Description, Tags } = params
 
   try {
@@ -209,7 +209,7 @@ async function ensureRole(
     )
     log.debug(`The role has been updated`)
 
-    return Arn
+    return { Arn, IsCreated: false }
   } catch (error) {
     if (error.code !== 'NoSuchEntity') {
       throw error
@@ -228,7 +228,7 @@ async function ensureRole(
     )
     log.debug(`The role with ARN ${Arn} has been created`)
 
-    return Arn
+    return { Arn, IsCreated: true }
   }
 }
 
@@ -391,30 +391,36 @@ const ensureRoleWithPolicy: TMethod = async (
   })
 
   log.debug('Ensure the role')
-  const Arn = await ensureRole(
+  const { Arn, IsCreated } = await ensureRole(
     { Region, AssumeRolePolicyDocument, RoleName, Description, Tags },
     log
   )
   log.debug(`The role has been ensured with ARN ${JSON.stringify(Arn)}`)
 
-  log.debug('Find a role policies')
-  const rolePolicies = await listRolePolicies({ Region, RoleName }, log)
-  log.debug('The role policies have been found')
+  if (!IsCreated) {
+    log.debug('Find a role policies')
+    const rolePolicies = await listRolePolicies({ Region, RoleName }, log)
+    log.debug('The role policies have been found')
 
-  log.debug('Delete a role policies')
-  await Promise.all(
-    rolePolicies.map((policyName) =>
-      deleteRolePolicy(
-        {
-          Region,
-          RoleName,
-          PolicyName: policyName
-        },
-        log
+    log.debug('Delete a role redundant policies')
+
+    await Promise.all(
+      rolePolicies.map((policyName) =>
+        policyName !== PolicyName
+          ? deleteRolePolicy(
+              {
+                Region,
+                RoleName,
+                PolicyName: policyName
+              },
+              log
+            )
+          : null
       )
     )
-  )
-  log.debug('The role policies have been deleted')
+
+    log.debug('The role policies have been deleted')
+  }
 
   log.debug('Put the policy')
   await putRolePolicy({ Region, RoleName, PolicyName, PolicyDocument }, log)
@@ -422,6 +428,9 @@ const ensureRoleWithPolicy: TMethod = async (
 
   const iam = new IAM({ region: Region })
   const getRole = retry(iam, iam.getRole, Options.Defaults.override({ log, silent: true }))
+
+  log.debug('Waiting for role to be accessible')
+
   for (let retryIndex = 0; ; retryIndex++) {
     try {
       await getRole({ RoleName })
@@ -432,6 +441,8 @@ const ensureRoleWithPolicy: TMethod = async (
       }
     }
   }
+
+  log.debug('Role is ready to use')
 
   return Arn
 }

@@ -34,7 +34,7 @@ const ensureUserPool: TMethod = async (
     )
 
     const listUserPoolsResult = await listUserPoolsExecutor({
-      MaxResults: 100
+      MaxResults: 60
     })
 
     if (listUserPoolsResult == null) {
