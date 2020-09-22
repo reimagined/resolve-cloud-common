@@ -2,8 +2,7 @@ import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import createApiWithLambdaIntegration from './createApiWithLambdaIntegration'
 import createRouteWithLambdaIntegration from './createRouteWithLambdaIntegration'
-
-import { retry, Options, getLog, Log } from '../utils'
+import { getLog, Log, Options, retry } from '../utils'
 
 interface TMethod {
   (
@@ -11,7 +10,6 @@ interface TMethod {
       Region: string
       Stage: string
       Name: string
-      RouteSelectionExpression: string
       ApiStage: string
       LambdaArn: string
       AccountId: string
@@ -20,31 +18,30 @@ interface TMethod {
   ): Promise<{ ApiId: string; ApiEndpoint: string }>
 }
 
-const ROUTES = ['$connect', '$disconnect', '$default']
+const ROUTES = ['/', '/{proxy+}']
 
-const createWebSocketApi: TMethod = async (
-  { Region, Stage, Name, RouteSelectionExpression, ApiStage, LambdaArn, AccountId },
-  log = getLog(`CREATE-WEBSOCKET-API`)
+const createHttpApi: TMethod = async (
+  { Region, Stage, Name, ApiStage, LambdaArn, AccountId },
+  log = getLog(`CREATE-HTTP-API`)
 ) => {
   const agv2 = new ApiGatewayV2({ region: Region })
 
   try {
-    log.debug(`Create a websocket api "${Name}"`)
+    log.debug(`Create the "${Name}" HTTP API`)
 
     const { ApiId, ApiEndpoint, IntegrationId } = await createApiWithLambdaIntegration({
       Region,
       Name,
-      AccountId,
       ApiStage,
       LambdaArn,
-      RouteSelectionExpression,
-      ProtocolType: 'WEBSOCKET'
+      AccountId,
+      ProtocolType: 'HTTP'
     })
 
     log.debug(`Create routes`)
 
     await Promise.all(
-      ROUTES.map((routeKey) =>
+      ROUTES.map((path) =>
         createRouteWithLambdaIntegration(
           {
             Region,
@@ -52,34 +49,30 @@ const createWebSocketApi: TMethod = async (
             IntegrationId,
             LambdaArn,
             AccountId,
-            RouteKey: routeKey,
-            Path: routeKey
+            RouteKey: `ANY ${path}`,
+            Path: path
           },
           log
         )
       )
     )
 
-    log.debug(`Routes created`)
-
     log.debug(`Create deployment API`)
-    const createDeploymentExecutor = retry(
-      agv2,
-      agv2.createDeployment,
-      Options.Defaults.override({ log })
-    )
-    await createDeploymentExecutor({
+
+    const createDeployment = retry(agv2, agv2.createDeployment, Options.Defaults.override({ log }))
+
+    await createDeployment({
       ApiId,
       StageName: ApiStage,
-      Description: `resolve-api-websocket-${Stage}`
+      Description: `resolve-api-http-${Stage}`
     })
 
-    log.debug(`The WebSocket API has been created`)
+    log.debug(`The HTTP API has been created`)
     return { ApiId, ApiEndpoint }
   } catch (error) {
-    log.error(`Failed to create a WebSocket API`)
+    log.error(`Failed to create a HTTP API`)
     throw error
   }
 }
 
-export default createWebSocketApi
+export default createHttpApi
