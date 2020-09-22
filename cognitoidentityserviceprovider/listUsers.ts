@@ -42,7 +42,7 @@ const listUsers = async (
     try {
       const { PaginationToken: NextPaginationToken, Users } = await listUsersExecutor({
         UserPoolId,
-        Limit: 100,
+        Limit: 60,
         AttributesToGet: [SUB_ATTRIBUTE],
         Filter,
         PaginationToken

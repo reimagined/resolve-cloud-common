@@ -25,7 +25,7 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
     )
 
     const listUserPoolsResult = await listUserPoolsExecutor({
-      MaxResults: 100
+      MaxResults: 60
     })
 
     if (listUserPoolsResult == null) {
@@ -52,7 +52,7 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
       try {
         const { NextToken: FollowNextToken, Groups } = await listGroupsExecutor({
           UserPoolId,
-          Limit: 100,
+          Limit: 60,
           NextToken
         })
 
