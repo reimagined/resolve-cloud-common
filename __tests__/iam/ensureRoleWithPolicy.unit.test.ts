@@ -13,17 +13,23 @@ const mockUntagRole = mockedSdkFunction(IAM.prototype.untagRole)
 const mockGetRole = mockedSdkFunction(IAM.prototype.getRole)
 const mockPutRolePolicy = mockedSdkFunction(IAM.prototype.putRolePolicy)
 const mockListRolePolicies = mockedSdkFunction(IAM.prototype.listRolePolicies)
+const mockDeleteRolePolicy = mockedSdkFunction(IAM.prototype.deleteRolePolicy)
+
+class NoSuchEntityError extends Error {
+  code = 'NoSuchEntity'
+}
 
 describe('ensureRoleWithPolicy', () => {
   afterEach(() => {
-    mockUpdateAssumeRolePolicy.mockClear()
-    mockUpdateRole.mockClear()
-    mockCreateRole.mockClear()
-    mockTagRole.mockClear()
-    mockUntagRole.mockClear()
-    mockGetRole.mockClear()
-    mockPutRolePolicy.mockClear()
-    mockListRolePolicies.mockClear()
+    mockUpdateAssumeRolePolicy.mockReset()
+    mockUpdateRole.mockReset()
+    mockCreateRole.mockReset()
+    mockTagRole.mockReset()
+    mockUntagRole.mockReset()
+    mockGetRole.mockReset()
+    mockPutRolePolicy.mockReset()
+    mockListRolePolicies.mockReset()
+    mockDeleteRolePolicy.mockReset()
   })
   test('should role has been ensure', async () => {
     mockGetRole.mockResolvedValue({
@@ -103,9 +109,8 @@ describe('ensureRoleWithPolicy', () => {
   })
 
   test('should the role has been created with ARN', async () => {
-    const error: Error & { code?: string } = new Error()
-    error.code = 'NoSuchEntity'
-    mockUpdateRole.mockRejectedValue(error)
+    mockGetRole.mockRejectedValueOnce(new NoSuchEntityError())
+    mockUpdateRole.mockRejectedValue(new NoSuchEntityError())
     mockCreateRole.mockResolvedValue({
       Role: {
         Arn: 'roleArn',
@@ -115,6 +120,7 @@ describe('ensureRoleWithPolicy', () => {
         CreateDate: new Date()
       }
     })
+    mockListRolePolicies.mockResolvedValue({ PolicyNames: ['policyName'] })
     const result = await ensureRoleWithPolicy({
       Region: 'region',
       AssumeRolePolicyDocument: {
@@ -193,5 +199,40 @@ describe('ensureRoleWithPolicy', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
     }
+  })
+
+  test('should not delete role policies and should put policy only once if role is created', async () => {
+    mockGetRole.mockRejectedValueOnce(new NoSuchEntityError())
+    mockUpdateRole.mockRejectedValue(new NoSuchEntityError())
+    mockCreateRole.mockResolvedValue({
+      Role: {
+        Arn: 'roleArn',
+        Path: 'path',
+        RoleName: 'roleName',
+        RoleId: 'roleId',
+        CreateDate: new Date()
+      }
+    })
+    mockListRolePolicies.mockResolvedValue({
+      PolicyNames: ['policyName'],
+      IsTruncated: false
+    })
+
+    await ensureRoleWithPolicy({
+      Region: 'region',
+      AssumeRolePolicyDocument: {
+        Version: '1.2.3',
+        Statement: [{ Principal: { Service: '*' }, Action: 'lambda:invoke', Effect: 'Allow' }]
+      },
+      RoleName: 'roleName',
+      PolicyName: 'policyName',
+      PolicyDocument: {
+        Version: '1.2.3',
+        Statement: [{ Resource: '*', Action: 'lambda:invoke', Effect: 'Allow' }]
+      }
+    })
+
+    expect(mockPutRolePolicy).toBeCalledTimes(1)
+    expect(mockDeleteRolePolicy).not.toBeCalled()
   })
 })
