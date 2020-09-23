@@ -1,21 +1,20 @@
 import CognitoIdentityServiceProvider, {
-  GroupListType, UserPoolDescriptionType
+  GroupListType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 import STS from 'aws-sdk/clients/sts'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-const deleteUserPool = async (params: {
-  Region: string
-  PoolName: string
-  IfExists: boolean
-}, log: Log = getLog('DELETE_USER_POOL')): Promise<void> => {
-  const {
-    Region,
-    PoolName,
-    IfExists
-  } = params
+const deleteUserPool = async (
+  params: {
+    Region: string
+    PoolName: string
+    IfExists: boolean
+  },
+  log: Log = getLog('DELETE_USER_POOL')
+): Promise<void> => {
+  const { Region, PoolName, IfExists } = params
 
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
@@ -51,13 +50,13 @@ const deleteUserPool = async (params: {
 
   try {
     const { Account: AccountId } = await getCallerIdentityExecutor(undefined)
-    if(AccountId == null) {
-     throw new Error(`Cannot determine account id`)
+    if (AccountId == null) {
+      throw new Error(`Cannot determine account id`)
     }
 
     let NextToken: string | undefined
     let UserPoolId: string | undefined
-    searchLoop: for(;;) {
+    searchLoop: for (;;) {
       const { NextToken: FollowNextToken, UserPools } = await listUserPoolsExecutor({
         MaxResults: 60,
         NextToken
@@ -73,7 +72,7 @@ const deleteUserPool = async (params: {
       }
 
       for (const { Name, Id } of UserPools) {
-        if(Name === PoolName) {
+        if (Name === PoolName) {
           UserPoolId = Id
 
           break searchLoop
@@ -83,14 +82,14 @@ const deleteUserPool = async (params: {
       NextToken = FollowNextToken
     }
 
-    if(UserPoolId == null) {
+    if (UserPoolId == null) {
       throw new Error(`Pool with name ${PoolName} does not exist`)
     }
 
     try {
       const UserPoolArn = `arn:aws:cognito-idp:${Region}:${AccountId}:userpool/${UserPoolId}`
       const { Tags } = await listTagsForResourceExecutor({ ResourceArn: UserPoolArn })
-      if(Tags == null) {
+      if (Tags == null) {
         throw new Error(`Tags for Cognito identity pool is null`)
       }
 
@@ -98,10 +97,8 @@ const deleteUserPool = async (params: {
         ResourceARNList: [UserPoolArn],
         TagKeys: Object.keys(Tags)
       })
-
-
-    } catch(error) {
-      console.warn(error)
+    } catch (error) {
+      log.warn(error)
     }
 
     const groups: GroupListType = []
@@ -152,9 +149,13 @@ const deleteUserPool = async (params: {
       UserPoolId
     })
   } catch (error) {
-    log.debug(`Failed to delete the user pool "${PoolName}"`)
-
-    throw error
+    if (IfExists) {
+      log.debug(`Skip delete the user pool "${PoolName}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.debug(`Failed to delete the user pool "${PoolName}"`)
+      throw error
+    }
   }
 }
 

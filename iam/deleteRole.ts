@@ -1,4 +1,5 @@
 import IAM from 'aws-sdk/clients/iam'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
@@ -10,7 +11,6 @@ const deleteRolePolicies = async (
   const { Region, RoleName } = params
 
   const iam = new IAM({ region: Region })
-
   log.debug(`List the role inline policies`)
 
   const listRolePolicies = retry(
@@ -56,6 +56,7 @@ const deleteRole = async (
   const { Region, RoleName, IfExists } = params
 
   const iam = new IAM({ region: Region })
+  const taggingApi = new Resourcegroupstaggingapi({ region: Region })
 
   try {
     log.debug(`Delete the role "${RoleName}"`)
@@ -69,6 +70,37 @@ const deleteRole = async (
       iam.deleteRole,
       Options.Defaults.override({ log, expectedErrors: ['NoSuchEntity'] })
     )
+    const getRole = retry(
+      iam,
+      iam.getRole,
+      Options.Defaults.override({ log, expectedErrors: ['NoSuchEntity'] })
+    )
+    const untagResource = retry(
+      taggingApi,
+      taggingApi.untagResources,
+      Options.Defaults.override({ log })
+    )
+
+    const {
+      Role: { Arn, Tags }
+    } = await getRole({ RoleName })
+    if (Arn == null) {
+      const error: Error & { code?: string } = new Error('IAM role not found')
+      error.code = 'ResourceNotFoundException'
+      throw error
+    }
+
+    try {
+      if (Tags != null) {
+        await untagResource({
+          ResourceARNList: [Arn],
+          TagKeys: Tags.map(({ Key }) => Key)
+        })
+      }
+    } catch (error) {
+      log.warn(error)
+    }
+
     await removeRole({ RoleName })
 
     log.debug(`The role "${RoleName}" has been deleted`)
