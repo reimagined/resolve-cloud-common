@@ -1,22 +1,18 @@
 import ApiGateway from 'aws-sdk/clients/apigateway'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      RestApiId: string
-      ResourceId: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const deleteApiGatewayResource = async (
+  params: {
+    Region: string
+    RestApiId: string
+    ResourceId: string
+    IfExists?: boolean
+  },
+  log: Log = getLog(`DELETE-API-GATEWAY-RESOURCE`)
+): Promise<void> => {
+  const { Region, RestApiId, ResourceId, IfExists } = params
 
-const deleteApiGatewayResource: TMethod = async (
-  { Region, RestApiId, ResourceId },
-  log = getLog(`DELETE-API-GATEWAY-RESOURCE`)
-) => {
   const gw = new ApiGateway({ region: Region })
 
   try {
@@ -30,8 +26,13 @@ const deleteApiGatewayResource: TMethod = async (
 
     log.debug(`The rest api "${RestApiId}" resource "${ResourceId}" has been deleted`)
   } catch (error) {
-    log.error(`Failed to delete the rest api "${RestApiId}" resource "${ResourceId}"`)
-    throw error
+    if (IfExists) {
+      log.error(`Skip delete the rest api "${RestApiId}" resource "${ResourceId}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.error(`Failed to delete the rest api "${RestApiId}" resource "${ResourceId}"`)
+      throw error
+    }
   }
 }
 

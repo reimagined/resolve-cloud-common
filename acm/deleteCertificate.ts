@@ -6,16 +6,12 @@ import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 const deleteCertificate = async (
   params: {
     Region: string
-    CertificateArn: string,
+    CertificateArn: string
     IfExists?: boolean
   },
-  log = getLog('DELETE-CERTIFICATE')
+  log: Log = getLog('DELETE-CERTIFICATE')
 ): Promise<void> => {
-  const {
-    Region,
-    CertificateArn,
-    IfExists
-  } = params
+  const { Region, CertificateArn, IfExists } = params
 
   const acm = new ACM({ region: Region })
   const taggingApi = new Resourcegroupstaggingapi({ region: Region })
@@ -42,9 +38,7 @@ const deleteCertificate = async (
           Options.Defaults.override({ log })
         )
 
-        const tagKeys = Tags.map(
-          ({ Key }) => Key
-        )
+        const tagKeys = Tags.map(({ Key }) => Key)
 
         await untagResources({
           TagKeys: tagKeys,
@@ -68,7 +62,7 @@ const deleteCertificate = async (
 
       log.debug(`Delete certificate has been deleted`)
     } catch (deleteCertificateError) {
-      if(IfExists) {
+      if (IfExists) {
         ignoreNotFoundException(deleteCertificateError)
       } else {
         throw deleteCertificateError

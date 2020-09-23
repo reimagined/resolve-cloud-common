@@ -11,7 +11,7 @@ const createCloudFrontDistribution = async (
   params: {
     Region: string
     DistributionConfig: CloudFrontDistributionConfig
-    Tags: object
+    Tags: Record<string, string>
   },
   log: Log = getLog(`CREATE-CLOUD-FRONT-DISTRIBUTION`)
 ): Promise<CloudFrontDistribution> => {
@@ -37,7 +37,9 @@ const createCloudFrontDistribution = async (
     const { Distribution } = await createDistributionWithTags({
       DistributionConfigWithTags: {
         DistributionConfig,
-        Tags
+        Tags: {
+          Items: Object.entries(Tags).map(([Key, Value]) => ({ Key, Value }))
+        }
       }
     })
 

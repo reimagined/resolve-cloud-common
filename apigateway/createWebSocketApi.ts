@@ -36,18 +36,31 @@ const createWebSocketApi = async (
         Tags
       }))
     } catch (error) {
-      if(IfNotExists) {
+      if (IfNotExists) {
         log.error(`Skip create the WebSocket API`)
         ignoreAlreadyExistsException(error)
 
         let NextToken: string | undefined
-        searchLoop: while(true) {
-          const { Items, NextToken: followingNextToken } = await getApisExecutor({ MaxResults: '50', NextToken })
-          if(Items == null || Items.length === 0 || followingNextToken == null || followingNextToken === '') {
+        searchLoop: for (;;) {
+          const { Items, NextToken: followingNextToken } = await getApisExecutor({
+            MaxResults: '50',
+            NextToken
+          })
+          if (
+            Items == null ||
+            Items.length === 0 ||
+            followingNextToken == null ||
+            followingNextToken === ''
+          ) {
             break searchLoop
           }
-          for(const { Name: ItemName, ApiId: ItemApiId, ApiEndpoint: ItemApiEndpoint, ApiKeySelectionExpression: ItemApiKeySelectionExpression } of Items) {
-            if(ItemName === Name) {
+          for (const {
+            Name: ItemName,
+            ApiId: ItemApiId,
+            ApiEndpoint: ItemApiEndpoint,
+            ApiKeySelectionExpression: ItemApiKeySelectionExpression
+          } of Items) {
+            if (ItemName === Name) {
               ApiId = ItemApiId
               ApiEndpoint = ItemApiEndpoint
               ApiKeySelectionExpression = ItemApiKeySelectionExpression
