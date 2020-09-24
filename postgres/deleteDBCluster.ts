@@ -9,7 +9,7 @@ const deleteDBCluster = async (
     DBClusterIdentifier: string
     SkipFinalSnapshot?: boolean
     FinalDBSnapshotIdentifier?: string
-    IfExists: boolean
+    IfExists?: boolean
   },
   log: Log = getLog('DELETE-DATABASE-CLUSTER')
 ): Promise<void> => {
