@@ -1,27 +1,28 @@
 import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
-import Lambda from 'aws-sdk/clients/lambda'
+import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-async function getFunctionByTags(
+const getStepFunctionBuTags = async (
   params: {
     Region: string
-    Tags: { [key: string]: string }
+    Tags: Array<{ key: string; value: string }>
   },
-  log: Log = getLog('GET-FUNCTION-BY-TAGS')
-): Promise<string | null> {
+  log: Log = getLog('DESCRIBE-STEP-FUNCTION-EXECUTION')
+): Promise<string | null> => {
   const { Region, Tags } = params
 
-  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
-
   const api = new TaggingAPI({ region: Region })
-  const lambda = new Lambda({ region: Region })
+  const stepFunctions = new StepFunctions({ region: Region })
+
+  const TagFilters = Object.entries(Tags).map(([key, value]) => ({ Key: key, Values: [value] }))
 
   const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
-  const getFunctionConfiguration = retry(
-    lambda,
-    lambda.getFunctionConfiguration,
-    Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
+
+  const describeStateMachine = retry(
+    stepFunctions,
+    stepFunctions.describeStateMachine,
+    Options.Defaults.override({ log })
   )
 
   let resources: ResourceTagMappingList | undefined
@@ -30,7 +31,7 @@ async function getFunctionByTags(
     log.debug(`Find resources by tags`)
     resources = (
       await getResources({
-        ResourceTypeFilters: ['lambda'],
+        ResourceTypeFilters: ['states'],
         TagFilters
       })
     ).ResourceTagMappingList
@@ -55,9 +56,9 @@ async function getFunctionByTags(
   }
 
   try {
-    await getFunctionConfiguration({ FunctionName: ResourceARN })
+    await describeStateMachine({ stateMachineArn: ResourceARN })
   } catch (error) {
-    if (error != null && error.code === 'ResourceNotFoundException') {
+    if (error != null && error.code === 'StateMachineDoesNotExist') {
       return null
     }
     throw error
@@ -68,4 +69,4 @@ async function getFunctionByTags(
   return ResourceARN
 }
 
-export default getFunctionByTags
+export default getStepFunctionBuTags

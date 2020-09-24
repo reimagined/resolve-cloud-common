@@ -9,6 +9,7 @@ const mockListExecutions = mockedSdkFunction(StepFunctions.prototype.listExecuti
 const mockStopExecution = mockedSdkFunction(StepFunctions.prototype.stopExecution)
 const mockDeleteStateMachine = mockedSdkFunction(StepFunctions.prototype.deleteStateMachine)
 const mockDescribeStateMachine = mockedSdkFunction(StepFunctions.prototype.describeStateMachine)
+const mockListTagsForResource = mockedSdkFunction(StepFunctions.prototype.listTagsForResource)
 
 type AWSError = Error & { code?: string }
 
@@ -31,6 +32,9 @@ describe('deleteStepFunction', () => {
         }
       ],
       nextToken: 'nextToken'
+    })
+    mockListTagsForResource.mockResolvedValueOnce({
+      tags: []
     })
     mockListExecutions.mockResolvedValue({
       executions: [

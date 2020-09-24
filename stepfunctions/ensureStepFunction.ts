@@ -236,23 +236,19 @@ async function stopExecution(
   await throttleExecution({ executionArn: ExecutionArn })
 }
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Tags?: { [key: string]: string }
-      Definition: object
-      Name: string
-      RoleArn: string
-      Type?: string
-      LoggingConfiguration?: object
-    },
-    log?: Log
-  ): Promise<string>
-}
-
-const ensureStepFunction: TMethod = async (
-  {
+const ensureStepFunction = async (
+  params: {
+    Region: string
+    Tags?: { [key: string]: string }
+    Definition: object
+    Name: string
+    RoleArn: string
+    Type?: string
+    LoggingConfiguration?: object
+  },
+  log: Log = getLog('ENSURE-STEP-FUNCTION')
+): Promise<string> => {
+  const {
     Region,
     Tags: { ...RawTags } = {},
     Definition,
@@ -260,9 +256,8 @@ const ensureStepFunction: TMethod = async (
     RoleArn,
     Type = 'STANDARD',
     LoggingConfiguration
-  },
-  log = getLog('ENSURE-STEP-FUNCTION')
-) => {
+  } = params
+
   delete RawTags.Owner
 
   const Tags = [

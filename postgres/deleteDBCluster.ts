@@ -12,7 +12,7 @@ const deleteDBCluster = async (
     IfExists: boolean
   },
   log: Log = getLog('DELETE-DATABASE-CLUSTER')
-) => {
+): Promise<void> => {
   const {
     Region,
     DBClusterIdentifier,
