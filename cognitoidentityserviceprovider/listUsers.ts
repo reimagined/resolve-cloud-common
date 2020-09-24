@@ -48,6 +48,12 @@ const listUsers = async (
         PaginationToken
       })
 
+      if (Users != null) {
+        for (const user of Users) {
+          users.push(user)
+        }
+      }
+
       if (
         NextPaginationToken == null ||
         NextPaginationToken === '' ||
@@ -55,10 +61,6 @@ const listUsers = async (
         Users.length === 0
       ) {
         break
-      }
-
-      for (const user of Users) {
-        users.push(user)
       }
 
       PaginationToken = NextPaginationToken

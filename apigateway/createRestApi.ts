@@ -45,14 +45,18 @@ const createRestApi = async (
       let position: string | undefined
       searchLoop: for (;;) {
         const { items, position: nextPosition } = await getApisExecutor({ limit: 50, position })
+
+        if (items != null) {
+          for (const { name, id } of items) {
+            if (name === Name) {
+              restApiId = id
+              break searchLoop
+            }
+          }
+        }
+
         if (items == null || items.length === 0 || nextPosition == null || nextPosition === '') {
           break searchLoop
-        }
-        for (const { name, id } of items) {
-          if (name === Name) {
-            restApiId = id
-            break searchLoop
-          }
         }
 
         position = nextPosition
