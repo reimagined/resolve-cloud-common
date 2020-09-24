@@ -10,7 +10,7 @@ const deleteUserPool = async (
   params: {
     Region: string
     PoolName: string
-    IfExists: boolean
+    IfExists?: boolean
   },
   log: Log = getLog('DELETE_USER_POOL')
 ): Promise<void> => {
