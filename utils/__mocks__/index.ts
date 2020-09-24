@@ -1,3 +1,8 @@
+import { ignoreNotFoundException } from '../ignoreNotFoundException'
+import { ignoreAlreadyExistsException } from '../ignoreAlreadyExistsException'
+
+export { ignoreNotFoundException, ignoreAlreadyExistsException }
+
 export const getLog = jest.fn()
 
 getLog.mockReturnValue(getLog)

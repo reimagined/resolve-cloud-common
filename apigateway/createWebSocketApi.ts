@@ -1,38 +1,82 @@
 import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
-import { retry, Options, getLog, Log } from '../utils'
-
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-      RouteSelectionExpression: string
-      Stage: string
-      LambdaArn: string
-    },
-    log?: Log
-  ): Promise<{ ApiId: string; ApiEndpoint: string; ApiKeySelectionExpression: string }>
-}
+import { retry, Options, getLog, Log, ignoreAlreadyExistsException } from '../utils'
 
 const buildIntegrationUri = (region: string, lambdaArn: string): string =>
   `arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`
 
-const createWebSocketApi: TMethod = async (
-  { Region, Name, RouteSelectionExpression, Stage, LambdaArn },
-  log = getLog(`CREATE-WEBSOCKET-API`)
-) => {
+const createWebSocketApi = async (
+  params: {
+    Region: string
+    Name: string
+    RouteSelectionExpression: string
+    Stage: string
+    LambdaArn: string
+    Tags?: Record<string, string>
+    IfNotExists?: boolean
+  },
+  log: Log = getLog(`CREATE-WEBSOCKET-API`)
+): Promise<{ ApiId: string; ApiEndpoint: string; ApiKeySelectionExpression: string }> => {
+  const { Region, Name, RouteSelectionExpression, Stage, LambdaArn, Tags, IfNotExists } = params
   const agv2 = new ApiGatewayV2({ region: Region })
 
   try {
     log.debug(`Create a websocket api "${Name}"`)
 
     const createApiExecutor = retry(agv2, agv2.createApi, Options.Defaults.override({ log }))
-    const { ApiId, ApiEndpoint, ApiKeySelectionExpression } = await createApiExecutor({
-      ProtocolType: 'WEBSOCKET',
-      Name,
-      RouteSelectionExpression
-    })
+    const getApisExecutor = retry(agv2, agv2.getApis, Options.Defaults.override({ log }))
+
+    let ApiId, ApiEndpoint, ApiKeySelectionExpression
+
+    try {
+      void ({ ApiId, ApiEndpoint, ApiKeySelectionExpression } = await createApiExecutor({
+        ProtocolType: 'WEBSOCKET',
+        Name,
+        RouteSelectionExpression,
+        Tags
+      }))
+    } catch (error) {
+      if (IfNotExists) {
+        log.error(`Skip create the WebSocket API`)
+        ignoreAlreadyExistsException(error)
+
+        let NextToken: string | undefined
+        searchLoop: for (;;) {
+          const { Items, NextToken: followingNextToken } = await getApisExecutor({
+            MaxResults: '50',
+            NextToken
+          })
+          if (
+            Items == null ||
+            Items.length === 0 ||
+            followingNextToken == null ||
+            followingNextToken === ''
+          ) {
+            break searchLoop
+          }
+          for (const {
+            Name: ItemName,
+            ApiId: ItemApiId,
+            ApiEndpoint: ItemApiEndpoint,
+            ApiKeySelectionExpression: ItemApiKeySelectionExpression
+          } of Items) {
+            if (ItemName === Name) {
+              ApiId = ItemApiId
+              ApiEndpoint = ItemApiEndpoint
+              ApiKeySelectionExpression = ItemApiKeySelectionExpression
+              break searchLoop
+            }
+          }
+
+          NextToken = followingNextToken
+        }
+
+        return { ApiId, ApiEndpoint, ApiKeySelectionExpression }
+      } else {
+        log.error(`Failed to create the Rest API`)
+        throw error
+      }
+    }
 
     if (ApiId == null || ApiEndpoint == null || ApiKeySelectionExpression == null) {
       throw new Error('WebSocket API creation fault')
