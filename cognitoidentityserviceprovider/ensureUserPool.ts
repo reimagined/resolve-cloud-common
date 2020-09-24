@@ -67,18 +67,6 @@ const ensureUserPool = async (
         AllowAdminCreateUserOnly: false
       },
       MfaConfiguration: 'OFF',
-      AccountRecoverySetting: {
-        RecoveryMechanisms: [
-          {
-            Name: 'verified_phone_number',
-            Priority: 1
-          },
-          {
-            Name: 'verified_email',
-            Priority: 2
-          }
-        ]
-      },
       UserPoolTags: Tags
     })
 
@@ -99,10 +87,11 @@ const ensureUserPool = async (
       LogoutURLs,
       PreventUserExistenceErrors: 'LEGACY',
       ExplicitAuthFlows: ['ALLOW_CUSTOM_AUTH', 'ALLOW_USER_SRP_AUTH', 'ALLOW_REFRESH_TOKEN_AUTH'],
-      GenerateSecret: true,
+      GenerateSecret: false,
       AllowedOAuthFlowsUserPoolClient: true,
       AllowedOAuthFlows: ['code'],
-      AllowedOAuthScopes: ['email', 'openid', 'aws.cognito.signin.user.admin', 'profile']
+      AllowedOAuthScopes: ['email', 'openid', 'aws.cognito.signin.user.admin', 'profile'],
+      SupportedIdentityProviders: ['COGNITO']
     })
 
     const createUserPoolDomainExecutor = retry(
