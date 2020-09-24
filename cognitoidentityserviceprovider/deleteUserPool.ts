@@ -62,6 +62,16 @@ const deleteUserPool = async (
         NextToken
       })
 
+      if (UserPools != null) {
+        for (const { Name, Id } of UserPools) {
+          if (Name === PoolName) {
+            UserPoolId = Id
+
+            break searchLoop
+          }
+        }
+      }
+
       if (
         FollowNextToken == null ||
         FollowNextToken === '' ||
@@ -69,14 +79,6 @@ const deleteUserPool = async (
         UserPools.length === 0
       ) {
         break searchLoop
-      }
-
-      for (const { Name, Id } of UserPools) {
-        if (Name === PoolName) {
-          UserPoolId = Id
-
-          break searchLoop
-        }
       }
 
       NextToken = FollowNextToken

@@ -46,6 +46,23 @@ const createWebSocketApi = async (
             MaxResults: '50',
             NextToken
           })
+
+          if (Items != null) {
+            for (const {
+              Name: ItemName,
+              ApiId: ItemApiId,
+              ApiEndpoint: ItemApiEndpoint,
+              ApiKeySelectionExpression: ItemApiKeySelectionExpression
+            } of Items) {
+              if (ItemName === Name) {
+                ApiId = ItemApiId
+                ApiEndpoint = ItemApiEndpoint
+                ApiKeySelectionExpression = ItemApiKeySelectionExpression
+                break searchLoop
+              }
+            }
+          }
+
           if (
             Items == null ||
             Items.length === 0 ||
@@ -53,19 +70,6 @@ const createWebSocketApi = async (
             followingNextToken === ''
           ) {
             break searchLoop
-          }
-          for (const {
-            Name: ItemName,
-            ApiId: ItemApiId,
-            ApiEndpoint: ItemApiEndpoint,
-            ApiKeySelectionExpression: ItemApiKeySelectionExpression
-          } of Items) {
-            if (ItemName === Name) {
-              ApiId = ItemApiId
-              ApiEndpoint = ItemApiEndpoint
-              ApiKeySelectionExpression = ItemApiKeySelectionExpression
-              break searchLoop
-            }
           }
 
           NextToken = followingNextToken
