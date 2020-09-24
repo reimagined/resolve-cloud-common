@@ -1,8 +1,7 @@
 import StepFunctions from 'aws-sdk/clients/stepfunctions'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
-import { retry, Options, getLog, Log } from '../utils'
-
-import { ignoreNotFoundException } from '../utils/ignoreNotFoundException'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
 async function processPage(
   params: { Region: string; StepFunctionArn: string },
@@ -57,47 +56,48 @@ const deleteStepFunction = async (
   const { Region, StepFunctionArn, IfExists } = params
 
   const stepFunctions = new StepFunctions({ region: Region })
+  const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
 
   const removeStateMachine = retry(
     stepFunctions,
     stepFunctions.deleteStateMachine,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
   )
 
   const describeStateMachine = retry(
     stepFunctions,
     stepFunctions.describeStateMachine,
-    Options.Defaults.override({ log, maxAttempts: 1 })
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
   )
 
   const listTagsForResource = retry(
     stepFunctions,
     stepFunctions.listTagsForResource,
-    Options.Defaults.override({ log, maxAttempts: 1 })
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
   )
 
-  const untagResource = retry(
-    stepFunctions,
-    stepFunctions.untagResource,
-    Options.Defaults.override({ log, maxAttempts: 1 })
+  const untagResources = retry(
+    taggingAPI,
+    taggingAPI.untagResources,
+    Options.Defaults.override({ log })
   )
-
-  const { tags } = await listTagsForResource({
-    stateMachineArn: StepFunctionArn
-  })
-
-  const tagKeys: Array<string> = []
-
-  for (const { key } of tags ?? []) {
-    if (key != null) {
-      tagKeys.push(key)
-    }
-  }
 
   try {
-    await untagResource({
-      resourceArn: StepFunctionArn,
-      tagKeys
+    const { tags } = await listTagsForResource({
+      stateMachineArn: StepFunctionArn
+    })
+
+    const tagKeys: Array<string> = []
+
+    for (const { key } of tags ?? []) {
+      if (key != null) {
+        tagKeys.push(key)
+      }
+    }
+
+    await untagResources({
+      ResourceARNList: [StepFunctionArn],
+      TagKeys: tagKeys
     })
   } catch (error) {
     log.warn(error)

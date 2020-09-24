@@ -5,6 +5,7 @@ export function ignoreNotFoundException(error?: Error & { code: string }): void 
       error.code === 'NoSuchEntity' ||
       error.code === 'NotFoundException' ||
       error.code === 'StateMachineDoesNotExist' ||
+      error.code === 'DBClusterNotFoundFault' ||
       error.code === 'NoSuchDistribution' ||
       error.code === 'NoSuchCloudFrontOriginAccessIdentity' ||
       error.code === 'NoSuchBucket' ||
