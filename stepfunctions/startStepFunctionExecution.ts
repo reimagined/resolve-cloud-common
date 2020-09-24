@@ -2,24 +2,17 @@ import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      StepFunctionArn: string
-      ExecutionName: string
-      Input: {
-        [key: string]: any
-      }
-    },
-    log?: Log
-  ): Promise<string>
-}
+const startStepFunctionExecution = async (
+  params: {
+    Region: string
+    StepFunctionArn: string
+    ExecutionName: string
+    Input: Record<string, any>
+  },
+  log: Log = getLog('START-STEP-FUNCTION-EXECUTION')
+): Promise<string> => {
+  const { Region, StepFunctionArn, ExecutionName, Input } = params
 
-const startStepFunctionExecution: TMethod = async (
-  { Region, StepFunctionArn, ExecutionName, Input },
-  log = getLog('START-STEP-FUNCTION-EXECUTION')
-) => {
   const stepFunctions = new StepFunctions({ region: Region })
 
   const startExecution = retry(

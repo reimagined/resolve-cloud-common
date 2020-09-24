@@ -11,11 +11,13 @@ const createCloudFrontDistribution = async (
   params: {
     Region: string
     DistributionConfig: CloudFrontDistributionConfig
-    Tags: Record<string, string>
+    Tags?: Record<string, string>
   },
   log: Log = getLog(`CREATE-CLOUD-FRONT-DISTRIBUTION`)
 ): Promise<CloudFrontDistribution> => {
-  const { Region, DistributionConfig, Tags } = params
+  const { Region, DistributionConfig, Tags = {} } = params
+
+  Tags.Owner = 'reimagined'
 
   const cf = new CloudFront({ region: Region })
 

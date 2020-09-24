@@ -5,25 +5,21 @@ import CognitoIdentityServiceProvider, {
 import { ADMIN_GROUP_NAME, ADMIN_GROUP_DESCRIPTION } from './constants'
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      PoolName: string
-      ClientName: string
-      CallbackURLs: Array<string>
-      LogoutURLs: Array<string>
-      Domain: string
-      Tags: { [key: string]: string }
-    },
-    log?: Log
-  ): Promise<UserPoolType>
-}
+const ensureUserPool = async (
+  params: {
+    Region: string
+    PoolName: string
+    ClientName: string
+    CallbackURLs: Array<string>
+    LogoutURLs: Array<string>
+    Domain: string
+    Tags?: Record<string, string>
+  },
+  log: Log = getLog('ENSURE_USER_POOL')
+): Promise<UserPoolType> => {
+  const { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain, Tags = {} } = params
+  Tags.Owner = 'reimagined'
 
-const ensureUserPool: TMethod = async (
-  { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain, Tags },
-  log = getLog('ENSURE_USER_POOL')
-) => {
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   try {

@@ -3,19 +3,19 @@ import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-const getStepFunctionBuTags = async (
+const getStepFunctionByTags = async (
   params: {
     Region: string
-    Tags: Array<{ key: string; value: string }>
+    Tags: Record<string, string>
   },
-  log: Log = getLog('DESCRIBE-STEP-FUNCTION-EXECUTION')
+  log: Log = getLog('GET-STEP-FUNCTION-BY-TAGS')
 ): Promise<string | null> => {
   const { Region, Tags } = params
 
   const api = new TaggingAPI({ region: Region })
   const stepFunctions = new StepFunctions({ region: Region })
 
-  const TagFilters = Object.entries(Tags).map(([key, value]) => ({ Key: key, Values: [value] }))
+  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
 
   const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
 
@@ -69,4 +69,4 @@ const getStepFunctionBuTags = async (
   return ResourceARN
 }
 
-export default getStepFunctionBuTags
+export default getStepFunctionByTags

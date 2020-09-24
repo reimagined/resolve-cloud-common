@@ -239,7 +239,7 @@ async function stopExecution(
 const ensureStepFunction = async (
   params: {
     Region: string
-    Tags?: { [key: string]: string }
+    Tags?: Record<string, string>
     Definition: object
     Name: string
     RoleArn: string
