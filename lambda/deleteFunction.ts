@@ -1,4 +1,5 @@
 import Lambda from 'aws-sdk/clients/lambda'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
@@ -13,6 +14,7 @@ const deleteFunction = async (
   const { Region, FunctionName, IfExists = false } = params
 
   const lambda = new Lambda({ region: Region })
+  const taggingApi = new Resourcegroupstaggingapi({ region: Region })
 
   try {
     log.debug(`Delete the function "${FunctionName}"`)
@@ -24,6 +26,37 @@ const deleteFunction = async (
         expectedErrors: ['ResourceNotFoundException', 'InvalidParameterValueException']
       })
     )
+
+    const getFunction = retry(
+      lambda,
+      lambda.getFunction,
+      Options.Defaults.override({
+        log
+      })
+    )
+
+    const untagResources = retry(
+      taggingApi,
+      taggingApi.untagResources,
+      Options.Defaults.override({
+        log
+      })
+    )
+
+    try {
+      const { Tags, Configuration: { FunctionArn } = {} } = await getFunction({
+        Resource: FunctionName
+      })
+      if (Tags != null && FunctionArn != null) {
+        await untagResources({
+          ResourceARNList: [FunctionArn],
+          TagKeys: Object.keys(Tags)
+        })
+      }
+    } catch (error) {
+      log.warn(error)
+    }
+
     await removeFunction({
       FunctionName
     })

@@ -1,23 +1,15 @@
 import StepFunctions from 'aws-sdk/clients/stepfunctions'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
-import { retry, Options, getLog, Log } from '../utils'
-
-import { ignoreNotFoundException } from '../utils/ignoreNotFoundException'
-
-interface TParams {
-  Region: string
-  StepFunctionArn: string
-}
-
-interface TMethod {
-  (params: TParams, log?: Log): Promise<void>
-}
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
 async function processPage(
-  { Region, StepFunctionArn }: TParams,
+  params: { Region: string; StepFunctionArn: string },
   log: Log,
   page?: object
 ): Promise<void> {
+  const { Region, StepFunctionArn } = params
+
   const stepFunctions = new StepFunctions({ region: Region })
 
   log.debug(`Request running executions`)
@@ -57,31 +49,69 @@ async function processPage(
   }
 }
 
-const deleteStepFunction: TMethod = async (
-  { Region, StepFunctionArn },
-  log = getLog('DELETE-STATE-MACHINE')
-) => {
+const deleteStepFunction = async (
+  params: { Region: string; StepFunctionArn: string; IfExists?: boolean },
+  log: Log = getLog('DELETE-STATE-MACHINE')
+): Promise<void> => {
+  const { Region, StepFunctionArn, IfExists } = params
+
   const stepFunctions = new StepFunctions({ region: Region })
+  const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
+
+  const removeStateMachine = retry(
+    stepFunctions,
+    stepFunctions.deleteStateMachine,
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
+  )
+
+  const describeStateMachine = retry(
+    stepFunctions,
+    stepFunctions.describeStateMachine,
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
+  )
+
+  const listTagsForResource = retry(
+    stepFunctions,
+    stepFunctions.listTagsForResource,
+    Options.Defaults.override({ log, expectedErrors: ['StateMachineDoesNotExist'] })
+  )
+
+  const untagResources = retry(
+    taggingAPI,
+    taggingAPI.untagResources,
+    Options.Defaults.override({ log })
+  )
+
+  try {
+    const { tags } = await listTagsForResource({
+      stateMachineArn: StepFunctionArn
+    })
+
+    const tagKeys: Array<string> = []
+
+    for (const { key } of tags ?? []) {
+      if (key != null) {
+        tagKeys.push(key)
+      }
+    }
+
+    await untagResources({
+      ResourceARNList: [StepFunctionArn],
+      TagKeys: tagKeys
+    })
+  } catch (error) {
+    log.warn(error)
+  }
 
   log.debug(`Enumerate and stop active executions`)
   await processPage({ Region, StepFunctionArn }, log)
 
   try {
     log.debug(`Delete step function "${StepFunctionArn}"`)
-    const removeStateMachine = retry(
-      stepFunctions,
-      stepFunctions.deleteStateMachine,
-      Options.Defaults.override({ log })
-    )
     await removeStateMachine({
       stateMachineArn: StepFunctionArn
     })
-
-    const describeStateMachine = retry(
-      stepFunctions,
-      stepFunctions.describeStateMachine,
-      Options.Defaults.override({ log, maxAttempts: 1 })
-    )
+    log.debug(`Step function "${StepFunctionArn}" has been deleted`)
 
     log.debug('Wait for deleting')
     for (;;) {
@@ -94,14 +124,15 @@ const deleteStepFunction: TMethod = async (
       }
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
-
-    log.debug(`Step function "${StepFunctionArn}" has been deleted`)
   } catch (error) {
-    log.debug(`Failed to delete step function "${StepFunctionArn}"`)
-    throw error
+    if (IfExists) {
+      log.debug(`Skip delete step function "${StepFunctionArn}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.debug(`Failed to delete step function "${StepFunctionArn}"`)
+      throw error
+    }
   }
-
-  log.debug(`Step function "${StepFunctionArn}" has been deleted`)
 }
 
 export default deleteStepFunction

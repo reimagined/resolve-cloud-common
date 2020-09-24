@@ -21,6 +21,11 @@ rules:
   no-param-reassign: ['error', { props: false }]
   no-restricted-syntax: ['off', 'ForInStatement', 'ForOfStatement']
   no-await-in-loop: 'off'
+  no-labels: 'off'
+  no-extra-label: 'off'
+  no-void: 'off'
+  no-else-return: 'off'
+  one-var: 'off'
   class-methods-use-this: 'off'
   lines-between-class-members: 'off'
   semi: 'off'

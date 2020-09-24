@@ -1,18 +1,22 @@
 import CloudFront from 'aws-sdk/clients/cloudfront'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
-import { retry, Options, Log, getLog } from '../utils'
+import { retry, Options, Log, getLog, ignoreNotFoundException } from '../utils'
+import getCloudFrontDistributionById from './getCloudFrontDistributionById'
 
 const deleteCloudFrontDistribution = async (
   params: {
     Region: string
     Id: string
     IfMatch?: string
+    IfExists?: boolean
   },
   log: Log = getLog('DELETE-CLOUD-FRONT-DISTRIBUTION')
 ): Promise<void> => {
-  const { Region, Id, IfMatch } = params
+  const { Region, Id, IfMatch, IfExists } = params
 
   const cloudFront = new CloudFront({ region: Region })
+  const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
 
   try {
     log.debug('Delete cloud front distribution')
@@ -25,11 +29,55 @@ const deleteCloudFrontDistribution = async (
         delay: 1000
       })
     )
+    const untagResources = retry(
+      taggingAPI,
+      taggingAPI.untagResources,
+      Options.Defaults.override({
+        maxAttempts: 5,
+        delay: 1000
+      })
+    )
 
-    await deleteDistribution({
-      Id,
-      IfMatch
-    })
+    const listTagsForResource = retry(
+      cloudFront,
+      cloudFront.listTagsForResource,
+      Options.Defaults.override({
+        maxAttempts: 5,
+        delay: 1000
+      })
+    )
+
+    try {
+      try {
+        const { Distribution: { ARN } = {} } = await getCloudFrontDistributionById({ Region, Id })
+        if (ARN == null) {
+          throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
+        }
+
+        const { Tags: TagsWithItems } = await listTagsForResource({ Resource: ARN })
+        if (TagsWithItems != null && TagsWithItems.Items != null) {
+          const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
+
+          await untagResources({
+            ResourceARNList: [ARN],
+            TagKeys
+          })
+        }
+      } catch (error) {
+        log.warn(error)
+      }
+
+      await deleteDistribution({
+        Id,
+        IfMatch
+      })
+    } catch (error) {
+      if (IfExists) {
+        ignoreNotFoundException(error)
+      } else {
+        throw error
+      }
+    }
 
     log.debug('Cloud front distribution successfully deleted')
   } catch (error) {

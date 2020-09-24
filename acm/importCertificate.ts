@@ -2,23 +2,19 @@ import ACM from 'aws-sdk/clients/acm'
 
 import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Certificate: string
-      PrivateKey: string
-      CertificateArn?: string
-      CertificateChain?: string
-    },
-    log?: Log
-  ): Promise<string>
-}
+const importCertificate = async (
+  params: {
+    Region: string
+    Certificate: string
+    PrivateKey: string
+    CertificateArn?: string
+    CertificateChain?: string
+    Tags?: Record<string, string>
+  },
+  log: Log = getLog('IMPORT-CERTIFICATE')
+): Promise<string> => {
+  const { Region, Certificate, PrivateKey, CertificateArn, CertificateChain, Tags } = params
 
-const importCertificate: TMethod = async (
-  { Region, Certificate, PrivateKey, CertificateArn, CertificateChain },
-  log = getLog('IMPORT-CERTIFICATE')
-) => {
   const acm = new ACM({ region: Region })
 
   try {
@@ -34,7 +30,14 @@ const importCertificate: TMethod = async (
       Certificate,
       PrivateKey,
       CertificateArn,
-      CertificateChain
+      CertificateChain,
+      Tags:
+        Tags != null
+          ? Object.entries(Tags).map(([Key, Value]) => ({
+              Key,
+              Value
+            }))
+          : undefined
     })
 
     if (ImportedCertificateArn == null) {
