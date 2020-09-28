@@ -10,6 +10,7 @@ import addCallbackUrl from './addCallbackUrl'
 import addLogoutUrl from './addLogoutUrl'
 import removeCallbackUrl from './removeCallbackUrl'
 import removeLogoutUrl from './removeLogoutUrl'
+import getUserPoolClients from './getUserPoolClients'
 
 export {
   createUser,
@@ -23,5 +24,6 @@ export {
   addCallbackUrl,
   addLogoutUrl,
   removeCallbackUrl,
-  removeLogoutUrl
+  removeLogoutUrl,
+  getUserPoolClients
 }
