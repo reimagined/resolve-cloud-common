@@ -44,7 +44,7 @@ const updateFunctionEnvironment: TMethod = async (
       lambda.updateFunctionConfiguration,
       Options.Defaults.override({ log })
     )
-    const nextVariables: { [key: string]: string } = { ...currentVars }
+    const nextVariables: Record<string, string> = { ...currentVars }
     for (const [key, value] of Object.entries(Variables) as Array<[string, string | null]>) {
       if (value == null) {
         delete nextVariables[key]

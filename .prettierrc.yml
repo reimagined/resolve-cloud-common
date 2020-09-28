@@ -2,3 +2,4 @@ printWidth: 100
 singleQuote: true
 semi: false
 trailingComma: none
+"endOfLine": "auto"

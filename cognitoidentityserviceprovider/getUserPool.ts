@@ -1,5 +1,7 @@
 import Cognitoidentityserviceprovider, {
-  UserPoolType
+  UserPoolType,
+  DescribeUserPoolRequest,
+  DescribeUserPoolResponse
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -19,7 +21,7 @@ const getUserPool = async (
     throw new Error(`Invalid ${UserPoolArn}`)
   }
 
-  const describeUserPool = retry(
+  const describeUserPool = retry<DescribeUserPoolRequest, DescribeUserPoolResponse>(
     cognito,
     cognito.describeUserPool,
     Options.Defaults.override({ log })
@@ -29,7 +31,9 @@ const getUserPool = async (
     UserPoolId
   })
   if (UserPool == null) {
-    throw new Error(`User pool ${UserPoolArn} not found`)
+    const error: Error & { code?: string } = new Error(`User pool ${UserPoolArn} not found`)
+    error.code = 'ResourceNotFoundException'
+    throw error
   }
 
   return UserPool

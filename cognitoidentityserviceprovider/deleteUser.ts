@@ -21,7 +21,7 @@ const deleteUser = async (
   )
 
   const UserPoolId: string | null = UserPoolArn.split('/').slice(-1)[0]
-  if (UserPoolId == null) {
+  if (UserPoolId == null || UserPoolId === '') {
     throw new Error(`Invalid ${UserPoolArn}`)
   }
 

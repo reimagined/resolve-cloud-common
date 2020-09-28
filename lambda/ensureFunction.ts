@@ -82,7 +82,7 @@ async function createFunction(
     S3Key?: string
     ZipFile?: Buffer
     Environment?: object
-    Tags: { [key: string]: string }
+    Tags: Record<string, string>
     Runtime: string
     Timeout: number
     MemorySize: number
@@ -148,7 +148,7 @@ async function listTags(
     Resource: string
   },
   log: Log
-): Promise<{ [key: string]: string } | undefined> {
+): Promise<Record<string, string> | undefined> {
   const { Region, Resource } = params
 
   const lambda = new Lambda({ region: Region })
@@ -169,7 +169,7 @@ async function tagResource(
   params: {
     Region: string
     Resource: string
-    Tags: { [key: string]: string }
+    Tags: Record<string, string>
   },
   log: Log
 ): Promise<void> {
@@ -223,8 +223,8 @@ interface TMethod {
       S3Bucket?: string
       S3Key?: string
       ZipFile?: Buffer
-      Variables?: { [key: string]: string }
-      Tags?: { [key: string]: string }
+      Variables?: Record<string, string>
+      Tags?: Record<string, string>
       Runtime?: string
       Timeout?: number
       MemorySize?: number
@@ -258,7 +258,7 @@ const ensureFunction: TMethod = async (
   const Tags = { ...RawTags, Owner: 'reimagined' }
   const Environment = Variables
     ? {
-        Variables: Object.keys(Variables).reduce((acc: { [key: string]: string }, key: string) => {
+        Variables: Object.keys(Variables).reduce((acc: Record<string, string>, key: string) => {
           acc[key] = `${Variables[key]}`
           return acc
         }, {})
@@ -370,8 +370,8 @@ const ensureFunction: TMethod = async (
     )
     log.debug(`Tags have been found`)
 
-    const nextTags: { [key: string]: string } = { ...prevTags, ...Tags }
-    const ensuredTags: { [key: string]: string } = {}
+    const nextTags: Record<string, string> = { ...prevTags, ...Tags }
+    const ensuredTags: Record<string, string> = {}
     const dropTags: Array<string> = []
     for (const [key, value] of Object.entries(nextTags)) {
       if (Object.prototype.hasOwnProperty.call(Tags, key)) {

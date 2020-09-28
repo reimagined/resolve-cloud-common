@@ -6,6 +6,7 @@ import ensureDBCluster from './ensureDBCluster'
 import escapeId from './escapeId'
 import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
+import getDBClusterByTags from './getDBClusterByTags'
 import rollbackTransaction from './rollbackTransaction'
 
 export {
@@ -17,5 +18,6 @@ export {
   escapeId,
   escapeStr,
   executeStatement,
+  getDBClusterByTags,
   rollbackTransaction
 }

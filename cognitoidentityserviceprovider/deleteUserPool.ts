@@ -1,8 +1,17 @@
 import CognitoIdentityServiceProvider, {
-  GroupListType
+  GroupListType,
+  ListUserPoolsRequest,
+  ListUserPoolsResponse,
+  ListGroupsRequest,
+  ListGroupsResponse,
+  ListTagsForResourceRequest,
+  ListTagsForResourceResponse
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
-import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
-import STS from 'aws-sdk/clients/sts'
+import Resourcegroupstaggingapi, {
+  UntagResourcesInput,
+  UntagResourcesOutput
+} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import STS, { GetCallerIdentityRequest, GetCallerIdentityResponse } from 'aws-sdk/clients/sts'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
@@ -20,36 +29,39 @@ const deleteUserPool = async (
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
   const sts = new STS({ region: Region })
 
-  const listUserPoolsExecutor = retry(
+  const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listUserPools,
     Options.Defaults.override({ log })
   )
-  const listGroupsExecutor = retry(
+  const listGroupsExecutor = retry<ListGroupsRequest, ListGroupsResponse>(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listGroups,
     Options.Defaults.override({ log })
   )
 
-  const listTagsForResourceExecutor = retry(
+  const listTagsForResourceExecutor = retry<
+    ListTagsForResourceRequest,
+    ListTagsForResourceResponse
+  >(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listTagsForResource,
     Options.Defaults.override({ log })
   )
-  const getCallerIdentityExecutor = retry<any, any>(
+  const getCallerIdentityExecutor = retry<GetCallerIdentityRequest, GetCallerIdentityResponse>(
     sts,
     sts.getCallerIdentity,
     Options.Defaults.override({ log })
   )
 
-  const untagResourcesExecutor = retry(
+  const untagResourcesExecutor = retry<UntagResourcesInput, UntagResourcesOutput>(
     taggingAPI,
     taggingAPI.untagResources,
     Options.Defaults.override({ log })
   )
 
   try {
-    const { Account: AccountId } = await getCallerIdentityExecutor(undefined)
+    const { Account: AccountId } = await getCallerIdentityExecutor({})
     if (AccountId == null) {
       throw new Error(`Cannot determine account id`)
     }
@@ -84,7 +96,7 @@ const deleteUserPool = async (
       NextToken = FollowNextToken
     }
 
-    if (UserPoolId == null) {
+    if (UserPoolId == null || UserPoolId === '') {
       throw new Error(`Pool with name ${PoolName} does not exist`)
     }
 

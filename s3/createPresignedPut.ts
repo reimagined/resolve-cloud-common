@@ -11,7 +11,7 @@ interface TMethod {
       Expires?: number /* in seconds */
       ContentLength?: number
       ContentType?: string
-      Metadata?: { [key: string]: string }
+      Metadata?: Record<string, string>
     },
     log?: Log
   ): Promise<string>
