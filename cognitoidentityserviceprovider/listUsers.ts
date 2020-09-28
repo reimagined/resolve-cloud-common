@@ -1,5 +1,9 @@
 import CognitoIdentityServiceProvider, {
-  UsersListType
+  UsersListType,
+  ListUsersRequest,
+  ListUsersResponse,
+  AdminListGroupsForUserRequest,
+  AdminListGroupsForUserResponse
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
@@ -19,19 +23,28 @@ const listUsers = async (
     UserPoolArn: string
     Filter?: string
   },
-  log: Log = getLog('LIST_USERS')
+  log: Log = getLog('LIST-USERS')
 ): Promise<UserListWithAdminFlagType> => {
   const { Region, UserPoolArn, Filter } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
-  const listUsersExecutor = retry(
+  const listUsersExecutor = retry<ListUsersRequest, ListUsersResponse>(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listUsers,
     Options.Defaults.override({ log })
   )
 
+  const adminListGroupsForUserExecutor = retry<
+    AdminListGroupsForUserRequest,
+    AdminListGroupsForUserResponse
+  >(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.adminListGroupsForUser,
+    Options.Defaults.override({ log })
+  )
+
   const UserPoolId: string | null = UserPoolArn.split('/').slice(-1)[0]
-  if (UserPoolId == null) {
+  if (UserPoolId == null || UserPoolId === '') {
     throw new Error(`Invalid ${UserPoolArn}`)
   }
 
@@ -69,12 +82,6 @@ const listUsers = async (
       throw error
     }
   }
-
-  const adminListGroupsForUserExecutor = retry(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.adminListGroupsForUser,
-    Options.Defaults.override({ log })
-  )
 
   const result: UserListWithAdminFlagType = []
   const promises: Array<Promise<any>> = []

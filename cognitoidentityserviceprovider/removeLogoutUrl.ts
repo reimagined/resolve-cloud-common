@@ -1,4 +1,9 @@
-import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider, {
+  DescribeUserPoolClientRequest,
+  DescribeUserPoolClientResponse,
+  UpdateUserPoolClientRequest,
+  UpdateUserPoolClientResponse
+} from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { getLog, Log, Options, retry } from '../utils'
 
@@ -16,30 +21,34 @@ const removeLogoutUrl = async (
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   const UserPoolId: string | null = UserPoolArn.split('/').slice(-1)[0]
-  if (UserPoolId == null) {
+  if (UserPoolId == null || UserPoolId === '') {
     throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
-  const describeUserPoolClient = retry(
+  const describeUserPoolClient = retry<
+    DescribeUserPoolClientRequest,
+    DescribeUserPoolClientResponse
+  >(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.describeUserPoolClient,
+    Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
+  )
+
+  const updateUserPoolClient = retry<UpdateUserPoolClientRequest, UpdateUserPoolClientResponse>(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.updateUserPoolClient,
     Options.Defaults.override({ log })
   )
 
   const { UserPoolClient } = await describeUserPoolClient({
-    UserPoolId
+    UserPoolId,
+    ClientId
   })
   if (UserPoolClient == null) {
     throw new Error(`User pool client ${ClientId} not found`)
   }
 
   const { LogoutURLs = [] } = UserPoolClient
-
-  const updateUserPoolClient = retry(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.updateUserPoolClient,
-    Options.Defaults.override({ log })
-  )
 
   if (!LogoutURLs.includes(Url)) {
     log.warn(`This URL "${Url}" was not found in client`)

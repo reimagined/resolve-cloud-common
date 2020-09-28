@@ -1,4 +1,9 @@
-import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider, {
+  DescribeUserPoolClientRequest,
+  DescribeUserPoolClientResponse,
+  UpdateUserPoolClientRequest,
+  UpdateUserPoolClientResponse
+} from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { getLog, Log, Options, retry } from '../utils'
 
@@ -9,24 +14,34 @@ const addCallbackUrl = async (
     ClientId: string
     Url: string
   },
-  log: Log = getLog('ADD_CALLBACK_URL')
+  log: Log = getLog('ADD-CALLBACK-URL')
 ): Promise<void> => {
   const { Region, UserPoolArn, ClientId, Url } = params
 
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   const UserPoolId: string | null = UserPoolArn.split('/').slice(-1)[0]
-  if (UserPoolId == null) {
+  if (UserPoolId == null || UserPoolId === '') {
     throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
-  const describeUserPoolClient = retry(
+  const describeUserPoolClient = retry<
+    DescribeUserPoolClientRequest,
+    DescribeUserPoolClientResponse
+  >(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.describeUserPoolClient,
+    Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
+  )
+
+  const updateUserPoolClient = retry<UpdateUserPoolClientRequest, UpdateUserPoolClientResponse>(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.updateUserPoolClient,
     Options.Defaults.override({ log })
   )
 
   const { UserPoolClient } = await describeUserPoolClient({
+    ClientId,
     UserPoolId
   })
   if (UserPoolClient == null) {
@@ -34,12 +49,6 @@ const addCallbackUrl = async (
   }
 
   const { CallbackURLs = [] } = UserPoolClient
-
-  const updateUserPoolClient = retry(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.updateUserPoolClient,
-    Options.Defaults.override({ log })
-  )
 
   if (CallbackURLs.includes(Url)) {
     log.warn(`This URL "${Url}" already exists`)

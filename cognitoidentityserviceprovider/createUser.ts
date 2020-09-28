@@ -1,4 +1,7 @@
 import CognitoIdentityServiceProvider, {
+  AdminCreateUserRequest,
+  AdminCreateUserResponse,
+  AdminAddUserToGroupRequest,
   UserType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
@@ -36,15 +39,21 @@ const createUser = async (
   } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
-  const adminCreateUserExecutor = retry(
+  const adminCreateUserExecutor = retry<AdminCreateUserRequest, AdminCreateUserResponse>(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.adminCreateUser,
     Options.Defaults.override({ log })
   )
 
+  const adminAddUserToGroupExecutor = retry<AdminAddUserToGroupRequest, {}>(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.adminAddUserToGroup,
+    Options.Defaults.override({ log })
+  )
+
   const UserPoolId: string | null = UserPoolArn.split('/').slice(-1)[0]
-  if (UserPoolId == null) {
-    throw new Error(`Invalid ${UserPoolArn}`)
+  if (UserPoolId == null || UserPoolId === '') {
+    throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
   const createUserResult = await adminCreateUserExecutor({
@@ -66,12 +75,6 @@ const createUser = async (
   const { User } = createUserResult
 
   if (IsAdmin === true) {
-    const adminAddUserToGroupExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.adminAddUserToGroup,
-      Options.Defaults.override({ log })
-    )
-
     const addUserResult = await adminAddUserToGroupExecutor({
       UserPoolId,
       Username,
