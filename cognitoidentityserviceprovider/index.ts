@@ -6,6 +6,10 @@ import getUser from './getUser'
 import getUserPool from './getUserPool'
 import getUserPoolByTags from './getUserPoolByTags'
 import listUsers from './listUsers'
+import addCallbackUrl from './addCallbackUrl'
+import addLogoutUrl from './addLogoutUrl'
+import removeCallbackUrl from './removeCallbackUrl'
+import removeLogoutUrl from './removeLogoutUrl'
 
 export {
   createUser,
@@ -15,5 +19,9 @@ export {
   getUser,
   getUserPool,
   getUserPoolByTags,
-  listUsers
+  listUsers,
+  addCallbackUrl,
+  addLogoutUrl,
+  removeCallbackUrl,
+  removeLogoutUrl
 }
