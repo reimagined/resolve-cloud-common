@@ -1,4 +1,8 @@
-import CloudFront, { Distribution } from 'aws-sdk/clients/cloudfront'
+import CloudFront, {
+  Distribution,
+  GetDistributionRequest,
+  GetDistributionResult
+} from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -21,7 +25,7 @@ const getCloudFrontDistributionById: TMethod = async (
   try {
     log.debug('get distribution')
 
-    const getDistribution = retry(
+    const getDistribution = retry<GetDistributionRequest, GetDistributionResult>(
       cloudFront,
       cloudFront.getDistribution,
       Options.Defaults.override({

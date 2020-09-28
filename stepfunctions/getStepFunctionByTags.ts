@@ -3,38 +3,45 @@ import TaggingAPI, {
   GetResourcesOutput,
   ResourceTagMappingList
 } from 'aws-sdk/clients/resourcegroupstaggingapi'
-import getUserPool from './getUserPool'
+import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-const getUserPoolByTags = async (
+const getStepFunctionByTags = async (
   params: {
     Region: string
     Tags: Record<string, string>
   },
-  log: Log = getLog('GET-USER-POOL-BY-TAGS')
+  log: Log = getLog('GET-STEP-FUNCTION-BY-TAGS')
 ): Promise<{
   ResourceARN: string
   Tags: Record<string, string>
 } | null> => {
   const { Region, Tags } = params
 
-  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
-
   const api = new TaggingAPI({ region: Region })
+  const stepFunctions = new StepFunctions({ region: Region })
+
+  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
 
   const getResources = retry<GetResourcesInput, GetResourcesOutput>(
     api,
     api.getResources,
     Options.Defaults.override({ log })
   )
+  const describeStateMachine = retry(
+    stepFunctions,
+    stepFunctions.describeStateMachine,
+    Options.Defaults.override({ log })
+  )
+
   let resources: ResourceTagMappingList | undefined
 
   try {
     log.debug(`Find resources by tags`)
     resources = (
       await getResources({
-        ResourceTypeFilters: ['cognito-idp'],
+        ResourceTypeFilters: ['states'],
         TagFilters
       })
     ).ResourceTagMappingList
@@ -59,12 +66,9 @@ const getUserPoolByTags = async (
   }
 
   try {
-    await getUserPool({
-      Region,
-      UserPoolArn: ResourceARN
-    })
+    await describeStateMachine({ stateMachineArn: ResourceARN })
   } catch (error) {
-    if (error != null && error.code === 'ResourceNotFoundException') {
+    if (error != null && error.code === 'StateMachineDoesNotExist') {
       return null
     }
     throw error
@@ -82,4 +86,4 @@ const getUserPoolByTags = async (
   }
 }
 
-export default getUserPoolByTags
+export default getStepFunctionByTags

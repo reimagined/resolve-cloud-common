@@ -8,7 +8,7 @@ interface TMethod {
       Name: string
       SecretString: string
       Description?: string
-      Tags?: { [key: string]: string }
+      Tags?: Record<string, string>
     },
     log?: Log
   ): Promise<string>

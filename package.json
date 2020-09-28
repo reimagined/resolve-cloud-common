@@ -1,13 +1,13 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.51",
+  "version": "0.0.58",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
   "scripts": {
     "prepare": "node scripts/prepare.js",
     "clear": "node scripts/clear.js",
-    "lint": "eslint --ignore-path=.prettierignore './**/*.{ts,tsx}' && tsc --noEmit",
+    "lint": "eslint --ignore-path=.prettierignore \"./**/*.{ts,tsx}\" && tsc --noEmit",
     "prettier": "prettier --write \"**/**.{ts,tsx,json}\"",
     "prettier:scripts": "prettier --write \"**/scripts/**.js\"",
     "test": "yarn clear && jest",

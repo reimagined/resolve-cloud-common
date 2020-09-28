@@ -44,7 +44,7 @@ async function ensureS3Bucket(
     Region
     BucketName
     ACL?: AmazonACL
-    Tags?: { [key: string]: string }
+    Tags?: Record<string, string>
     Policy?: object
   },
   log: Log = getLog('ENSURE-S3-BUCKET')

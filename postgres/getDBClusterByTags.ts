@@ -3,38 +3,45 @@ import TaggingAPI, {
   GetResourcesOutput,
   ResourceTagMappingList
 } from 'aws-sdk/clients/resourcegroupstaggingapi'
-import getUserPool from './getUserPool'
+import RDS, { DescribeDBClustersMessage, DBClusterMessage } from 'aws-sdk/clients/rds'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-const getUserPoolByTags = async (
+async function getDBClusterByTags(
   params: {
     Region: string
     Tags: Record<string, string>
   },
-  log: Log = getLog('GET-USER-POOL-BY-TAGS')
+  log: Log = getLog('GET-DB-CLUSTER-BY-TAGS')
 ): Promise<{
   ResourceARN: string
   Tags: Record<string, string>
-} | null> => {
+} | null> {
   const { Region, Tags } = params
 
   const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
 
   const api = new TaggingAPI({ region: Region })
+  const rds = new RDS({ region: Region })
 
   const getResources = retry<GetResourcesInput, GetResourcesOutput>(
     api,
     api.getResources,
     Options.Defaults.override({ log })
   )
+  const describeDBClusters = retry<DescribeDBClustersMessage, DBClusterMessage>(
+    rds,
+    rds.describeDBClusters,
+    Options.Defaults.override({ log, expectedErrors: ['DBClusterNotFoundFault'] })
+  )
+
   let resources: ResourceTagMappingList | undefined
 
   try {
     log.debug(`Find resources by tags`)
     resources = (
       await getResources({
-        ResourceTypeFilters: ['cognito-idp'],
+        ResourceTypeFilters: ['rds'],
         TagFilters
       })
     ).ResourceTagMappingList
@@ -59,12 +66,11 @@ const getUserPoolByTags = async (
   }
 
   try {
-    await getUserPool({
-      Region,
-      UserPoolArn: ResourceARN
+    await describeDBClusters({
+      DBClusterIdentifier: ResourceARN.split(':').splice(-1)[0]
     })
   } catch (error) {
-    if (error != null && error.code === 'ResourceNotFoundException') {
+    if (error != null && error.code === 'DBClusterNotFoundFault') {
       return null
     }
     throw error
@@ -82,4 +88,4 @@ const getUserPoolByTags = async (
   }
 }
 
-export default getUserPoolByTags
+export default getDBClusterByTags

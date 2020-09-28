@@ -1,40 +1,76 @@
 import CognitoIdentityServiceProvider, {
-  UserPoolType
+  UserPoolType,
+  ListUserPoolsRequest,
+  ListUserPoolsResponse,
+  CreateUserPoolRequest,
+  CreateUserPoolResponse,
+  CreateUserPoolClientRequest,
+  CreateUserPoolClientResponse,
+  CreateUserPoolDomainRequest,
+  CreateUserPoolDomainResponse,
+  CreateGroupRequest,
+  CreateGroupResponse
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { ADMIN_GROUP_NAME, ADMIN_GROUP_DESCRIPTION } from './constants'
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      PoolName: string
-      ClientName: string
-      CallbackURLs: Array<string>
-      LogoutURLs: Array<string>
-      Domain: string
-      Tags: { [key: string]: string }
-    },
-    log?: Log
-  ): Promise<UserPoolType>
-}
+const ensureUserPool = async (
+  params: {
+    Region: string
+    PoolName: string
+    ClientName: string
+    CallbackURLs: Array<string>
+    LogoutURLs: Array<string>
+    Domain: string
+    Tags?: Record<string, string>
+  },
+  log: Log = getLog('ENSURE_USER_POOL')
+): Promise<UserPoolType> => {
+  const { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain, Tags = {} } = params
+  Tags.Owner = 'reimagined'
 
-const ensureUserPool: TMethod = async (
-  { Region, PoolName, ClientName, CallbackURLs, LogoutURLs, Domain, Tags },
-  log = getLog('ENSURE_USER_POOL')
-) => {
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   try {
-    const listUserPoolsExecutor = retry(
+    const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.listUserPools,
       Options.Defaults.override({ log })
     )
 
+    const createUserPoolExecutor = retry<CreateUserPoolRequest, CreateUserPoolResponse>(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.createUserPool,
+      Options.Defaults.override({ log })
+    )
+
+    const createUserPoolClientExecutor = retry<
+      CreateUserPoolClientRequest,
+      CreateUserPoolClientResponse
+    >(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.createUserPoolClient,
+      Options.Defaults.override({ log })
+    )
+
+    const createUserPoolDomainExecutor = retry<
+      CreateUserPoolDomainRequest,
+      CreateUserPoolDomainResponse
+    >(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.createUserPoolDomain,
+      Options.Defaults.override({ log })
+    )
+
+    const createGroupExecutor = retry<CreateGroupRequest, CreateGroupResponse>(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.createGroup,
+      Options.Defaults.override({ log })
+    )
+
     const listUserPoolsResult = await listUserPoolsExecutor({
-      MaxResults: 100
+      MaxResults: 60
     })
 
     if (listUserPoolsResult == null) {
@@ -47,12 +83,6 @@ const ensureUserPool: TMethod = async (
       log.warn(`Pool with the same name already exists`)
       return foundPool
     }
-
-    const createUserPoolExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.createUserPool,
-      Options.Defaults.override({ log })
-    )
 
     const createUserPoolResult = await createUserPoolExecutor({
       PoolName,
@@ -71,18 +101,6 @@ const ensureUserPool: TMethod = async (
         AllowAdminCreateUserOnly: false
       },
       MfaConfiguration: 'OFF',
-      AccountRecoverySetting: {
-        RecoveryMechanisms: [
-          {
-            Name: 'verified_phone_number',
-            Priority: 1
-          },
-          {
-            Name: 'verified_email',
-            Priority: 2
-          }
-        ]
-      },
       UserPoolTags: Tags
     })
 
@@ -90,34 +108,29 @@ const ensureUserPool: TMethod = async (
       throw new Error('Failed to create user pool')
     }
 
-    const createUserPoolClientExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.createUserPoolClient,
-      Options.Defaults.override({ log })
-    )
+    const UserPoolId = createUserPoolResult.UserPool?.Id
+
+    if (UserPoolId == null || UserPoolId === '') {
+      throw new Error(`Pool with name ${PoolName} does not exist`)
+    }
 
     await createUserPoolClientExecutor({
       ClientName,
-      UserPoolId: createUserPoolResult.UserPool?.Id,
+      UserPoolId,
       CallbackURLs,
       LogoutURLs,
       PreventUserExistenceErrors: 'LEGACY',
       ExplicitAuthFlows: ['ALLOW_CUSTOM_AUTH', 'ALLOW_USER_SRP_AUTH', 'ALLOW_REFRESH_TOKEN_AUTH'],
-      GenerateSecret: true,
+      GenerateSecret: false,
       AllowedOAuthFlowsUserPoolClient: true,
       AllowedOAuthFlows: ['code'],
-      AllowedOAuthScopes: ['email', 'openid', 'aws.cognito.signin.user.admin', 'profile']
+      AllowedOAuthScopes: ['email', 'openid', 'aws.cognito.signin.user.admin', 'profile'],
+      SupportedIdentityProviders: ['COGNITO']
     })
-
-    const createUserPoolDomainExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.createUserPoolDomain,
-      Options.Defaults.override({ log })
-    )
 
     await createUserPoolDomainExecutor({
       Domain,
-      UserPoolId: createUserPoolResult.UserPool?.Id
+      UserPoolId
     })
 
     log.debug(`The user pool "${PoolName}" has been ensured`)
@@ -126,14 +139,9 @@ const ensureUserPool: TMethod = async (
     if (UserPool == null) {
       throw new Error(`User pool is null`)
     }
-    const createGroupExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.createGroup,
-      Options.Defaults.override({ log })
-    )
 
     const groupResult = await createGroupExecutor({
-      UserPoolId: UserPool.Id,
+      UserPoolId,
       GroupName: ADMIN_GROUP_NAME,
       Description: ADMIN_GROUP_DESCRIPTION
     })

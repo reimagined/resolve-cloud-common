@@ -1,79 +1,143 @@
 import CognitoIdentityServiceProvider, {
-  GroupListType
+  GroupListType,
+  ListUserPoolsRequest,
+  ListUserPoolsResponse,
+  ListGroupsRequest,
+  ListGroupsResponse,
+  ListTagsForResourceRequest,
+  ListTagsForResourceResponse
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import Resourcegroupstaggingapi, {
+  UntagResourcesInput,
+  UntagResourcesOutput
+} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import STS, { GetCallerIdentityRequest, GetCallerIdentityResponse } from 'aws-sdk/clients/sts'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      PoolName: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const deleteUserPool = async (
+  params: {
+    Region: string
+    PoolName: string
+    IfExists?: boolean
+  },
+  log: Log = getLog('DELETE_USER_POOL')
+): Promise<void> => {
+  const { Region, PoolName, IfExists } = params
 
-const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELETE_USER_POOL')) => {
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
+  const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
+  const sts = new STS({ region: Region })
+
+  const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.listUserPools,
+    Options.Defaults.override({ log })
+  )
+  const listGroupsExecutor = retry<ListGroupsRequest, ListGroupsResponse>(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.listGroups,
+    Options.Defaults.override({ log })
+  )
+
+  const listTagsForResourceExecutor = retry<
+    ListTagsForResourceRequest,
+    ListTagsForResourceResponse
+  >(
+    cognitoIdentityServiceProvider,
+    cognitoIdentityServiceProvider.listTagsForResource,
+    Options.Defaults.override({ log })
+  )
+  const getCallerIdentityExecutor = retry<GetCallerIdentityRequest, GetCallerIdentityResponse>(
+    sts,
+    sts.getCallerIdentity,
+    Options.Defaults.override({ log })
+  )
+
+  const untagResourcesExecutor = retry<UntagResourcesInput, UntagResourcesOutput>(
+    taggingAPI,
+    taggingAPI.untagResources,
+    Options.Defaults.override({ log })
+  )
 
   try {
-    const listUserPoolsExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.listUserPools,
-      Options.Defaults.override({ log })
-    )
-
-    const listUserPoolsResult = await listUserPoolsExecutor({
-      MaxResults: 100
-    })
-
-    if (listUserPoolsResult == null) {
-      throw new Error('Failed to get list user pools')
+    const { Account: AccountId } = await getCallerIdentityExecutor({})
+    if (AccountId == null) {
+      throw new Error(`Cannot determine account id`)
     }
 
-    const foundPool = listUserPoolsResult.UserPools?.find((pool) => pool.Name === PoolName)
+    let NextToken: string | undefined
+    let UserPoolId: string | undefined
+    searchLoop: for (;;) {
+      const { NextToken: FollowNextToken, UserPools } = await listUserPoolsExecutor({
+        MaxResults: 60,
+        NextToken
+      })
 
-    if (foundPool == null) {
+      if (UserPools != null) {
+        for (const { Name, Id } of UserPools) {
+          if (Name === PoolName) {
+            UserPoolId = Id
+
+            break searchLoop
+          }
+        }
+      }
+
+      if (
+        FollowNextToken == null ||
+        FollowNextToken === '' ||
+        UserPools == null ||
+        UserPools.length === 0
+      ) {
+        break searchLoop
+      }
+
+      NextToken = FollowNextToken
+    }
+
+    if (UserPoolId == null || UserPoolId === '') {
       throw new Error(`Pool with name ${PoolName} does not exist`)
     }
-    const { Id: UserPoolId } = foundPool
 
-    const listGroupsExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.listGroups,
-      Options.Defaults.override({ log })
-    )
+    try {
+      const UserPoolArn = `arn:aws:cognito-idp:${Region}:${AccountId}:userpool/${UserPoolId}`
+      const { Tags } = await listTagsForResourceExecutor({ ResourceArn: UserPoolArn })
+      if (Tags == null) {
+        throw new Error(`Tags for Cognito identity pool is null`)
+      }
+
+      await untagResourcesExecutor({
+        ResourceARNList: [UserPoolArn],
+        TagKeys: Object.keys(Tags)
+      })
+    } catch (error) {
+      log.warn(error)
+    }
 
     const groups: GroupListType = []
 
-    let NextToken: string | undefined
     for (;;) {
-      try {
-        const { NextToken: FollowNextToken, Groups } = await listGroupsExecutor({
-          UserPoolId,
-          Limit: 100,
-          NextToken
-        })
+      const { NextToken: FollowNextToken, Groups } = await listGroupsExecutor({
+        UserPoolId,
+        Limit: 60,
+        NextToken
+      })
 
-        if (
-          FollowNextToken == null ||
-          FollowNextToken === '' ||
-          Groups == null ||
-          Groups.length === 0
-        ) {
-          break
-        }
-
-        for (const group of Groups) {
-          groups.push(group)
-        }
-
-        NextToken = FollowNextToken
-      } catch (error) {
-        log.error(error)
-        throw error
+      if (
+        FollowNextToken == null ||
+        FollowNextToken === '' ||
+        Groups == null ||
+        Groups.length === 0
+      ) {
+        break
       }
+
+      for (const group of Groups) {
+        groups.push(group)
+      }
+
+      NextToken = FollowNextToken
     }
 
     const deleteGroupExecutor = retry(
@@ -99,9 +163,13 @@ const deleteUserPool: TMethod = async ({ Region, PoolName }, log = getLog('DELET
       UserPoolId
     })
   } catch (error) {
-    log.debug(`Failed to delete the user pool "${PoolName}"`)
-
-    throw error
+    if (IfExists) {
+      log.debug(`Skip delete the user pool "${PoolName}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.debug(`Failed to delete the user pool "${PoolName}"`)
+      throw error
+    }
   }
 }
 
