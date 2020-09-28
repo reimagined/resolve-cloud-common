@@ -14,7 +14,7 @@ const removeLogoutUrl = async (
     ClientId: string
     Url: string
   },
-  log: Log = getLog('REMOVE_LOGOUT_URL')
+  log: Log = getLog('REMOVE-LOGOUT-URL')
 ): Promise<void> => {
   const { Region, UserPoolArn, ClientId, Url } = params
 

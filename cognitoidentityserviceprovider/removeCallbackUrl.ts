@@ -14,7 +14,7 @@ const removeCallbackUrl = async (
     ClientId: string
     Url: string
   },
-  log: Log = getLog('REMOVE_CALLBACK_URL')
+  log: Log = getLog('REMOVE-CALLBACK-URL')
 ): Promise<void> => {
   const { Region, UserPoolArn, ClientId, Url } = params
 
