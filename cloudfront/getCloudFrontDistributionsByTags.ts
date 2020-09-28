@@ -9,7 +9,7 @@ import { retry, Options, getLog, Log } from '../utils'
 async function getResourcesByTags(
   params: {
     Region: string
-    Tags: { [key: string]: string }
+    Tags: Record<string, string>
   },
   log: Log
 ): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
@@ -131,10 +131,10 @@ async function getResourceArns(
 async function getCloudFrontDistributionsByTags(
   params: {
     Region: string
-    Tags: { [key: string]: string }
+    Tags: Record<string, string>
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTIONS-BY-TAGS')
-): Promise<Array<{ ResourceARN: string; Tags: { [key: string]: string } }>> {
+): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
   const [resourcesByTags, listResources] = await Promise.all([
     getResourcesByTags(params, log),
     getResourceArns(params, log)

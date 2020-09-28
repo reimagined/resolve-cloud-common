@@ -13,7 +13,7 @@ const createUser = async (
     TemporaryPassword: string
     ForceAliasCreation?: boolean
     MessageAction?: 'RESEND' | 'SUPPRESS'
-    ClientMetadata?: { [key: string]: string }
+    ClientMetadata?: Record<string, string>
     DesiredDeliveryMediums?: Array<'SMS' | 'EMAIL'>
     UserAttributes?: Array<{ Name: string; Value: string }>
     ValidationData?: Array<{ Name: string; Value: string }>

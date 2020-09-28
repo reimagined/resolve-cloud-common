@@ -11,7 +11,7 @@ interface TMethod {
       Expires?: number /* in seconds */
       MaxSize?: number
       ContentType?: string
-      Metadata?: { [key: string]: string }
+      Metadata?: Record<string, string>
     },
     log?: Log
   ): Promise<PresignedPost>
@@ -22,7 +22,7 @@ const isTrailingSlash = /\/$/
 function getConditions(params: {
   MaxSize?: number
   ContentType?: string
-  Metadata?: { [key: string]: string }
+  Metadata?: Record<string, string>
 }): Array<[string, any, any]> | undefined {
   const { MaxSize, ContentType, Metadata } = params
 
@@ -48,7 +48,7 @@ function getConditions(params: {
   return undefined
 }
 
-function assignMetadata(presignedPost: PresignedPost, Metadata?: { [key: string]: string }): void {
+function assignMetadata(presignedPost: PresignedPost, Metadata?: Record<string, string>): void {
   if (Metadata != null) {
     for (const [key, value] of Object.entries(Metadata)) {
       presignedPost.fields[`x-amz-meta-${key}`] = value

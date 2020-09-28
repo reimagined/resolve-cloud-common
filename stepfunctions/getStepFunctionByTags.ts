@@ -1,4 +1,8 @@
-import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, {
+  GetResourcesInput,
+  GetResourcesOutput,
+  ResourceTagMappingList
+} from 'aws-sdk/clients/resourcegroupstaggingapi'
 import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -9,7 +13,10 @@ const getStepFunctionByTags = async (
     Tags: Record<string, string>
   },
   log: Log = getLog('GET-STEP-FUNCTION-BY-TAGS')
-): Promise<string | null> => {
+): Promise<{
+  ResourceARN: string
+  Tags: Record<string, string>
+} | null> => {
   const { Region, Tags } = params
 
   const api = new TaggingAPI({ region: Region })
@@ -17,8 +24,11 @@ const getStepFunctionByTags = async (
 
   const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
 
-  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
-
+  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
+    api,
+    api.getResources,
+    Options.Defaults.override({ log })
+  )
   const describeStateMachine = retry(
     stepFunctions,
     stepFunctions.describeStateMachine,
@@ -50,7 +60,7 @@ const getStepFunctionByTags = async (
     throw new Error('Too Many Resources')
   }
 
-  const { ResourceARN } = resources[0]
+  const { ResourceARN, Tags: ResourceTagList = [] } = resources[0]
   if (ResourceARN == null) {
     return null
   }
@@ -65,8 +75,15 @@ const getStepFunctionByTags = async (
   }
 
   log.verbose(ResourceARN)
+  log.verbose(ResourceTagList)
 
-  return ResourceARN
+  return {
+    ResourceARN,
+    Tags: ResourceTagList.reduce((acc: Record<string, string>, { Key, Value }) => {
+      acc[Key] = Value
+      return acc
+    }, {})
+  }
 }
 
 export default getStepFunctionByTags

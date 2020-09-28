@@ -29,7 +29,9 @@ const getUserPool = async (
     UserPoolId
   })
   if (UserPool == null) {
-    throw new Error(`User pool ${UserPoolArn} not found`)
+    const error: Error & { code?: string } = new Error(`User pool ${UserPoolArn} not found`)
+    error.code = 'ResourceNotFoundException'
+    throw error
   }
 
   return UserPool
