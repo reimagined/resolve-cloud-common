@@ -116,7 +116,7 @@ const deleteStepFunction = async (
         }
       }
 
-      if(tagKeys.length > 0) {
+      if (tagKeys.length > 0) {
         await untagResources({
           ResourceARNList: [StepFunctionArn],
           TagKeys: tagKeys

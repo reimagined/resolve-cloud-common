@@ -134,10 +134,12 @@ const deleteUserPool = async (
     }
 
     for (const { GroupName } of groups) {
-      await deleteGroupExecutor({
-        UserPoolId,
-        GroupName
-      })
+      if (GroupName != null) {
+        await deleteGroupExecutor({
+          UserPoolId,
+          GroupName
+        })
+      }
     }
 
     await deleteUserPoolsExecutor({

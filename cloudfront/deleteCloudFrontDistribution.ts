@@ -47,7 +47,7 @@ const deleteCloudFrontDistribution = async (
       })
     )
 
-    const { Distribution: ARN } = await getCloudFrontDistributionById({ Region, Id })
+    const { Distribution: { ARN } = {} } = await getCloudFrontDistributionById({ Region, Id })
     if (ARN == null) {
       throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
     }
@@ -62,10 +62,12 @@ const deleteCloudFrontDistribution = async (
       if (TagsWithItems != null && TagsWithItems.Items != null) {
         const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
 
-        await untagResources({
-          ResourceARNList: [ARN],
-          TagKeys
-        })
+        if (TagKeys.length > 0) {
+          await untagResources({
+            ResourceARNList: [ARN],
+            TagKeys
+          })
+        }
 
         log.debug(`Cloud front distribution tags has been deleted`)
         log.verbose({ TagKeys })

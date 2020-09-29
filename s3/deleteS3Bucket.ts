@@ -101,7 +101,7 @@ const deleteS3Bucket = async (
 
       const ResourceARNList = [`arn:aws:s3:::${BucketName}`]
 
-      if(TagKeys.length > 0) {
+      if (TagKeys.length > 0) {
         await untagResources({
           ResourceARNList,
           TagKeys

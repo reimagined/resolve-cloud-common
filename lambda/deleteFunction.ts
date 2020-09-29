@@ -54,7 +54,6 @@ const deleteFunction = async (
 
     try {
       if (TagKeys.length > 0 && FunctionArn != null) {
-
         await untagResources({
           ResourceARNList: [FunctionArn],
           TagKeys

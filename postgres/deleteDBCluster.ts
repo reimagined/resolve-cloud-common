@@ -69,7 +69,6 @@ const deleteDBCluster = async (
 
     try {
       if (DBClusterArn != null && TagList != null && TagList.length > 0) {
-
         const TagKeys: Array<string> = []
         for (const { Key } of TagList) {
           if (Key != null) {
