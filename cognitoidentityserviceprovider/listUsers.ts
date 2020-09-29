@@ -1,9 +1,5 @@
 import CognitoIdentityServiceProvider, {
-  UsersListType,
-  ListUsersRequest,
-  ListUsersResponse,
-  AdminListGroupsForUserRequest,
-  AdminListGroupsForUserResponse
+  UsersListType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
@@ -28,16 +24,13 @@ const listUsers = async (
   const { Region, UserPoolArn, Filter } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
-  const listUsersExecutor = retry<ListUsersRequest, ListUsersResponse>(
+  const listUsersExecutor = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listUsers,
     Options.Defaults.override({ log })
   )
 
-  const adminListGroupsForUserExecutor = retry<
-    AdminListGroupsForUserRequest,
-    AdminListGroupsForUserResponse
-  >(
+  const adminListGroupsForUserExecutor = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.adminListGroupsForUser,
     Options.Defaults.override({ log })

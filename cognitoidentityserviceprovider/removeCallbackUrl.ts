@@ -1,9 +1,4 @@
-import CognitoIdentityServiceProvider, {
-  DescribeUserPoolClientRequest,
-  DescribeUserPoolClientResponse,
-  UpdateUserPoolClientRequest,
-  UpdateUserPoolClientResponse
-} from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { getLog, Log, Options, retry } from '../utils'
 
@@ -25,16 +20,13 @@ const removeCallbackUrl = async (
     throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
-  const describeUserPoolClient = retry<
-    DescribeUserPoolClientRequest,
-    DescribeUserPoolClientResponse
-  >(
+  const describeUserPoolClient = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.describeUserPoolClient,
     Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
   )
 
-  const updateUserPoolClient = retry<UpdateUserPoolClientRequest, UpdateUserPoolClientResponse>(
+  const updateUserPoolClient = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.updateUserPoolClient,
     Options.Defaults.override({ log })

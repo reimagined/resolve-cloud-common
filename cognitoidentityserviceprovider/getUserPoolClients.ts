@@ -1,7 +1,5 @@
 import CognitoIdentityServiceProvider, {
-  UserPoolClientListType,
-  ListUserPoolClientsRequest,
-  ListUserPoolClientsResponse
+  UserPoolClientListType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { getLog, Log, Options, retry } from '../utils'
@@ -22,7 +20,7 @@ const getUserPoolClients = async (
     throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
-  const listUserPoolClients = retry<ListUserPoolClientsRequest, ListUserPoolClientsResponse>(
+  const listUserPoolClients = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.listUserPoolClients,
     Options.Defaults.override({ log })

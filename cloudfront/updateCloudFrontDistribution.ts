@@ -1,6 +1,5 @@
 import CloudFront, {
   DistributionConfig as Config,
-  UpdateDistributionRequest,
   UpdateDistributionResult
 } from 'aws-sdk/clients/cloudfront'
 
@@ -27,7 +26,7 @@ const updateCloudFrontDistribution: TMethod = async (
   try {
     log.debug('Update cloud front distribution')
 
-    const updateDistribution = retry<UpdateDistributionRequest, UpdateDistributionResult>(
+    const updateDistribution = retry(
       cloudFront,
       cloudFront.updateDistribution,
       Options.Defaults.override({

@@ -84,7 +84,7 @@ describe('retry', () => {
     const response = new MockSdkResponse({ responseData: 'response-data' })
     mockSdk.method.mockReturnValue(response)
 
-    const wrapper = retry<MockRequest, MockResponse>(mockSdk, mockSdk.invoke, opts)
+    const wrapper = retry(mockSdk, mockSdk.invoke, opts)
 
     await expect(wrapper({ requestData: 'data' })).resolves.toEqual({
       responseData: 'response-data'

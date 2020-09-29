@@ -84,7 +84,7 @@ const deleteStepFunction = async (
 
   try {
     const { tags } = await listTagsForResource({
-      stateMachineArn: StepFunctionArn
+      resourceArn: StepFunctionArn
     })
 
     const tagKeys: Array<string> = []

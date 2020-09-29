@@ -45,7 +45,7 @@ const deleteFunction = async (
 
     try {
       const { Tags, Configuration: { FunctionArn } = {} } = await getFunction({
-        Resource: FunctionName
+        FunctionName
       })
       if (Tags != null && FunctionArn != null) {
         await untagResources({

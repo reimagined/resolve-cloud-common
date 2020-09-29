@@ -2,20 +2,15 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-    },
-    log?: Log
-  ): Promise<string>
-}
-
-const getFunctionRole: TMethod = async (
-  { Region, FunctionName },
+const getFunctionRole = async (
+  params: {
+    Region: string
+    FunctionName: string
+  },
   log: Log = getLog('GET-FUNCTION-ROLE')
-) => {
+): Promise<string> => {
+  const { Region, FunctionName } = params
+
   try {
     log.debug(`Get the function "${FunctionName}" role`)
 
@@ -24,7 +19,7 @@ const getFunctionRole: TMethod = async (
     const getFunctionConfiguration = retry(
       lambda,
       lambda.getFunctionConfiguration,
-      Options.Defaults.override({ log, maxAttempts: 1 })
+      Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
     )
     const { Role: RoleArn } = await getFunctionConfiguration({
       FunctionName

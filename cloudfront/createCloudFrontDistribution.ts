@@ -1,6 +1,4 @@
 import CloudFront, {
-  CreateDistributionWithTagsRequest,
-  CreateDistributionWithTagsResult,
   DistributionConfig as CloudFrontDistributionConfig,
   Distribution as CloudFrontDistribution
 } from 'aws-sdk/clients/cloudfront'
@@ -24,10 +22,7 @@ const createCloudFrontDistribution = async (
   try {
     log.debug(`Create cloud front distribution with tags`)
 
-    const createDistributionWithTags = retry<
-      CreateDistributionWithTagsRequest,
-      CreateDistributionWithTagsResult
-    >(
+    const createDistributionWithTags = retry(
       cf,
       cf.createDistributionWithTags,
       Options.Defaults.override({
