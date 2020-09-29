@@ -82,26 +82,9 @@ const deleteStepFunction = async (
     Options.Defaults.override({ log })
   )
 
-  try {
-    const { tags } = await listTagsForResource({
-      stateMachineArn: StepFunctionArn
-    })
-
-    const tagKeys: Array<string> = []
-
-    for (const { key } of tags ?? []) {
-      if (key != null) {
-        tagKeys.push(key)
-      }
-    }
-
-    await untagResources({
-      ResourceARNList: [StepFunctionArn],
-      TagKeys: tagKeys
-    })
-  } catch (error) {
-    log.warn(error)
-  }
+  const { tags } = await listTagsForResource({
+    stateMachineArn: StepFunctionArn
+  })
 
   log.debug(`Enumerate and stop active executions`)
   await processPage({ Region, StepFunctionArn }, log)
@@ -111,7 +94,6 @@ const deleteStepFunction = async (
     await removeStateMachine({
       stateMachineArn: StepFunctionArn
     })
-    log.debug(`Step function "${StepFunctionArn}" has been deleted`)
 
     log.debug('Wait for deleting')
     for (;;) {
@@ -124,6 +106,27 @@ const deleteStepFunction = async (
       }
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
+
+    try {
+      const tagKeys: Array<string> = []
+
+      for (const { key } of tags ?? []) {
+        if (key != null) {
+          tagKeys.push(key)
+        }
+      }
+
+      await untagResources({
+        ResourceARNList: [StepFunctionArn],
+        TagKeys: tagKeys
+      })
+
+      log.debug(`Step function tags has been deleted`)
+    } catch (error) {
+      log.warn(error)
+    }
+
+    log.debug(`Step function "${StepFunctionArn}" has been deleted`)
   } catch (error) {
     if (IfExists) {
       log.debug(`Skip delete step function "${StepFunctionArn}"`)

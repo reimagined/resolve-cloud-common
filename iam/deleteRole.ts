@@ -90,6 +90,8 @@ const deleteRole = async (
       throw error
     }
 
+    await removeRole({ RoleName })
+
     try {
       if (Tags != null) {
         await untagResource({
@@ -100,8 +102,6 @@ const deleteRole = async (
     } catch (error) {
       log.warn(error)
     }
-
-    await removeRole({ RoleName })
 
     log.debug(`The role "${RoleName}" has been deleted`)
   } catch (error) {

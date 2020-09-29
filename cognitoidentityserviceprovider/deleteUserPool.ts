@@ -29,38 +29,52 @@ const deleteUserPool = async (
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
   const sts = new STS({ region: Region })
 
-  const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.listUserPools,
-    Options.Defaults.override({ log })
-  )
-  const listGroupsExecutor = retry<ListGroupsRequest, ListGroupsResponse>(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.listGroups,
-    Options.Defaults.override({ log })
-  )
-
-  const listTagsForResourceExecutor = retry<
-    ListTagsForResourceRequest,
-    ListTagsForResourceResponse
-  >(
-    cognitoIdentityServiceProvider,
-    cognitoIdentityServiceProvider.listTagsForResource,
-    Options.Defaults.override({ log })
-  )
-  const getCallerIdentityExecutor = retry<GetCallerIdentityRequest, GetCallerIdentityResponse>(
-    sts,
-    sts.getCallerIdentity,
-    Options.Defaults.override({ log })
-  )
-
-  const untagResourcesExecutor = retry<UntagResourcesInput, UntagResourcesOutput>(
-    taggingAPI,
-    taggingAPI.untagResources,
-    Options.Defaults.override({ log })
-  )
-
   try {
+    const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.listUserPools,
+      Options.Defaults.override({ log })
+    )
+
+    const listGroupsExecutor = retry<ListGroupsRequest, ListGroupsResponse>(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.listGroups,
+      Options.Defaults.override({ log })
+    )
+
+    const listTagsForResourceExecutor = retry<
+      ListTagsForResourceRequest,
+      ListTagsForResourceResponse
+    >(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.listTagsForResource,
+      Options.Defaults.override({ log })
+    )
+
+    const getCallerIdentityExecutor = retry<GetCallerIdentityRequest, GetCallerIdentityResponse>(
+      sts,
+      sts.getCallerIdentity,
+      Options.Defaults.override({ log })
+    )
+
+    const untagResourcesExecutor = retry<UntagResourcesInput, UntagResourcesOutput>(
+      taggingAPI,
+      taggingAPI.untagResources,
+      Options.Defaults.override({ log })
+    )
+
+    const deleteUserPoolsExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.deleteUserPool,
+      Options.Defaults.override({ log })
+    )
+
+    const deleteGroupExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.deleteGroup,
+      Options.Defaults.override({ log })
+    )
+
     const { Account: AccountId } = await getCallerIdentityExecutor({})
     if (AccountId == null) {
       throw new Error(`Cannot determine account id`)
@@ -100,22 +114,13 @@ const deleteUserPool = async (
       throw new Error(`Pool with name ${PoolName} does not exist`)
     }
 
-    try {
-      const UserPoolArn = `arn:aws:cognito-idp:${Region}:${AccountId}:userpool/${UserPoolId}`
-      const { Tags } = await listTagsForResourceExecutor({ ResourceArn: UserPoolArn })
-      if (Tags == null) {
-        throw new Error(`Tags for Cognito identity pool is null`)
-      }
-
-      await untagResourcesExecutor({
-        ResourceARNList: [UserPoolArn],
-        TagKeys: Object.keys(Tags)
-      })
-    } catch (error) {
-      log.warn(error)
-    }
-
     const groups: GroupListType = []
+    const UserPoolArn = `arn:aws:cognito-idp:${Region}:${AccountId}:userpool/${UserPoolId}`
+
+    const { Tags } = await listTagsForResourceExecutor({ ResourceArn: UserPoolArn })
+    if (Tags == null) {
+      throw new Error(`Tags for Cognito identity pool is null`)
+    }
 
     for (;;) {
       const { NextToken: FollowNextToken, Groups } = await listGroupsExecutor({
@@ -140,12 +145,6 @@ const deleteUserPool = async (
       NextToken = FollowNextToken
     }
 
-    const deleteGroupExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.deleteGroup,
-      Options.Defaults.override({ log })
-    )
-
     for (const { GroupName } of groups) {
       await deleteGroupExecutor({
         UserPoolId,
@@ -153,15 +152,20 @@ const deleteUserPool = async (
       })
     }
 
-    const deleteUserPoolsExecutor = retry(
-      cognitoIdentityServiceProvider,
-      cognitoIdentityServiceProvider.deleteUserPool,
-      Options.Defaults.override({ log })
-    )
-
     await deleteUserPoolsExecutor({
       UserPoolId
     })
+
+    try {
+      await untagResourcesExecutor({
+        ResourceARNList: [UserPoolArn],
+        TagKeys: Object.keys(Tags)
+      })
+
+      log.debug(`User pool tags has been deleted`)
+    } catch (error) {
+      log.warn(error)
+    }
   } catch (error) {
     if (IfExists) {
       log.debug(`Skip delete the user pool "${PoolName}"`)

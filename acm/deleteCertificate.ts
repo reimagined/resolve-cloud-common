@@ -19,25 +19,34 @@ const deleteCertificate = async (
   try {
     log.debug(`Delete certificate`)
 
+    const deleteCertificateExecutor = retry(
+      acm,
+      acm.deleteCertificate,
+      Options.Defaults.override({ log })
+    )
+
+    const listTagsForCertificate = retry(
+      acm,
+      acm.listTagsForCertificate,
+      Options.Defaults.override({ log })
+    )
+
+    const untagResources = retry(
+      taggingApi,
+      taggingApi.untagResources,
+      Options.Defaults.override({ log })
+    )
+
+    log.debug(`List tags certificate`)
+
+    const { Tags } = await listTagsForCertificate({
+      CertificateArn
+    })
+
+    await deleteCertificateExecutor({ CertificateArn })
+
     try {
-      log.debug(`List tags certificate`)
-      const listTagsForCertificate = retry(
-        acm,
-        acm.listTagsForCertificate,
-        Options.Defaults.override({ log })
-      )
-
-      const { Tags } = await listTagsForCertificate({
-        CertificateArn
-      })
-
       if (Tags != null) {
-        const untagResources = retry(
-          taggingApi,
-          taggingApi.untagResources,
-          Options.Defaults.override({ log })
-        )
-
         const tagKeys = Tags.map(({ Key }) => Key)
 
         await untagResources({
@@ -47,31 +56,19 @@ const deleteCertificate = async (
         log.debug(`Certificate tags has been deleted`)
         log.verbose({ tagKeys })
       }
-    } catch (listTagsError) {
-      ignoreNotFoundException(listTagsError)
+    } catch (error) {
+      log.warn(error)
     }
 
-    try {
-      const deleteCertificateExecutor = retry(
-        acm,
-        acm.deleteCertificate,
-        Options.Defaults.override({ log })
-      )
-
-      await deleteCertificateExecutor({ CertificateArn })
-
-      log.debug(`Delete certificate has been deleted`)
-    } catch (deleteCertificateError) {
-      if (IfExists) {
-        ignoreNotFoundException(deleteCertificateError)
-      } else {
-        throw deleteCertificateError
-      }
-    }
+    log.debug(`Delete certificate has been deleted`)
   } catch (error) {
-    log.debug(`Failed to delete certificate`)
-
-    throw error
+    if (IfExists) {
+      log.debug(`Skip delete the certificate "${CertificateArn}"`)
+      ignoreNotFoundException(error)
+    } else {
+      log.debug(`Failed to delete the certificate "${CertificateArn}"`)
+      throw error
+    }
   }
 }
 
