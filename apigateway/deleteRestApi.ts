@@ -57,6 +57,10 @@ const deleteRestApi = async (
       throw error
     }
 
+    await deleteRestApiExecutor({
+      restApiId: restApi.id
+    })
+
     try {
       if (restApi.tags != null) {
         await untagResourcesExecutor({
@@ -67,10 +71,6 @@ const deleteRestApi = async (
     } catch (error) {
       log.warn(error)
     }
-
-    await deleteRestApiExecutor({
-      restApiId: restApi.id
-    })
 
     log.debug(`The Rest API has been deleted`)
   } catch (error) {

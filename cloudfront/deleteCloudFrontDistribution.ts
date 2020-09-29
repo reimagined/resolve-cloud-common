@@ -29,15 +29,6 @@ const deleteCloudFrontDistribution = async (
         delay: 1000
       })
     )
-    const untagResources = retry(
-      taggingAPI,
-      taggingAPI.untagResources,
-      Options.Defaults.override({
-        maxAttempts: 5,
-        delay: 1000
-      })
-    )
-
     const listTagsForResource = retry(
       cloudFront,
       cloudFront.listTagsForResource,
@@ -47,42 +38,51 @@ const deleteCloudFrontDistribution = async (
       })
     )
 
-    try {
-      try {
-        const { Distribution: { ARN } = {} } = await getCloudFrontDistributionById({ Region, Id })
-        if (ARN == null) {
-          throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
-        }
-
-        const { Tags: TagsWithItems } = await listTagsForResource({ Resource: ARN })
-        if (TagsWithItems != null && TagsWithItems.Items != null) {
-          const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
-
-          await untagResources({
-            ResourceARNList: [ARN],
-            TagKeys
-          })
-        }
-      } catch (error) {
-        log.warn(error)
-      }
-
-      await deleteDistribution({
-        Id,
-        IfMatch
+    const untagResources = retry(
+      taggingAPI,
+      taggingAPI.untagResources,
+      Options.Defaults.override({
+        maxAttempts: 5,
+        delay: 1000
       })
-    } catch (error) {
-      if (IfExists) {
-        ignoreNotFoundException(error)
-      } else {
-        throw error
+    )
+
+    const { Distribution: ARN } = await getCloudFrontDistributionById({ Region, Id })
+    if (ARN == null) {
+      throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
+    }
+    const { Tags: TagsWithItems } = await listTagsForResource({ Resource: ARN })
+
+    await deleteDistribution({
+      Id,
+      IfMatch
+    })
+
+    try {
+      if (TagsWithItems != null && TagsWithItems.Items != null) {
+        const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
+
+        await untagResources({
+          ResourceARNList: [ARN],
+          TagKeys
+        })
+
+        log.debug(`Cloud front distribution tags has been deleted`)
+        log.verbose({ TagKeys })
       }
+    } catch (error) {
+      log.warn(error)
     }
 
     log.debug('Cloud front distribution successfully deleted')
   } catch (error) {
-    log.error('Failed to delete cloud front distribution')
-    throw error
+    if (IfExists) {
+      log.error('Skip delete cloud front distribution')
+      ignoreNotFoundException(error)
+    } else {
+      log.error('Failed to delete cloud front distribution')
+      throw error
+    }
   }
 }
 

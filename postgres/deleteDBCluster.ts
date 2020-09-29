@@ -1,4 +1,4 @@
-import RDS from 'aws-sdk/clients/rds'
+import RDS, { TagList as TagListType } from 'aws-sdk/clients/rds'
 import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
@@ -55,25 +55,10 @@ const deleteDBCluster = async (
       DBClusters: [{ DBClusterArn }]
     } = clusters
 
-    try {
-      if (DBClusterArn != null) {
-        const { TagList } = await listTagsForResource({ ResourceName: DBClusterArn })
+    let TagList: TagListType | undefined
 
-        if (TagList != null && TagList.length > 0) {
-          const TagKeys: Array<string> = []
-          for (const { Key } of TagList) {
-            if (Key != null) {
-              TagKeys.push(Key)
-            }
-          }
-          await untagResources({
-            ResourceARNList: [DBClusterArn],
-            TagKeys
-          })
-        }
-      }
-    } catch (error) {
-      log.warn(error)
+    if (DBClusterArn != null) {
+      void ({ TagList } = await listTagsForResource({ ResourceName: DBClusterArn }))
     }
 
     await deleteDBClusterExecutor({
@@ -81,6 +66,25 @@ const deleteDBCluster = async (
       SkipFinalSnapshot,
       FinalDBSnapshotIdentifier
     })
+
+    try {
+      if (DBClusterArn != null && TagList != null && TagList.length > 0) {
+
+        const TagKeys: Array<string> = []
+        for (const { Key } of TagList) {
+          if (Key != null) {
+            TagKeys.push(Key)
+          }
+        }
+        await untagResources({
+          ResourceARNList: [DBClusterArn],
+          TagKeys
+        })
+        log.debug(`DB cluster tags has been deleted`)
+      }
+    } catch (error) {
+      log.warn(error)
+    }
 
     log.debug(`RDS database cluster has been deleted`)
   } catch (error) {
