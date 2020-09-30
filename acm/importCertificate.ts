@@ -13,7 +13,9 @@ const importCertificate = async (
   },
   log: Log = getLog('IMPORT-CERTIFICATE')
 ): Promise<string> => {
-  const { Region, Certificate, PrivateKey, CertificateArn, CertificateChain, Tags } = params
+  const { Region, Certificate, PrivateKey, CertificateArn, CertificateChain, Tags = {} } = params
+
+  Tags.Owner = 'reimagined'
 
   const acm = new ACM({ region: Region })
 
@@ -31,13 +33,10 @@ const importCertificate = async (
       PrivateKey,
       CertificateArn,
       CertificateChain,
-      Tags:
-        Tags != null
-          ? Object.entries(Tags).map(([Key, Value]) => ({
-              Key,
-              Value
-            }))
-          : undefined
+      Tags: Object.entries(Tags).map(([Key, Value]) => ({
+        Key,
+        Value
+      }))
     })
 
     if (ImportedCertificateArn == null) {
