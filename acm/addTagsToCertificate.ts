@@ -2,21 +2,18 @@ import ACM from 'aws-sdk/clients/acm'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      CertificateArn: string
-      Tags: Array<{ Key: string; Value: string }>
-    },
-    log?: Log
-  ): Promise<void>
-}
+const addTagsToCertificate = async (
+  params: {
+    Region: string
+    CertificateArn: string
+    Tags: Record<string, string>
+  },
+  log: Log = getLog('ADD-TAGS-TO-CERTIFICATE')
+): Promise<void> => {
+  const { Region, CertificateArn, Tags } = params
 
-const addTagsToCertificate: TMethod = async (
-  { Region, CertificateArn, Tags },
-  log = getLog('ADD-TAGS-TO-CERTIFICATE')
-) => {
+  Tags.Owner = 'reimagined'
+
   const acm = new ACM({ region: Region })
 
   try {
@@ -28,7 +25,10 @@ const addTagsToCertificate: TMethod = async (
       Options.Defaults.override({ log })
     )
 
-    await addTagsToCertificateExecutor({ CertificateArn, Tags })
+    await addTagsToCertificateExecutor({
+      CertificateArn,
+      Tags: Object.entries(Tags).map(([Key, Value]) => ({ Key, Value }))
+    })
 
     log.debug(`Tags has been added to the certificate`)
   } catch (error) {
