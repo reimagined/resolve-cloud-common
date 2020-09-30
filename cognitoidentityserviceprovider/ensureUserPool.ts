@@ -1,15 +1,5 @@
 import CognitoIdentityServiceProvider, {
-  UserPoolType,
-  ListUserPoolsRequest,
-  ListUserPoolsResponse,
-  CreateUserPoolRequest,
-  CreateUserPoolResponse,
-  CreateUserPoolClientRequest,
-  CreateUserPoolClientResponse,
-  CreateUserPoolDomainRequest,
-  CreateUserPoolDomainResponse,
-  CreateGroupRequest,
-  CreateGroupResponse
+  UserPoolType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { ADMIN_GROUP_NAME, ADMIN_GROUP_DESCRIPTION } from './constants'
@@ -33,37 +23,31 @@ const ensureUserPool = async (
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
   try {
-    const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
+    const listUserPoolsExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.listUserPools,
       Options.Defaults.override({ log })
     )
 
-    const createUserPoolExecutor = retry<CreateUserPoolRequest, CreateUserPoolResponse>(
+    const createUserPoolExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.createUserPool,
       Options.Defaults.override({ log })
     )
 
-    const createUserPoolClientExecutor = retry<
-      CreateUserPoolClientRequest,
-      CreateUserPoolClientResponse
-    >(
+    const createUserPoolClientExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.createUserPoolClient,
       Options.Defaults.override({ log })
     )
 
-    const createUserPoolDomainExecutor = retry<
-      CreateUserPoolDomainRequest,
-      CreateUserPoolDomainResponse
-    >(
+    const createUserPoolDomainExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.createUserPoolDomain,
       Options.Defaults.override({ log })
     )
 
-    const createGroupExecutor = retry<CreateGroupRequest, CreateGroupResponse>(
+    const createGroupExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.createGroup,
       Options.Defaults.override({ log })

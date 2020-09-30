@@ -1,4 +1,4 @@
-import S3, { PutPublicAccessBlockRequest, PublicAccessBlockConfiguration } from 'aws-sdk/clients/s3'
+import S3, { PublicAccessBlockConfiguration } from 'aws-sdk/clients/s3'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -22,7 +22,7 @@ const putS3PublicAccessBlock: TMethod = async (
   try {
     log.debug(`Put "${BucketName}" bucket public access block`)
 
-    const putPublicAccessBlock = retry<PutPublicAccessBlockRequest, {}>(
+    const putPublicAccessBlock = retry(
       s3,
       s3.putPublicAccessBlock,
       Options.Defaults.override({

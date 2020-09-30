@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.58",
+  "version": "0.0.60",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -15,9 +15,10 @@
   },
   "dependencies": {
     "chalk": "^4.0.0",
-    "debug": "^4.1.1",
-    "lodash.isequal":"^4.5.0",
-    "lodash.differencewith": "^4.5.0"
+    "debug": "^4.1.1"
+  },
+  "peerDependencies": {
+    "aws-sdk": "*"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",

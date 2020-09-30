@@ -1,16 +1,14 @@
 import executeStatement from './executeStatement'
 import { Log } from '../utils'
 
-interface TExecutor {
-  (sql: string, log?: Log): Promise<Array<any>>
-}
+const createStatementExecutor = (params: {
+  Region: string
+  ResourceArn: string
+  SecretArn: string
+}): ((sql: string, log?: Log) => Promise<Array<any>>) => {
+  const { Region, ResourceArn, SecretArn } = params
 
-interface TMethod {
-  (params: { Region: string; ResourceArn: string; SecretArn: string }): TExecutor
-}
-
-const createStatementExecutor: TMethod = ({ Region, ResourceArn, SecretArn }) => {
-  const executor: TExecutor = (sql, log) =>
+  const executor = (sql: string, log?: Log): Promise<Array<any>> =>
     executeStatement(
       {
         Region,

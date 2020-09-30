@@ -1,7 +1,4 @@
 import CognitoIdentityServiceProvider, {
-  AdminCreateUserRequest,
-  AdminCreateUserResponse,
-  AdminAddUserToGroupRequest,
   UserType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
@@ -39,13 +36,13 @@ const createUser = async (
   } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
-  const adminCreateUserExecutor = retry<AdminCreateUserRequest, AdminCreateUserResponse>(
+  const adminCreateUserExecutor = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.adminCreateUser,
     Options.Defaults.override({ log })
   )
 
-  const adminAddUserToGroupExecutor = retry<AdminAddUserToGroupRequest, {}>(
+  const adminAddUserToGroupExecutor = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.adminAddUserToGroup,
     Options.Defaults.override({ log })

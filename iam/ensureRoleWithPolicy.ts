@@ -1,4 +1,4 @@
-import IAM from 'aws-sdk/clients/iam'
+import IAM, { Tag as RoleTag } from 'aws-sdk/clients/iam'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -50,7 +50,7 @@ async function createRole(
     AssumeRolePolicyDocument: object
     RoleName: string
     Description?: string
-    Tags: object
+    Tags: Array<RoleTag>
   },
   log: Log
 ): Promise<string> {
@@ -115,7 +115,7 @@ async function ensureRole(
     AssumeRolePolicyDocument: object
     RoleName: string
     Description: string
-    Tags: Array<{ Key: string; Value: string }>
+    Tags: Array<RoleTag>
   },
   log: Log
 ): Promise<{ Arn: string; IsCreated: boolean }> {

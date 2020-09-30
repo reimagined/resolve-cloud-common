@@ -1,4 +1,4 @@
-import ApiGateway, { DeleteRestApiRequest, RestApi } from 'aws-sdk/clients/apigateway'
+import ApiGateway, { RestApi } from 'aws-sdk/clients/apigateway'
 import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
@@ -16,7 +16,7 @@ const deleteRestApi = async (
   const gateway = new ApiGateway({ region: Region })
   const taggingApi = new Resourcegroupstaggingapi({ region: Region })
 
-  const deleteRestApiExecutor = retry<DeleteRestApiRequest, {}>(
+  const deleteRestApiExecutor = retry(
     gateway,
     gateway.deleteRestApi,
     Options.Defaults.override({ log })
@@ -57,6 +57,10 @@ const deleteRestApi = async (
       throw error
     }
 
+    await deleteRestApiExecutor({
+      restApiId: restApi.id
+    })
+
     try {
       if (restApi.tags != null) {
         await untagResourcesExecutor({
@@ -67,10 +71,6 @@ const deleteRestApi = async (
     } catch (error) {
       log.warn(error)
     }
-
-    await deleteRestApiExecutor({
-      restApiId: restApi.id
-    })
 
     log.debug(`The Rest API has been deleted`)
   } catch (error) {

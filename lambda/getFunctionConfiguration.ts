@@ -2,20 +2,15 @@ import Lambda, { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-    },
-    log?: Log
-  ): Promise<FunctionConfiguration>
-}
+const getFunctionConfiguration = async (
+  params: {
+    Region: string
+    FunctionName: string
+  },
+  log: Log = getLog('GET-FUNCTION-CONFIGURATION')
+): Promise<FunctionConfiguration> => {
+  const { Region, FunctionName } = params
 
-const getFunctionConfiguration: TMethod = async (
-  { Region, FunctionName },
-  log = getLog('GET-FUNCTION-CONFIGURATION')
-) => {
   try {
     const lambda = new Lambda({ region: Region })
 

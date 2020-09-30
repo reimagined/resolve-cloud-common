@@ -1,8 +1,5 @@
 import Cloudfront from 'aws-sdk/clients/cloudfront'
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -19,11 +16,7 @@ async function getResourcesByTags(
 
   const api = new TaggingAPI({ region: Region })
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
 
   const resources: Array<{ ResourceARN: string; Tags: Record<string, string> }> = []
 
