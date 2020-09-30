@@ -2,21 +2,16 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      Handler: string
-    },
-    log?: Log
-  ): Promise<void>
-}
-
-const updateFunctionHandler: TMethod = async (
-  { Region, FunctionName, Handler },
+const updateFunctionHandler = async (
+  params: {
+    Region: string
+    FunctionName: string
+    Handler: string
+  },
   log: Log = getLog('UPDATE-FUNCTION-HANDLER')
-) => {
+): Promise<void> => {
+  const { Region, FunctionName, Handler } = params
+
   try {
     log.debug(`Update the function "${FunctionName}" handler`)
 

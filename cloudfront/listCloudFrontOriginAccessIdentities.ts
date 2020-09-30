@@ -2,21 +2,16 @@ import CloudFront, { ListCloudFrontOriginAccessIdentitiesResult } from 'aws-sdk/
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Marker?: string
-      MaxItems?: string
-    },
-    log?: Log
-  ): Promise<ListCloudFrontOriginAccessIdentitiesResult>
-}
+const listCloudFrontOriginAccessIdentities = async (
+  params: {
+    Region: string
+    Marker?: string
+    MaxItems?: string
+  },
+  log: Log = getLog('LIST-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITIES')
+): Promise<ListCloudFrontOriginAccessIdentitiesResult> => {
+  const { Region, Marker, MaxItems = '200' } = params
 
-const listCloudFrontOriginAccessIdentities: TMethod = async (
-  { Region, Marker, MaxItems = '200' },
-  log = getLog('LIST-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITIES')
-) => {
   const cloudFront = new CloudFront({ region: Region })
 
   try {
@@ -27,7 +22,8 @@ const listCloudFrontOriginAccessIdentities: TMethod = async (
       cloudFront.listCloudFrontOriginAccessIdentities,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 

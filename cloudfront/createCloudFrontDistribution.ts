@@ -27,7 +27,8 @@ const createCloudFrontDistribution = async (
       cf.createDistributionWithTags,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 

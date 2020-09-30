@@ -9,10 +9,11 @@ async function invokeFunction<Response extends object | null>(
     FunctionName: string
     Payload: object
     InvocationType?: 'Event' | 'RequestResponse' | 'DryRun'
+    WithLogs?: boolean
   },
   log: Log = getLog('INVOKE-FUNCTION')
 ): Promise<Response> {
-  const { Payload, FunctionName, Region, InvocationType } = params
+  const { Payload, FunctionName, Region, InvocationType, WithLogs } = params
 
   const lambda = new Lambda({ region: Region })
 
@@ -22,11 +23,17 @@ async function invokeFunction<Response extends object | null>(
   try {
     const invoke = retry(lambda, lambda.invoke, Options.Defaults.override({ log }))
 
-    const { FunctionError, Payload: ResponsePayload } = await invoke({
+    const { FunctionError, Payload: ResponsePayload, LogResult } = await invoke({
       FunctionName,
       InvocationType,
-      Payload: JSON.stringify(Payload)
+      Payload: JSON.stringify(Payload),
+      ...(WithLogs ? { LogType: 'Tail' } : {})
     })
+
+    if (WithLogs && LogResult != null) {
+      // eslint-disable-next-line no-console
+      console.log(LogResult)
+    }
 
     if (FunctionError != null && (InvocationType === 'RequestResponse' || InvocationType == null)) {
       const { errorMessage, trace, errorType } =

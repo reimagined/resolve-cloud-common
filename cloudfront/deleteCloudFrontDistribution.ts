@@ -26,7 +26,8 @@ const deleteCloudFrontDistribution = async (
       cloudFront.deleteDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
     const listTagsForResource = retry(
@@ -34,7 +35,8 @@ const deleteCloudFrontDistribution = async (
       cloudFront.listTagsForResource,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 
@@ -43,7 +45,8 @@ const deleteCloudFrontDistribution = async (
       taggingAPI.untagResources,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 

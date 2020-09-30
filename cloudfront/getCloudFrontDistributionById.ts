@@ -1,21 +1,16 @@
-import CloudFront, { Distribution } from 'aws-sdk/clients/cloudfront'
+import CloudFront, { GetDistributionResult } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Id: string
-    },
-    log?: Log
-  ): Promise<{ Distribution?: Distribution; ETag?: string }>
-}
+const getCloudFrontDistributionById = async (
+  params: {
+    Region: string
+    Id: string
+  },
+  log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTION-BY-ID')
+): Promise<GetDistributionResult> => {
+  const { Region, Id } = params
 
-const getCloudFrontDistributionById: TMethod = async (
-  { Region, Id },
-  log = getLog('GET-CLOUD-FRONT-DISTRIBUTION-BY-ID')
-) => {
   const cloudFront = new CloudFront({ region: Region })
 
   try {
@@ -26,7 +21,8 @@ const getCloudFrontDistributionById: TMethod = async (
       cloudFront.getDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 

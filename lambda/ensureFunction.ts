@@ -90,7 +90,10 @@ async function createFunction(
     Publish?: boolean
   },
   log: Log
-): Promise<TResponse> {
+): Promise<{
+  FunctionArn: string
+  Version?: string
+}> {
   const {
     Region,
     FunctionName,
@@ -207,36 +210,30 @@ async function untagResource(
   })
 }
 
-interface TResponse {
+const ensureFunction = async (
+  params: {
+    Region: string
+    FunctionName: string
+    Description?: string
+    Handler: string
+    RoleArn: string
+    S3Bucket?: string
+    S3Key?: string
+    ZipFile?: Buffer
+    Variables?: Record<string, string>
+    Tags?: Record<string, string>
+    Runtime?: string
+    Timeout?: number
+    MemorySize?: number
+    Layers?: Array<string>
+    Publish?: boolean
+  },
+  log: Log = getLog('ENSURE-FUNCTION')
+): Promise<{
   FunctionArn: string
   Version?: string
-}
-
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      Description?: string
-      Handler: string
-      RoleArn: string
-      S3Bucket?: string
-      S3Key?: string
-      ZipFile?: Buffer
-      Variables?: Record<string, string>
-      Tags?: Record<string, string>
-      Runtime?: string
-      Timeout?: number
-      MemorySize?: number
-      Layers?: Array<string>
-      Publish?: boolean
-    },
-    log?: Log
-  ): Promise<TResponse>
-}
-
-const ensureFunction: TMethod = async (
-  {
+}> => {
+  const {
     Region,
     FunctionName,
     Description,
@@ -252,9 +249,8 @@ const ensureFunction: TMethod = async (
     Timeout = LambdaDefaults.TIMEOUT,
     MemorySize = LambdaDefaults.MEMORY_SIZE,
     Publish
-  },
-  log: Log = getLog('ENSURE-FUNCTION')
-) => {
+  } = params
+
   const Tags = { ...RawTags, Owner: 'reimagined' }
   const Environment = Variables
     ? {
