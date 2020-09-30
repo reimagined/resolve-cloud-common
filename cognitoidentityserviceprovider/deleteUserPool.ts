@@ -1,17 +1,8 @@
 import CognitoIdentityServiceProvider, {
-  GroupListType,
-  ListUserPoolsRequest,
-  ListUserPoolsResponse,
-  ListGroupsRequest,
-  ListGroupsResponse,
-  ListTagsForResourceRequest,
-  ListTagsForResourceResponse
+  GroupListType
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
-import Resourcegroupstaggingapi, {
-  UntagResourcesInput,
-  UntagResourcesOutput
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
-import STS, { GetCallerIdentityRequest, GetCallerIdentityResponse } from 'aws-sdk/clients/sts'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
+import STS from 'aws-sdk/clients/sts'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
@@ -30,34 +21,31 @@ const deleteUserPool = async (
   const sts = new STS({ region: Region })
 
   try {
-    const listUserPoolsExecutor = retry<ListUserPoolsRequest, ListUserPoolsResponse>(
+    const listUserPoolsExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.listUserPools,
       Options.Defaults.override({ log })
     )
 
-    const listGroupsExecutor = retry<ListGroupsRequest, ListGroupsResponse>(
+    const listGroupsExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.listGroups,
       Options.Defaults.override({ log })
     )
 
-    const listTagsForResourceExecutor = retry<
-      ListTagsForResourceRequest,
-      ListTagsForResourceResponse
-    >(
+    const listTagsForResourceExecutor = retry(
       cognitoIdentityServiceProvider,
       cognitoIdentityServiceProvider.listTagsForResource,
       Options.Defaults.override({ log })
     )
 
-    const getCallerIdentityExecutor = retry<GetCallerIdentityRequest, GetCallerIdentityResponse>(
+    const getCallerIdentityExecutor = retry(
       sts,
       sts.getCallerIdentity,
       Options.Defaults.override({ log })
     )
 
-    const untagResourcesExecutor = retry<UntagResourcesInput, UntagResourcesOutput>(
+    const untagResourcesExecutor = retry(
       taggingAPI,
       taggingAPI.untagResources,
       Options.Defaults.override({ log })
@@ -146,10 +134,12 @@ const deleteUserPool = async (
     }
 
     for (const { GroupName } of groups) {
-      await deleteGroupExecutor({
-        UserPoolId,
-        GroupName
-      })
+      if (GroupName != null) {
+        await deleteGroupExecutor({
+          UserPoolId,
+          GroupName
+        })
+      }
     }
 
     await deleteUserPoolsExecutor({

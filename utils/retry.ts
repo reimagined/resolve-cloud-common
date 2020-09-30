@@ -44,31 +44,52 @@ interface SDKRequest<TResponse> {
   promise: () => Promise<TResponse>
 }
 
-export function retry<TParams extends object, TResponse extends object>(
+type AwsServicePromiseArgumentsType<T> = T extends { (args: infer A1): any; (args: infer A2): any }
+  ? A1 | A2
+  : T extends (args: infer A) => any
+  ? A
+  : never
+
+type AwsServicePromiseReturnType<T> = T extends { (args: any): infer R1; (args: any): infer R2 }
+  ? R1 | R2
+  : T extends (args: any) => infer R
+  ? R
+  : never
+
+type UnwrapAwsPromise<AWSWrappedResult> = AWSWrappedResult extends {
+  // eslint-disable-next-line no-empty-pattern
+  promise: ({}) => infer AWSPureResult
+}
+  ? AWSPureResult
+  : never
+
+type GetPromiseType<PromiseLike> = PromiseLike extends Promise<infer R> ? R : never
+
+export function retry<Callback extends Function>(
   client: object,
-  callable: (params: TParams) => SDKRequest<TResponse>,
+  callable: Callback,
   options: Options = Options.Defaults
-): (params: TParams) => Promise<TResponse> {
-  return function wrapper(params: TParams): Promise<TResponse> {
+): (
+  params: AwsServicePromiseArgumentsType<Callback>
+) => Promise<GetPromiseType<UnwrapAwsPromise<AwsServicePromiseReturnType<Callback>>>> {
+  return async (
+    params: AwsServicePromiseArgumentsType<Callback>
+  ): Promise<GetPromiseType<UnwrapAwsPromise<AwsServicePromiseReturnType<Callback>>>> => {
     const { maxAttempts, silent, log, delay } = options
     const callback = callable.bind(client)
+    let lastError: Error | undefined
 
-    async function proxy(attempt: number, lastError?: Error): Promise<TResponse> {
-      if (attempt >= maxAttempts) {
-        if (!silent && lastError) {
-          log.error(lastError)
-        }
-        throw lastError
-      }
-
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         return await callback(params).promise()
       } catch (error) {
-        if (options.expectedErrors.includes(error.code)) {
+        if (error != null && options.expectedErrors.includes(error.code)) {
           throw error
         }
 
-        const nextAttempt = attempt + (error.code && toleratedErrors.includes(error.code) ? 0 : 1)
+        const nextAttempt =
+          attempt +
+          (error != null && error.code != null && toleratedErrors.includes(error.code) ? 0 : 1)
 
         if (nextAttempt > attempt) {
           await new Promise((resolve) => setTimeout(resolve, delay))
@@ -80,10 +101,23 @@ export function retry<TParams extends object, TResponse extends object>(
           )
         }
 
-        return proxy(nextAttempt, error)
+        lastError = error
       }
     }
 
-    return proxy(0)
+    if (!silent && lastError != null) {
+      log.error(lastError)
+    }
+    throw lastError
   }
 }
+
+//
+// void (async () => {
+//   const lambda = new Lambda()
+//   const qqq = retry2(lambda, lambda.invoke)
+//  const www = await qqq({ FunctionName: 'fn',InvocationType:'DryRun' })
+// www.Payload
+// www
+//
+// })()

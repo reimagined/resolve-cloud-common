@@ -1,8 +1,4 @@
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput,
-  ResourceTagMappingList
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
 import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -24,11 +20,7 @@ async function getFunctionByTags(
   const api = new TaggingAPI({ region: Region })
   const lambda = new Lambda({ region: Region })
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
   const getFunctionConfiguration = retry(
     lambda,
     lambda.getFunctionConfiguration,

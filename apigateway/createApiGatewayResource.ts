@@ -2,22 +2,17 @@ import ApiGateway from 'aws-sdk/clients/apigateway'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      RestApiId: string
-      ParentId: string
-      PathPart: string
-    },
-    log?: Log
-  ): Promise<string>
-}
+const createApiGatewayResource = async (
+  params: {
+    Region: string
+    RestApiId: string
+    ParentId: string
+    PathPart: string
+  },
+  log: Log = getLog(`CREATE-API-GATEWAY-RESOURCE`)
+): Promise<string> => {
+  const { Region, RestApiId, ParentId, PathPart } = params
 
-const createApiGatewayResource: TMethod = async (
-  { Region, RestApiId, ParentId, PathPart },
-  log = getLog(`GET-REST-API-BY-NAME`)
-) => {
   const gw = new ApiGateway({ region: Region })
 
   try {

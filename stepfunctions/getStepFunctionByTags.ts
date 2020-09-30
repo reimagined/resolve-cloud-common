@@ -1,8 +1,4 @@
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput,
-  ResourceTagMappingList
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
 import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -24,11 +20,7 @@ const getStepFunctionByTags = async (
 
   const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
   const describeStateMachine = retry(
     stepFunctions,
     stepFunctions.describeStateMachine,

@@ -1,9 +1,5 @@
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput,
-  ResourceTagMappingList
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
-import RDS, { DescribeDBClustersMessage, DBClusterMessage } from 'aws-sdk/clients/rds'
+import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
+import RDS from 'aws-sdk/clients/rds'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -24,12 +20,8 @@ async function getDBClusterByTags(
   const api = new TaggingAPI({ region: Region })
   const rds = new RDS({ region: Region })
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
-  const describeDBClusters = retry<DescribeDBClustersMessage, DBClusterMessage>(
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
+  const describeDBClusters = retry(
     rds,
     rds.describeDBClusters,
     Options.Defaults.override({ log, expectedErrors: ['DBClusterNotFoundFault'] })

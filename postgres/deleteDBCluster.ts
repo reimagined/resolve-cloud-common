@@ -68,10 +68,16 @@ const deleteDBCluster = async (
     })
 
     try {
-      if (TagList != null && TagList.length > 0) {
+      if (DBClusterArn != null && TagList != null && TagList.length > 0) {
+        const TagKeys: Array<string> = []
+        for (const { Key } of TagList) {
+          if (Key != null) {
+            TagKeys.push(Key)
+          }
+        }
         await untagResources({
           ResourceARNList: [DBClusterArn],
-          TagKeys: TagList.map(({ Key }) => Key)
+          TagKeys
         })
         log.debug(`DB cluster tags has been deleted`)
       }

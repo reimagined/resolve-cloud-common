@@ -2,21 +2,16 @@ import ApiGatewayV2, { Api, ProtocolType } from 'aws-sdk/clients/apigatewayv2'
 
 import { Log, Options, retry, getLog } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-      ProtocolType?: ProtocolType
-    },
-    log?: Log
-  ): Promise<Api | null>
-}
+const getApi = async (
+  params: {
+    Region: string
+    Name: string
+    ProtocolType?: ProtocolType
+  },
+  log: Log = getLog('GET-API')
+): Promise<Api | null> => {
+  const { Region, Name, ProtocolType: Protocol } = params
 
-const getApi: TMethod = async (
-  { Region, Name, ProtocolType: Protocol },
-  log = getLog('GET_API')
-) => {
   let nextToken
   let items
 

@@ -1,38 +1,33 @@
 import CloudFront, {
   DistributionConfig as Config,
-  UpdateDistributionRequest,
   UpdateDistributionResult
 } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, Log, getLog } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      DistributionConfig: Config
-      Id: string
-      IfMatch?: string
-    },
-    log?: Log
-  ): Promise<UpdateDistributionResult>
-}
+const updateCloudFrontDistribution = async (
+  params: {
+    Region: string
+    DistributionConfig: Config
+    Id: string
+    IfMatch?: string
+  },
+  log: Log = getLog('UPDATE-CLOUD-FRONT-DISTRIBUTION')
+): Promise<UpdateDistributionResult> => {
+  const { Region, DistributionConfig, Id, IfMatch } = params
 
-const updateCloudFrontDistribution: TMethod = async (
-  { Region, DistributionConfig, Id, IfMatch },
-  log = getLog('UPDATE-CLOUD-FRONT-DISTRIBUTION')
-) => {
   const cloudFront = new CloudFront({ region: Region })
 
   try {
     log.debug('Update cloud front distribution')
 
-    const updateDistribution = retry<UpdateDistributionRequest, UpdateDistributionResult>(
+    const updateDistribution = retry(
       cloudFront,
       cloudFront.updateDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 

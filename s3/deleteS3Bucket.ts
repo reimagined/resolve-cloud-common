@@ -1,8 +1,5 @@
-import S3, { GetBucketTaggingRequest, GetBucketTaggingOutput } from 'aws-sdk/clients/s3'
-import Resourcegroupstaggingapi, {
-  UntagResourcesInput,
-  UntagResourcesOutput
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import S3 from 'aws-sdk/clients/s3'
+import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException, maybeThrowErrors } from '../utils'
 
@@ -48,7 +45,7 @@ const deleteS3Bucket = async (
       })
     )
 
-    const getBucketTagging = retry<GetBucketTaggingRequest, GetBucketTaggingOutput>(
+    const getBucketTagging = retry(
       s3,
       s3.getBucketTagging,
       Options.Defaults.override({
@@ -56,7 +53,7 @@ const deleteS3Bucket = async (
       })
     )
 
-    const untagResources = retry<UntagResourcesInput, UntagResourcesOutput>(
+    const untagResources = retry(
       taggingAPI,
       taggingAPI.untagResources,
       Options.Defaults.override({ log, maxAttempts: 1 })
@@ -104,11 +101,13 @@ const deleteS3Bucket = async (
 
       const ResourceARNList = [`arn:aws:s3:::${BucketName}`]
 
-      await untagResources({
-        ResourceARNList,
-        TagKeys
-      })
-      log.debug(`Bucket tags has been deleted`)
+      if (TagKeys.length > 0) {
+        await untagResources({
+          ResourceARNList,
+          TagKeys
+        })
+        log.debug(`Bucket tags has been deleted`)
+      }
     } catch (error) {
       log.warn(error)
     }

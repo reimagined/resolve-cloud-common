@@ -44,18 +44,19 @@ const deleteFunction = async (
     )
 
     const { Tags, Configuration: { FunctionArn } = {} } = await getFunction({
-      Resource: FunctionName
+      FunctionName
     })
+    const TagKeys: Array<string> = Tags != null ? Object.keys(Tags) : []
 
     await removeFunction({
       FunctionName
     })
 
     try {
-      if (Tags != null && FunctionArn != null) {
+      if (TagKeys.length > 0 && FunctionArn != null) {
         await untagResources({
           ResourceARNList: [FunctionArn],
-          TagKeys: Object.keys(Tags)
+          TagKeys
         })
         log.debug(`Function tags has been deleted`)
       }

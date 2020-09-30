@@ -22,7 +22,7 @@ const createCloudFrontOriginAccessIdentity = async (
     const createCloudFrontAccessIdentity = retry(
       cloudFront,
       cloudFront.createCloudFrontOriginAccessIdentity,
-      Options.Defaults.override({ maxAttempts: 5, delay: 1000 })
+      Options.Defaults.override({ maxAttempts: 5, delay: 1000, log })
     )
 
     const { CloudFrontOriginAccessIdentity } = await createCloudFrontAccessIdentity({

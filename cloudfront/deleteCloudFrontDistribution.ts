@@ -26,7 +26,8 @@ const deleteCloudFrontDistribution = async (
       cloudFront.deleteDistribution,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
     const listTagsForResource = retry(
@@ -34,7 +35,8 @@ const deleteCloudFrontDistribution = async (
       cloudFront.listTagsForResource,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 
@@ -43,11 +45,12 @@ const deleteCloudFrontDistribution = async (
       taggingAPI.untagResources,
       Options.Defaults.override({
         maxAttempts: 5,
-        delay: 1000
+        delay: 1000,
+        log
       })
     )
 
-    const { Distribution: ARN } = await getCloudFrontDistributionById({ Region, Id })
+    const { Distribution: { ARN } = {} } = await getCloudFrontDistributionById({ Region, Id })
     if (ARN == null) {
       throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
     }
@@ -62,10 +65,12 @@ const deleteCloudFrontDistribution = async (
       if (TagsWithItems != null && TagsWithItems.Items != null) {
         const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
 
-        await untagResources({
-          ResourceARNList: [ARN],
-          TagKeys
-        })
+        if (TagKeys.length > 0) {
+          await untagResources({
+            ResourceARNList: [ARN],
+            TagKeys
+          })
+        }
 
         log.debug(`Cloud front distribution tags has been deleted`)
         log.verbose({ TagKeys })

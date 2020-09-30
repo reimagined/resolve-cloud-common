@@ -2,20 +2,15 @@ import ACM, { CertificateDetail } from 'aws-sdk/clients/acm'
 
 import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      CertificateArn: string
-    },
-    log?: Log
-  ): Promise<CertificateDetail>
-}
+const describeCertificate = async (
+  params: {
+    Region: string
+    CertificateArn: string
+  },
+  log: Log = getLog('DESCRIBE-CERTIFICATE')
+): Promise<CertificateDetail> => {
+  const { Region, CertificateArn } = params
 
-const describeCertificate: TMethod = async (
-  { Region, CertificateArn },
-  log = getLog('DESCRIBE-CERTIFICATE')
-) => {
   const acm = new ACM({ region: Region })
 
   try {

@@ -2,21 +2,16 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      StatementId: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const deleteFunctionPermission = async (
+  params: {
+    Region: string
+    FunctionName: string
+    StatementId: string
+  },
+  log: Log = getLog(`DELETE-FUNCTION-PERMISSION`)
+): Promise<void> => {
+  const { Region, FunctionName, StatementId } = params
 
-const deleteFunctionPermission: TMethod = async (
-  { Region, FunctionName, StatementId },
-  log = getLog(`DELETE-FUNCTION-PERMISSION`)
-) => {
   const lambda = new Lambda({ region: Region })
 
   try {

@@ -83,7 +83,7 @@ const deleteStepFunction = async (
   )
 
   const { tags } = await listTagsForResource({
-    stateMachineArn: StepFunctionArn
+    resourceArn: StepFunctionArn
   })
 
   log.debug(`Enumerate and stop active executions`)
@@ -116,12 +116,14 @@ const deleteStepFunction = async (
         }
       }
 
-      await untagResources({
-        ResourceARNList: [StepFunctionArn],
-        TagKeys: tagKeys
-      })
+      if (tagKeys.length > 0) {
+        await untagResources({
+          ResourceARNList: [StepFunctionArn],
+          TagKeys: tagKeys
+        })
 
-      log.debug(`Step function tags has been deleted`)
+        log.debug(`Step function tags has been deleted`)
+      }
     } catch (error) {
       log.warn(error)
     }

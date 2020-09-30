@@ -1,21 +1,11 @@
-function highloadExecute(
-  method: Function
-): (
-  params: object
-) => {
-  promise(): Promise<any>
-} {
-  return function wrapper(
-    params: object
-  ): {
-    promise(): Promise<any>
-  } {
+export function highloadExecute<Executor extends Function>(method: Executor): Executor {
+  const executor = async function wrappedExecutor(...args: any): Promise<any> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const target = this
     return {
       async promise(): Promise<any> {
         try {
-          return await method.call(target, params).promise()
+          return await method.apply(target, args).promise()
         } catch (error) {
           if (
             error != null &&
@@ -35,6 +25,5 @@ function highloadExecute(
       }
     }
   }
+  return (executor as unknown) as Executor
 }
-
-export { highloadExecute }

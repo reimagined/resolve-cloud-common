@@ -2,17 +2,15 @@ import ApiGateway, { RestApi } from 'aws-sdk/clients/apigateway'
 
 import { Log, Options, retry, getLog } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-    },
-    log?: Log
-  ): Promise<RestApi | null>
-}
+const getRestApi = async (
+  params: {
+    Region: string
+    Name: string
+  },
+  log: Log = getLog('GET_REST_API')
+): Promise<RestApi | null> => {
+  const { Region, Name } = params
 
-const getRestApi: TMethod = async ({ Region, Name }, log = getLog('GET_REST_API')) => {
   let nextPosition
   let items
 

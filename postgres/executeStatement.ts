@@ -52,6 +52,7 @@ async function executeStatement<T extends object>(
     highloadExecute(rdsDataService.executeStatement),
     Options.Defaults.override({ log, maxAttempts: 1 })
   )
+
   const result = await execute({
     resourceArn: ResourceArn,
     secretArn: SecretArn,
