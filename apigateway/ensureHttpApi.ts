@@ -28,15 +28,23 @@ const ensureHttpApi: TMethod = async (
     if (restApi != null) {
       log.debug(`API found, returning`)
 
+      if (restApi.ApiId == null) {
+        throw new Error(`Rest API does not contain ApiId field`)
+      }
+
+      if (restApi.ApiEndpoint == null) {
+        throw new Error(`Rest API does not contain ApiEndpoint field`)
+      }
+
       return {
-        ApiId: restApi.ApiId || '',
-        ApiEndpoint: restApi.ApiEndpoint || ''
+        ApiId: restApi.ApiId,
+        ApiEndpoint: restApi.ApiEndpoint
       }
     }
 
     log.debug(`API not found, creating`)
 
-    const { ApiId = '', ApiEndpoint = '' } = await createHttpApi({
+    const { ApiId, ApiEndpoint } = await createHttpApi({
       Region,
       Stage,
       Name,
@@ -46,6 +54,14 @@ const ensureHttpApi: TMethod = async (
     })
 
     log.debug(`API has been created`)
+
+    if (ApiId == null) {
+      throw new Error(`Rest API does not contain ApiId field`)
+    }
+
+    if (ApiEndpoint == null) {
+      throw new Error(`Rest API does not contain ApiEndpoint field`)
+    }
 
     return {
       ApiId,
