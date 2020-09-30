@@ -30,7 +30,7 @@ async function getResourcesByTags(
         ResourceTagMappingList = [],
         PaginationToken: NextPaginationToken
       } = await getResources({
-        ResourceTypeFilters: ['acm'],
+        ResourceTypeFilters: ['acm:certificate'],
         TagFilters,
         PaginationToken
       })

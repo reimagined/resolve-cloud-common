@@ -63,6 +63,18 @@ const deleteUserPool = async (
       Options.Defaults.override({ log })
     )
 
+    const deleteUserPoolDomainExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.deleteUserPoolDomain,
+      Options.Defaults.override({ log })
+    )
+
+    const describeUserPoolExecutor = retry(
+      cognitoIdentityServiceProvider,
+      cognitoIdentityServiceProvider.describeUserPool,
+      Options.Defaults.override({ log })
+    )
+
     const { Account: AccountId } = await getCallerIdentityExecutor({})
     if (AccountId == null) {
       throw new Error(`Cannot determine account id`)
@@ -138,6 +150,17 @@ const deleteUserPool = async (
         await deleteGroupExecutor({
           UserPoolId,
           GroupName
+        })
+      }
+    }
+
+    const { UserPool } = await describeUserPoolExecutor({ UserPoolId })
+    if (UserPool != null) {
+      const { Domain } = UserPool
+      if (Domain != null) {
+        await deleteUserPoolDomainExecutor({
+          UserPoolId,
+          Domain
         })
       }
     }
