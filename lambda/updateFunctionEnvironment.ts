@@ -2,23 +2,18 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      Variables: {
-        [key: string]: string | null
-      }
-    },
-    log?: Log
-  ): Promise<void>
-}
+const updateFunctionEnvironment = async (
+  params: {
+    Region: string
+    FunctionName: string
+    Variables: {
+      [key: string]: string | null
+    }
+  },
+  log: Log = getLog('UPDATE-LAMBDA-ENVIRONMENT')
+): Promise<void> => {
+  const { Region, FunctionName, Variables } = params
 
-const updateFunctionEnvironment: TMethod = async (
-  { Region, FunctionName, Variables },
-  log = getLog('UPDATE-LAMBDA-ENVIRONMENT')
-) => {
   const lambda = new Lambda({ region: Region })
 
   log.debug(`Get current function environment variables`)

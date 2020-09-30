@@ -1,8 +1,4 @@
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput,
-  ResourceTagMappingList
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
 import getUserPool from './getUserPool'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -23,11 +19,7 @@ const getUserPoolByTags = async (
 
   const api = new TaggingAPI({ region: Region })
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
   let resources: ResourceTagMappingList | undefined
 
   try {

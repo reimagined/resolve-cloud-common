@@ -2,21 +2,16 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      FunctionName: string
-      Concurrency: number
-      Region: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const setFunctionConcurrency = async (
+  params: {
+    FunctionName: string
+    Concurrency: number
+    Region: string
+  },
+  log: Log = getLog('SET-FUNCTION-CONCURRENCY')
+): Promise<void> => {
+  const { FunctionName, Concurrency, Region } = params
 
-const setFunctionConcurrency: TMethod = async (
-  { FunctionName, Concurrency, Region },
-  log = getLog('SET-FUNCTION-CONCURRENCY')
-) => {
   const lambda = new Lambda({ region: Region })
 
   try {

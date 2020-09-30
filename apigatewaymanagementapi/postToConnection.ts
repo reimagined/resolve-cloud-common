@@ -2,21 +2,16 @@ import Apigatewaymanagementapi from 'aws-sdk/clients/apigatewaymanagementapi'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Endpoint: string
-      ConnectionId: string
-      Data: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const postToConnection = async (
+  params: {
+    Endpoint: string
+    ConnectionId: string
+    Data: string
+  },
+  log: Log = getLog(`POST-TO-CONNECTION`)
+): Promise<void> => {
+  const { Endpoint, ConnectionId, Data } = params
 
-const postToConnection: TMethod = async (
-  { Endpoint, ConnectionId, Data },
-  log = getLog(`POST-TO-CONNECTION`)
-) => {
   const managementApi = new Apigatewaymanagementapi({ endpoint: Endpoint })
 
   try {

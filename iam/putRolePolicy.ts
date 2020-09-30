@@ -2,29 +2,24 @@ import IAM from 'aws-sdk/clients/iam'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      PolicyName: string
-      RoleName: string
-      PolicyDocument: {
-        Version: string
-        Statement: Array<{
-          Action: string | Array<string>
-          Resource: string | Array<string>
-          Effect: 'Allow' | 'Deny'
-        }>
-      }
-    },
-    log?: Log
-  ): Promise<void>
-}
+const putRolePolicy = async (
+  params: {
+    Region: string
+    PolicyName: string
+    RoleName: string
+    PolicyDocument: {
+      Version: string
+      Statement: Array<{
+        Action: string | Array<string>
+        Resource: string | Array<string>
+        Effect: 'Allow' | 'Deny'
+      }>
+    }
+  },
+  log: Log = getLog('PUT-ROLE-POLICY')
+): Promise<void> => {
+  const { Region, RoleName, PolicyName, PolicyDocument } = params
 
-const putRolePolicy: TMethod = async (
-  { Region, RoleName, PolicyName, PolicyDocument },
-  log = getLog('PUT-ROLE-POLICY')
-) => {
   const iam = new IAM({ region: Region })
 
   try {

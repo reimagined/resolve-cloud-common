@@ -2,24 +2,19 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      FunctionName: string
-      Action: string
-      Principal: string
-      StatementId: string
-      SourceArn: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const addFunctionPermission = async (
+  params: {
+    Region: string
+    FunctionName: string
+    Action: string
+    Principal: string
+    StatementId: string
+    SourceArn: string
+  },
+  log: Log = getLog('ADD-FUNCTION-PERMISSION')
+): Promise<void> => {
+  const { Region, FunctionName, Action, Principal, StatementId, SourceArn } = params
 
-const addFunctionPermission: TMethod = async (
-  { Region, FunctionName, Action, Principal, StatementId, SourceArn },
-  log = getLog('ADD-FUNCTION-PERMISSION')
-) => {
   const lambda = new Lambda({ region: Region })
 
   try {

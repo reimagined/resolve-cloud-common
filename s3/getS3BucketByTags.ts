@@ -1,8 +1,4 @@
-import TaggingAPI, {
-  GetResourcesInput,
-  GetResourcesOutput,
-  ResourceTagMappingList
-} from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
 import S3 from 'aws-sdk/clients/s3'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -24,11 +20,7 @@ async function getS3BucketByTags(
   const api = new TaggingAPI({ region: Region })
   const s3 = new S3({ region: Region })
 
-  const getResources = retry<GetResourcesInput, GetResourcesOutput>(
-    api,
-    api.getResources,
-    Options.Defaults.override({ log })
-  )
+  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
   const getBucketAcl = retry(
     s3,
     s3.getBucketAcl,
