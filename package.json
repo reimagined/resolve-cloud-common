@@ -17,9 +17,6 @@
     "chalk": "^4.0.0",
     "debug": "^4.1.1"
   },
-  "peerDependencies": {
-    "aws-sdk": "*"
-  },
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.149",
