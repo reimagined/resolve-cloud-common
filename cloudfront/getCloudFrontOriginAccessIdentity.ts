@@ -1,10 +1,11 @@
 import listCloudFrontOriginAccessIdentities from './listCloudFrontOriginAccessIdentities'
 
 import { Log, getLog } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 const getCloudFrontOriginAccessIdentity = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Comment: string
   },
   log: Log = getLog('GET-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
@@ -12,7 +13,7 @@ const getCloudFrontOriginAccessIdentity = async (
   Id: string
   S3CanonicalUserId: string
 }> => {
-  const { Region, Comment } = params
+  const { Region = DEFAULT_REGION, Comment } = params
 
   let Marker: string | undefined
 
