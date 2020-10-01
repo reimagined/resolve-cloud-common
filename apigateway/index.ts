@@ -1,14 +1,33 @@
-export { default as createApiDeployment } from './createApiDeployment'
-export { default as createApiGatewayDeployment } from './createApiGatewayDeployment'
-export { default as createApiGatewayLambdaIntegration } from './createApiGatewayLambdaIntegration'
-export { default as createApiGatewayMethod } from './createApiGatewayMethod'
-export { default as createApiGatewayResource } from './createApiGatewayResource'
-export { default as createApiWithLambdaIntegration } from './createApiWithLambdaIntegration'
-export { default as createRestApi } from './createRestApi'
-export { default as createWebSocketApi } from './createWebSocketApi'
-export { default as createRouteWithLambdaIntegration } from './createRouteWithLambdaIntegration'
-export { default as deleteApiGatewayResource } from './deleteApiGatewayResource'
-export { default as getApi } from './getApi'
-export { default as getRestApi } from './getRestApi'
-export { default as getApiGatewayResource } from './getApiGatewayResource'
-export { default as getApiGatewayRootResource } from './getApiGatewayRootResource'
+import createApiDeployment from './createApiDeployment'
+import createApiGatewayDeployment from './createApiGatewayDeployment'
+import createApiGatewayLambdaIntegration from './createApiGatewayLambdaIntegration'
+import createApiGatewayMethod from './createApiGatewayMethod'
+import createApiGatewayResource from './createApiGatewayResource'
+import createApiWithLambdaIntegration from './createApiWithLambdaIntegration'
+import createRestApi from './createRestApi'
+import createRouteWithLambdaIntegration from './createRouteWithLambdaIntegration'
+import createWebSocketApi from './createWebSocketApi'
+import deleteApiGatewayResource from './deleteApiGatewayResource'
+import deleteRestApi from './deleteRestApi'
+import getApi from './getApi'
+import getApiGatewayResource from './getApiGatewayResource'
+import getApiGatewayRootResource from './getApiGatewayRootResource'
+import getRestApi from './getRestApi'
+
+export {
+  createApiDeployment,
+  createApiGatewayDeployment,
+  createApiGatewayLambdaIntegration,
+  createApiGatewayMethod,
+  createApiGatewayResource,
+  createApiWithLambdaIntegration,
+  createRestApi,
+  createRouteWithLambdaIntegration,
+  createWebSocketApi,
+  deleteApiGatewayResource,
+  deleteRestApi,
+  getApi,
+  getApiGatewayResource,
+  getApiGatewayRootResource,
+  getRestApi
+}

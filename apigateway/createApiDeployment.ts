@@ -2,22 +2,17 @@ import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import { getLog, Log, Options, retry } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Stage: string
-      ApiId: string
-      ApiStage: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const createApiDeployment = async (
+  params: {
+    Region: string
+    Stage: string
+    ApiId: string
+    ApiStage: string
+  },
+  log: Log = getLog(`CREATE-API-DEPLOYMENT`)
+): Promise<void> => {
+  const { Region, Stage, ApiId, ApiStage } = params
 
-const createApiDeployment: TMethod = async (
-  { Region, Stage, ApiId, ApiStage },
-  log = getLog(`CREATE-HTTP-API`)
-) => {
   const agv2 = new ApiGatewayV2({ region: Region })
 
   try {

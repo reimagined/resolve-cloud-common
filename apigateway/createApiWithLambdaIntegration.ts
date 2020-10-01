@@ -2,28 +2,23 @@ import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import { getLog, Log, Options, retry } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-      ApiStage: string
-      LambdaArn: string
-      AccountId: string
-      ProtocolType: 'HTTP' | 'WEBSOCKET'
-      RouteSelectionExpression?: string
-    },
-    log?: Log
-  ): Promise<{ ApiId: string; ApiEndpoint: string; IntegrationId: string }>
-}
-
 const buildIntegrationUri = (region: string, lambdaArn: string): string =>
   `arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`
 
-const createApiWithLambdaIntegration: TMethod = async (
-  { Region, Name, ApiStage, LambdaArn, ProtocolType, RouteSelectionExpression },
-  log = getLog(`CREATE-API-WITH-LAMBDA-INTEGRATION`)
-) => {
+const createApiWithLambdaIntegration = async (
+  params: {
+    Region: string
+    Name: string
+    ApiStage: string
+    LambdaArn: string
+    AccountId: string
+    ProtocolType: 'HTTP' | 'WEBSOCKET'
+    RouteSelectionExpression?: string
+  },
+  log: Log = getLog(`CREATE-API-WITH-LAMBDA-INTEGRATION`)
+): Promise<{ ApiId: string; ApiEndpoint: string; IntegrationId: string }> => {
+  const { Region, Name, ApiStage, LambdaArn, ProtocolType, RouteSelectionExpression } = params
+
   const agv2 = new ApiGatewayV2({ region: Region })
 
   try {
@@ -71,9 +66,9 @@ const createApiWithLambdaIntegration: TMethod = async (
     }
 
     return { ApiId, ApiEndpoint, IntegrationId }
-  } catch (e) {
+  } catch (error) {
     log.error(`Failed to create API`)
-    throw e
+    throw error
   }
 }
 

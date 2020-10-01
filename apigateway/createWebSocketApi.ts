@@ -5,27 +5,22 @@ import createRouteWithLambdaIntegration from './createRouteWithLambdaIntegration
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Stage: string
-      Name: string
-      RouteSelectionExpression: string
-      ApiStage: string
-      LambdaArn: string
-      AccountId: string
-    },
-    log?: Log
-  ): Promise<{ ApiId: string; ApiEndpoint: string }>
-}
-
 const ROUTES = ['$connect', '$disconnect', '$default']
 
-const createWebSocketApi: TMethod = async (
-  { Region, Stage, Name, RouteSelectionExpression, ApiStage, LambdaArn, AccountId },
-  log = getLog(`CREATE-WEBSOCKET-API`)
-) => {
+const createWebSocketApi = async (
+  params: {
+    Region: string
+    Stage: string
+    Name: string
+    RouteSelectionExpression: string
+    ApiStage: string
+    LambdaArn: string
+    AccountId: string
+  },
+  log: Log = getLog(`CREATE-WEBSOCKET-API`)
+): Promise<{ ApiId: string; ApiEndpoint: string }> => {
+  const { Region, Stage, Name, RouteSelectionExpression, ApiStage, LambdaArn, AccountId } = params
+
   const agv2 = new ApiGatewayV2({ region: Region })
 
   try {
