@@ -6,15 +6,36 @@ const ensureDBCluster = async (
   params: {
     Region: string
     DBClusterIdentifier: string
+    MasterUsername: string
+    MasterUserPassword: string
     MinCapacity?: number
     MaxCapacity?: number
     Tags?: Record<string, string>
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
 ): Promise<DBCluster> => {
-  const { Region, DBClusterIdentifier, MinCapacity, MaxCapacity, Tags = {} } = params
+  const {
+    Region,
+    DBClusterIdentifier,
+    MasterUsername,
+    MasterUserPassword,
+    MinCapacity,
+    MaxCapacity,
+    Tags = {}
+  } = params
 
   Tags.Owner = 'reimagined'
+
+  if (MasterUsername === 'admin') {
+    throw new Error(
+      'MasterUsername admin cannot be used as it is a reserved word used by the engine'
+    )
+  }
+  if (MasterUserPassword.length < 8) {
+    throw new Error(
+      'The parameter MasterUserPassword is not a valid password because it is shorter than 8 characters.'
+    )
+  }
 
   const rds = new RDS({ region: Region })
 
@@ -44,6 +65,8 @@ const ensureDBCluster = async (
   try {
     const createResult = await createDBClusterExecutor({
       DBClusterIdentifier,
+      MasterUsername,
+      MasterUserPassword,
       Engine: 'aurora-postgresql',
       EngineVersion: '10.7',
       EngineMode: 'serverless',

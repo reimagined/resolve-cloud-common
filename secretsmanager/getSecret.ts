@@ -1,17 +1,15 @@
 import SecretsManager, { GetSecretValueResponse } from 'aws-sdk/clients/secretsmanager'
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-    },
-    log?: Log
-  ): Promise<GetSecretValueResponse>
-}
+const getSecret = async (
+  params: {
+    Region: string
+    Name: string
+  },
+  log: Log = getLog(`GET-SECRET`)
+): Promise<GetSecretValueResponse> => {
+  const { Region, Name } = params
 
-const getSecret: TMethod = async ({ Region, Name }, log = getLog(`GET-SECRET`)) => {
   const secretsManager = new SecretsManager({ region: Region })
 
   const result = retry(

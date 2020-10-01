@@ -44,9 +44,32 @@ async function getS3BucketByTags(
     throw error
   }
 
-  if (resources == null || resources.length === 0) {
+  if (resources == null) {
     return null
   }
+
+  const allResources = resources
+  resources = []
+  for (const resource of allResources) {
+    try {
+      if (
+        resource.ResourceARN != null &&
+        (await getBucketAcl({ Bucket: resource.ResourceARN.split(':').splice(-1)[0] })) != null
+      ) {
+        resources.push(resource)
+      }
+    } catch (error) {
+      if (error != null && error.code === 'NoSuchBucket') {
+        continue
+      }
+      throw error
+    }
+  }
+
+  if (resources.length === 0) {
+    return null
+  }
+
   if (resources.length > 1) {
     log.verbose(resources.map(({ ResourceARN }) => ResourceARN).filter((arn) => arn != null))
     throw new Error('Too Many Resources')
@@ -55,17 +78,6 @@ async function getS3BucketByTags(
   const { ResourceARN, Tags: ResourceTagList = [] } = resources[0]
   if (ResourceARN == null) {
     return null
-  }
-
-  try {
-    const BucketName = ResourceARN.split(':').splice(-1)[0]
-
-    await getBucketAcl({ Bucket: BucketName })
-  } catch (error) {
-    if (error != null && error.code === 'NoSuchBucket') {
-      return null
-    }
-    throw error
   }
 
   log.verbose(ResourceARN)

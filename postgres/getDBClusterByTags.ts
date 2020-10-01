@@ -44,28 +44,44 @@ async function getDBClusterByTags(
     throw error
   }
 
-  if (resources == null || resources.length === 0) {
+  if (resources == null) {
     return null
   }
+
+  const allResources = resources
+  resources = []
+  for (const resource of allResources) {
+    try {
+      if (
+        resource.ResourceARN != null &&
+        (await describeDBClusters({
+          DBClusterIdentifier: resource.ResourceARN.split(':').splice(-1)[0]
+        })) != null
+      ) {
+        resources.push(resource)
+      }
+    } catch (error) {
+      if (error != null && error.code === 'DBClusterNotFoundFault') {
+        continue
+      }
+      throw error
+    }
+  }
+
+  if (resources.length === 0) {
+    return null
+  }
+
   if (resources.length > 1) {
     log.verbose(resources.map(({ ResourceARN }) => ResourceARN).filter((arn) => arn != null))
-    throw new Error('Too Many Resources')
+    throw new Error(
+      `Too Many Resources: ${JSON.stringify(resources.map(({ ResourceARN }) => ResourceARN))}`
+    )
   }
 
   const { ResourceARN, Tags: ResourceTagList = [] } = resources[0]
   if (ResourceARN == null) {
     return null
-  }
-
-  try {
-    await describeDBClusters({
-      DBClusterIdentifier: ResourceARN.split(':').splice(-1)[0]
-    })
-  } catch (error) {
-    if (error != null && error.code === 'DBClusterNotFoundFault') {
-      return null
-    }
-    throw error
   }
 
   log.verbose(ResourceARN)
