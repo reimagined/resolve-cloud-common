@@ -16,7 +16,7 @@
     "moduleResolution": "node",
     "removeComments": false,
     "resolveJsonModule": true,
-    "types": ["node", "jest", "lodash", "uuid"]
+    "types": ["node", "jest", "lodash"]
   },
   "include": ["./**/*"],
   "exclude": ["node_modules", "**/__tests__/**", "**/__mocks__/**", "**/*.test.ts"]

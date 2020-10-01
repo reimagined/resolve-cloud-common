@@ -12,6 +12,7 @@ const createWebSocketApi = async (
     Region: string
     Stage: string
     Name: string
+    StatementId: string
     RouteSelectionExpression: string
     ApiStage: string
     LambdaArn: string
@@ -19,7 +20,16 @@ const createWebSocketApi = async (
   },
   log: Log = getLog(`CREATE-WEBSOCKET-API`)
 ): Promise<{ ApiId: string; ApiEndpoint: string }> => {
-  const { Region, Stage, Name, RouteSelectionExpression, ApiStage, LambdaArn, AccountId } = params
+  const {
+    Region,
+    Stage,
+    Name,
+    StatementId,
+    RouteSelectionExpression,
+    ApiStage,
+    LambdaArn,
+    AccountId
+  } = params
 
   const agv2 = new ApiGatewayV2({ region: Region })
 
@@ -45,6 +55,7 @@ const createWebSocketApi = async (
             Region,
             ApiId,
             IntegrationId,
+            StatementId,
             LambdaArn,
             AccountId,
             RouteKey: routeKey,

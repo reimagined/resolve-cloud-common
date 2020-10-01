@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.64",
+  "version": "0.0.65",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -15,11 +15,9 @@
   },
   "dependencies": {
     "chalk": "^4.0.0",
-    "debug": "^4.1.1",
-    "uuid": "8.3.0"
+    "debug": "^4.1.1"
   },
   "devDependencies": {
-    "@types/uuid": "^8.3.0",
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.149",
     "@types/node": "^10.17.17",
