@@ -44,9 +44,32 @@ async function getFunctionByTags(
     throw error
   }
 
-  if (resources == null || resources.length === 0) {
+  if (resources == null) {
     return null
   }
+
+  const allResources = resources
+  resources = []
+  for (const resource of allResources) {
+    try {
+      if (
+        resource.ResourceARN != null &&
+        (await getFunctionConfiguration({ FunctionName: resource.ResourceARN })) != null
+      ) {
+        resources.push(resource)
+      }
+    } catch (error) {
+      if (error != null && error.code === 'ResourceNotFoundException') {
+        continue
+      }
+      throw error
+    }
+  }
+
+  if (resources.length === 0) {
+    return null
+  }
+
   if (resources.length > 1) {
     log.verbose(resources.map(({ ResourceARN }) => ResourceARN).filter((arn) => arn != null))
     throw new Error('Too Many Resources')
@@ -55,15 +78,6 @@ async function getFunctionByTags(
   const { ResourceARN, Tags: ResourceTagList = [] } = resources[0]
   if (ResourceARN == null) {
     return null
-  }
-
-  try {
-    await getFunctionConfiguration({ FunctionName: ResourceARN })
-  } catch (error) {
-    if (error != null && error.code === 'ResourceNotFoundException') {
-      return null
-    }
-    throw error
   }
 
   log.verbose(ResourceARN)

@@ -1,23 +1,18 @@
 import SecretsManager from 'aws-sdk/clients/secretsmanager'
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-      SecretString: string
-      Description?: string
-      Tags?: Record<string, string>
-    },
-    log?: Log
-  ): Promise<string>
-}
+const createSecret = async (
+  params: {
+    Region: string
+    Name: string
+    SecretString: string
+    Description?: string
+    Tags?: Record<string, string>
+  },
+  log: Log = getLog(`CREATE-SECRET`)
+): Promise<string> => {
+  const { Region, Description, Name, SecretString, Tags: { ...RawTags } = {} } = params
 
-const createSecret: TMethod = async (
-  { Region, Description, Name, SecretString, Tags: { ...RawTags } = {} },
-  log = getLog(`CREATE-SECRET`)
-) => {
   delete RawTags.Owner
 
   const Tags = [

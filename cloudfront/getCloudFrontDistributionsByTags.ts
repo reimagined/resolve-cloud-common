@@ -3,6 +3,8 @@ import TaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
 
+const DEFAULT_REGION = 'us-east-1'
+
 async function getResourcesByTags(
   params: {
     Region: string
@@ -26,6 +28,7 @@ async function getResourcesByTags(
     let PaginationToken: string | undefined
     for (;;) {
       log.debug(`Get resources by PaginationToken = ${PaginationToken ?? '<none>'}`)
+
       const {
         ResourceTagMappingList = [],
         PaginationToken: NextPaginationToken
@@ -123,14 +126,19 @@ async function getResourceArns(
 
 async function getCloudFrontDistributionsByTags(
   params: {
-    Region: string
     Tags: Record<string, string>
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTIONS-BY-TAGS')
 ): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
   const [resourcesByTags, listResources] = await Promise.all([
-    getResourcesByTags(params, log),
-    getResourceArns(params, log)
+    getResourcesByTags(
+      {
+        Tags: params.Tags,
+        Region: DEFAULT_REGION
+      },
+      log
+    ),
+    getResourceArns({ Region: DEFAULT_REGION }, log)
   ])
 
   const resources = resourcesByTags.filter(({ ResourceARN }) => listResources.has(ResourceARN))

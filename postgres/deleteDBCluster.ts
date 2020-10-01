@@ -47,7 +47,7 @@ const deleteDBCluster = async (
       Options.Defaults.override({ log })
     )
 
-    const clusters = await describeDBClusters({ DBClusterIdentifier, MaxRecords: 1 })
+    const clusters = await describeDBClusters({ DBClusterIdentifier, MaxRecords: 20 })
     if (clusters == null || clusters.DBClusters == null || clusters.DBClusters.length !== 1) {
       throw new Error(`DB cluster ${DBClusterIdentifier} has not found`)
     }

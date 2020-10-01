@@ -26,6 +26,7 @@
         "ignoreChainWithDepth": 2
       }
     ],
+    "no-continue": "off",
     "no-plusplus": "off",
     "no-param-reassign": [
       "error",
