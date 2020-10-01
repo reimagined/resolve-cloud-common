@@ -3,17 +3,18 @@ import Resourcegroupstaggingapi from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, Log, getLog, ignoreNotFoundException } from '../utils'
 import getCloudFrontDistributionById from './getCloudFrontDistributionById'
+import { DEFAULT_REGION } from './constants'
 
 const deleteCloudFrontDistribution = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Id: string
     IfMatch?: string
     IfExists?: boolean
   },
   log: Log = getLog('DELETE-CLOUD-FRONT-DISTRIBUTION')
 ): Promise<void> => {
-  const { Region, Id, IfMatch, IfExists } = params
+  const { Region = DEFAULT_REGION, Id, IfMatch, IfExists } = params
 
   const cloudFront = new CloudFront({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })

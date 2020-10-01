@@ -2,8 +2,7 @@ import Cloudfront from 'aws-sdk/clients/cloudfront'
 import TaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
-
-const DEFAULT_REGION = 'us-east-1'
+import { DEFAULT_REGION } from './constants'
 
 async function getResourcesByTags(
   params: {
@@ -126,19 +125,22 @@ async function getResourceArns(
 
 async function getCloudFrontDistributionsByTags(
   params: {
+    Region?: 'us-east-1'
     Tags: Record<string, string>
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTIONS-BY-TAGS')
 ): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
+  const { Tags, Region = DEFAULT_REGION } = params
+
   const [resourcesByTags, listResources] = await Promise.all([
     getResourcesByTags(
       {
-        Tags: params.Tags,
-        Region: DEFAULT_REGION
+        Tags,
+        Region
       },
       log
     ),
-    getResourceArns({ Region: DEFAULT_REGION }, log)
+    getResourceArns({ Region }, log)
   ])
 
   const resources = resourcesByTags.filter(({ ResourceARN }) => listResources.has(ResourceARN))

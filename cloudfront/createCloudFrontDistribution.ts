@@ -4,16 +4,17 @@ import CloudFront, {
 } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log, NotFoundError } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 const createCloudFrontDistribution = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     DistributionConfig: CloudFrontDistributionConfig
     Tags?: Record<string, string>
   },
   log: Log = getLog(`CREATE-CLOUD-FRONT-DISTRIBUTION`)
 ): Promise<CloudFrontDistribution> => {
-  const { Region, DistributionConfig, Tags = {} } = params
+  const { Region = DEFAULT_REGION, DistributionConfig, Tags = {} } = params
 
   Tags.Owner = 'reimagined'
 

@@ -1,11 +1,12 @@
 import { getLog, Log } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 import getCloudFrontOriginAccessIdentity from './getCloudFrontOriginAccessIdentity'
 import createCloudFrontOriginAccessIdentity from './createCloudFrontOriginAccessIdentity'
 
 const ensureOriginAccessIdentity = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Comment: string
   },
   log: Log = getLog('ENSURE-ORIGIN-ACCESS-IDENTITY')
@@ -13,7 +14,7 @@ const ensureOriginAccessIdentity = async (
   Id: string
   S3CanonicalUserId: string
 }> => {
-  const { Region, Comment } = params
+  const { Region = DEFAULT_REGION, Comment } = params
 
   log.debug(`searching for origin access identity "${Comment}"`)
 

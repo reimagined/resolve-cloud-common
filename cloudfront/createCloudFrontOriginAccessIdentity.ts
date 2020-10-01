@@ -1,18 +1,19 @@
 import CloudFront from 'aws-sdk/clients/cloudfront'
 
-import { retry, Options, getLog, NotFoundError } from '../utils'
+import { retry, Options, getLog, NotFoundError, Log } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 const createCloudFrontOriginAccessIdentity = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Comment: string
   },
-  log = getLog('CREATE-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
+  log: Log = getLog('CREATE-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITY')
 ): Promise<{
   Id: string
   S3CanonicalUserId: string
 }> => {
-  const { Region, Comment } = params
+  const { Region = DEFAULT_REGION, Comment } = params
 
   const cloudFront = new CloudFront({ region: Region })
 

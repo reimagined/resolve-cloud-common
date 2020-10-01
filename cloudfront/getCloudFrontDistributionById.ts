@@ -1,15 +1,16 @@
 import CloudFront, { GetDistributionResult } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 const getCloudFrontDistributionById = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Id: string
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTION-BY-ID')
 ): Promise<GetDistributionResult> => {
-  const { Region, Id } = params
+  const { Region = DEFAULT_REGION, Id } = params
 
   const cloudFront = new CloudFront({ region: Region })
 

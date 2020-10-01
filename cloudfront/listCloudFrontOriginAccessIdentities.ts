@@ -1,16 +1,17 @@
 import CloudFront, { ListCloudFrontOriginAccessIdentitiesResult } from 'aws-sdk/clients/cloudfront'
 
 import { retry, Options, getLog, Log } from '../utils'
+import { DEFAULT_REGION } from './constants'
 
 const listCloudFrontOriginAccessIdentities = async (
   params: {
-    Region: string
+    Region?: 'us-east-1'
     Marker?: string
     MaxItems?: string
   },
   log: Log = getLog('LIST-CLOUD-FRONT-ORIGIN-ACCESS-IDENTITIES')
 ): Promise<ListCloudFrontOriginAccessIdentitiesResult> => {
-  const { Region, Marker, MaxItems = '200' } = params
+  const { Region = DEFAULT_REGION, Marker, MaxItems = '200' } = params
 
   const cloudFront = new CloudFront({ region: Region })
 
