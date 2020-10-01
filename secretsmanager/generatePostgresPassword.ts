@@ -2,19 +2,14 @@ import SecretsManager from 'aws-sdk/clients/secretsmanager'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-    },
-    log?: Log
-  ): Promise<string>
-}
+const generatePostgresPassword = async (
+  params: {
+    Region: string
+  },
+  log: Log = getLog('GENERATE-POSTGRESQL-PASSWORD')
+): Promise<string> => {
+  const { Region } = params
 
-const generatePostgresPassword: TMethod = async (
-  { Region },
-  log = getLog('GENERATE-POSTGRESQL-PASSWORD')
-) => {
   const secretsManager = new SecretsManager({ region: Region })
 
   try {

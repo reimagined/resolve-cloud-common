@@ -2,17 +2,15 @@ import SecretsManager from 'aws-sdk/clients/secretsmanager'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-    },
-    log?: Log
-  ): Promise<void>
-}
+const deleteSecret = async (
+  params: {
+    Region: string
+    Name: string
+  },
+  log: Log = getLog(`DELETE-SECRET`)
+): Promise<void> => {
+  const { Region, Name } = params
 
-const deleteSecret: TMethod = async ({ Region, Name }, log = getLog(`DELETE-SECRET`)) => {
   const secretsManager = new SecretsManager({ region: Region })
 
   const removeSecret = retry(
