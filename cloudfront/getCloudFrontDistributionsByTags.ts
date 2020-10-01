@@ -29,12 +29,6 @@ async function getResourcesByTags(
     for (;;) {
       log.debug(`Get resources by PaginationToken = ${PaginationToken ?? '<none>'}`)
 
-      log.verbose({
-        ResourceTypeFilters: ['cloudfront'],
-        TagFilters,
-        PaginationToken
-      })
-
       const {
         ResourceTagMappingList = [],
         PaginationToken: NextPaginationToken
