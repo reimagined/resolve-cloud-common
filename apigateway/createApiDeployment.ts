@@ -7,18 +7,15 @@ interface TMethod {
     params: {
       Region: string
       Stage: string
-      Name: string
       ApiId: string
       ApiStage: string
-      LambdaArn: string
-      AccountId: string
     },
     log?: Log
   ): Promise<void>
 }
 
 const createApiDeployment: TMethod = async (
-  { Region, Stage, Name, ApiId, ApiStage, LambdaArn, AccountId },
+  { Region, Stage, ApiId, ApiStage },
   log = getLog(`CREATE-HTTP-API`)
 ) => {
   const agv2 = new ApiGatewayV2({ region: Region })

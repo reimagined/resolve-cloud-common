@@ -58,13 +58,17 @@ const createApiWithLambdaIntegration: TMethod = async (
       Options.Defaults.override({ log })
     )
 
-    const { IntegrationId = '' } = await createIntegration({
+    const { IntegrationId } = await createIntegration({
       ApiId,
       IntegrationMethod: 'POST',
       IntegrationType: 'AWS_PROXY',
       IntegrationUri: buildIntegrationUri(Region, LambdaArn),
       PayloadFormatVersion: '2.0'
     })
+
+    if (IntegrationId == null) {
+      throw new Error(`The "IntegrationId" field is absent`)
+    }
 
     return { ApiId, ApiEndpoint, IntegrationId }
   } catch (e) {
