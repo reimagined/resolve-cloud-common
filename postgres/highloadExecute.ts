@@ -1,5 +1,5 @@
 export function highloadExecute<Executor extends Function>(method: Executor): Executor {
-  const executor = async function wrappedExecutor(...args: any): Promise<any> {
+  const executor = function wrappedExecutor(...args: any): any {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const target = this
     return {

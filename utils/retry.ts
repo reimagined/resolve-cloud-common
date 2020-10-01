@@ -111,13 +111,3 @@ export function retry<Callback extends Function>(
     throw lastError
   }
 }
-
-//
-// void (async () => {
-//   const lambda = new Lambda()
-//   const qqq = retry2(lambda, lambda.invoke)
-//  const www = await qqq({ FunctionName: 'fn',InvocationType:'DryRun' })
-// www.Payload
-// www
-//
-// })()
