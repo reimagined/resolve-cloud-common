@@ -15,7 +15,7 @@ const getUser = async (
     UserPoolArn: string
     UserName: string
   },
-  log: Log = getLog('GET_USER')
+  log: Log = getLog('GET-USER')
 ): Promise<UserWithAdminFlagType> => {
   const { Region, UserPoolArn, UserName } = params
   const users = await listUsers({

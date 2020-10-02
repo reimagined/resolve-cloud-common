@@ -9,7 +9,7 @@ const getUserPoolClients = async (
     Region: string
     UserPoolArn: string
   },
-  log: Log = getLog('GET_USER_POOL_CLIENTS')
+  log: Log = getLog('GET-USER-POOL-CLIENTS')
 ): Promise<UserPoolClientListType> => {
   const { Region, UserPoolArn } = params
 

@@ -39,7 +39,7 @@ const createUser = async (
   const adminCreateUserExecutor = retry(
     cognitoIdentityServiceProvider,
     cognitoIdentityServiceProvider.adminCreateUser,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['UsernameExistsException'] })
   )
 
   const adminAddUserToGroupExecutor = retry(
