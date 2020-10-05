@@ -24,8 +24,13 @@ const getUser = async (
     Filter: `username = ${JSON.stringify(UserName)}`
   })
 
-  if (users == null || users.length !== 1) {
-    const errorMessage = `Either user ${UserName} does not found nor there is multiple choices`
+  if (users == null || users.length === 0) {
+    const errorMessage = `User ${UserName} is not found`
+    log.error(errorMessage)
+    throw new Error(errorMessage)
+  }
+  if (users.length > 1) {
+    const errorMessage = `To many users: ${UserName}`
     log.error(errorMessage)
     throw new Error(errorMessage)
   }
