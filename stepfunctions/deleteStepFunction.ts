@@ -6,7 +6,7 @@ import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 async function processPage(
   params: { Region: string; StepFunctionArn: string },
   log: Log,
-  page?: object
+  page?: Record<string, any>
 ): Promise<void> {
   const { Region, StepFunctionArn } = params
 

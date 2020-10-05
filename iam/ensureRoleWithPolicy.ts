@@ -6,7 +6,7 @@ async function updateAssumeRolePolicy(
   params: {
     Region: string
     RoleName: string
-    PolicyDocument: object
+    PolicyDocument: Record<string, any>
   },
   log: Log
 ): Promise<void> {
@@ -47,7 +47,7 @@ async function updateRole(
 async function createRole(
   params: {
     Region: string
-    AssumeRolePolicyDocument: object
+    AssumeRolePolicyDocument: Record<string, any>
     RoleName: string
     Description?: string
     Tags: Array<RoleTag>
@@ -112,7 +112,7 @@ async function untagRole(
 async function ensureRole(
   params: {
     Region: string
-    AssumeRolePolicyDocument: object
+    AssumeRolePolicyDocument: Record<string, any>
     RoleName: string
     Description: string
     Tags: Array<RoleTag>
@@ -237,7 +237,7 @@ async function putRolePolicy(
     Region: string
     RoleName: string
     PolicyName: string
-    PolicyDocument: object
+    PolicyDocument: Record<string, any>
   },
   log: Log
 ): Promise<void> {

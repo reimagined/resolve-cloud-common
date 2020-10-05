@@ -5,7 +5,7 @@ import {
   logRootNamespace
 } from '../../utils/index'
 
-const prettify = ({ mock }): any =>
+const prettify = ({ mock }: any): any =>
   mock.calls
     .join('\n')
     .replace(
@@ -14,7 +14,7 @@ const prettify = ({ mock }): any =>
     )
     .replace(/\+\d+ms/gi, '+0ms')
 
-const writeTestLogs = (log): any => {
+const writeTestLogs = (log: any): any => {
   const largeObject = {
     a: {
       b: {
@@ -81,8 +81,8 @@ for (const { describeName, prepare } of [
   }
 ]) {
   describe(describeName, () => {
-    let originalStandardWrite
-    let originalErrorWrite
+    let originalStandardWrite: any
+    let originalErrorWrite: any
     // eslint-disable-next-line func-names
     const write = jest.fn().mockImplementation(function (...args) {
       originalStandardWrite.call(this, ...args)

@@ -56,9 +56,9 @@ async function updateStepFunction(
   params: {
     Region: string
     StepFunctionArn: string
-    Definition: object
+    Definition: Record<string, any>
     RoleArn: string
-    LoggingConfiguration?: object
+    LoggingConfiguration?: Record<string, any>
   },
   log: Log
 ): Promise<void> {
@@ -140,11 +140,11 @@ async function createStepFunction(
   params: {
     Region: string
     Tags: Array<{ key?: string; value?: string }>
-    Definition: object
+    Definition: Record<string, any>
     Name: string
     RoleArn: string
     Type: string
-    LoggingConfiguration?: object
+    LoggingConfiguration?: Record<string, any>
   },
   log: Log
 ): Promise<string> {
@@ -240,11 +240,11 @@ const ensureStepFunction = async (
   params: {
     Region: string
     Tags?: Record<string, string>
-    Definition: object
+    Definition: Record<string, any>
     Name: string
     RoleArn: string
     Type?: string
-    LoggingConfiguration?: object
+    LoggingConfiguration?: Record<string, any>
   },
   log: Log = getLog('ENSURE-STEP-FUNCTION')
 ): Promise<string> => {

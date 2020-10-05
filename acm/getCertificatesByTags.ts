@@ -40,7 +40,7 @@ async function getResourcesByTags(
         if (ResourceARN != null) {
           resources.push({
             ResourceARN,
-            Tags: ResourceTags.reduce((acc, { Key, Value }) => {
+            Tags: ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
               acc[Key] = Value
               return acc
             }, {})

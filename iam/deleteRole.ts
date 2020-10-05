@@ -6,7 +6,7 @@ import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 const deleteRolePolicies = async (
   params: { Region: string; RoleName: string },
   log: Log,
-  page?: object
+  page?: Record<string, any>
 ): Promise<void> => {
   const { Region, RoleName } = params
 

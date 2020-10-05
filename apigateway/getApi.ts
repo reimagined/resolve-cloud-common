@@ -20,13 +20,13 @@ const getApi = async (
   const getRestApis = retry(gateway, gateway.getApis, Options.Defaults.override({ log }))
 
   do {
-    ;({ NextToken: nextToken, Items: items } = await getRestApis({
+    void ({ NextToken: nextToken, Items: items } = await getRestApis({
       MaxResults: '100',
       NextToken: nextToken
     }))
 
     const api = items?.find(
-      (item) => (Protocol == null || item.Protocol === Protocol) && item.Name === Name
+      (item) => (Protocol == null || item.ProtocolType === Protocol) && item.Name === Name
     )
 
     if (api) {
