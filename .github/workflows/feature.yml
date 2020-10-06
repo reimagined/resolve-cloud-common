@@ -1,0 +1,28 @@
+name: Feature CI/CD
+
+on:
+  push:
+    branches-ignore:
+      - master/**
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '10'
+
+      - name: Build
+        run: |
+          yarn
+          yarn prepare
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
