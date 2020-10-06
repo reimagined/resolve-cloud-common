@@ -3,14 +3,14 @@ import CognitoIdentityServiceProvider, {
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
-import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE } from './constants'
+import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE, EMAIL_ATTRIBUTE } from './constants'
 
 type UserListWithAdminFlagType = Array<{
   Username: string
+  UserId: string
   Status: boolean
   UserStatus: string
   IsAdmin: boolean
-  Sub?: string
 }>
 
 const listUsers = async (
@@ -49,7 +49,7 @@ const listUsers = async (
       const { PaginationToken: NextPaginationToken, Users } = await listUsersExecutor({
         UserPoolId,
         Limit: 60,
-        AttributesToGet: [SUB_ATTRIBUTE],
+        AttributesToGet: [EMAIL_ATTRIBUTE, SUB_ATTRIBUTE],
         Filter,
         PaginationToken
       })
@@ -92,8 +92,11 @@ const listUsers = async (
             })
             const IsAdmin = (Groups?.length ?? 0) > 0 && Groups?.[0]?.GroupName === ADMIN_GROUP_NAME
             const Sub = Attributes?.find(({ Name }) => Name === SUB_ATTRIBUTE)?.Value
+            const Email = Attributes?.find(({ Name }) => Name === EMAIL_ATTRIBUTE)?.Value
 
-            result.push({ Username, Status, UserStatus, IsAdmin, Sub })
+            if (Email != null && Sub != null) {
+              result.push({ Username: Email, Status, UserStatus, IsAdmin, UserId: Sub })
+            }
           } catch (err) {
             errors.push(err)
           }

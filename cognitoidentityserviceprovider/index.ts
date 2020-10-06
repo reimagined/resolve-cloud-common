@@ -5,6 +5,7 @@ import deleteUser from './deleteUser'
 import deleteUserPool from './deleteUserPool'
 import ensureUserPool from './ensureUserPool'
 import getUser from './getUser'
+import getUserById from './getUserById'
 import getUserPool from './getUserPool'
 import getUserPoolByTags from './getUserPoolByTags'
 import getUserPoolClients from './getUserPoolClients'
@@ -20,6 +21,7 @@ export {
   deleteUserPool,
   ensureUserPool,
   getUser,
+  getUserById,
   getUserPool,
   getUserPoolByTags,
   getUserPoolClients,
