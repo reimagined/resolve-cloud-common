@@ -6,8 +6,8 @@ import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
 import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE, EMAIL_ATTRIBUTE } from './constants'
 
 type UserListWithAdminFlagType = Array<{
-  Username: string
   UserId: string
+  Email: string
   Status: boolean
   UserStatus: string
   IsAdmin: boolean
@@ -95,7 +95,7 @@ const listUsers = async (
             const Email = Attributes?.find(({ Name }) => Name === EMAIL_ATTRIBUTE)?.Value
 
             if (Email != null && Sub != null) {
-              result.push({ Username: Email, Status, UserStatus, IsAdmin, UserId: Sub })
+              result.push({ Email, Status, UserStatus, IsAdmin, UserId: Sub })
             }
           } catch (err) {
             errors.push(err)
