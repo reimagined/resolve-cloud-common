@@ -3,11 +3,11 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-async function invokeFunction<Response extends object | null>(
+async function invokeFunction<Response extends Record<string, any> | null>(
   params: {
     Region: string
     FunctionName: string
-    Payload: object
+    Payload: Record<string, any>
     InvocationType?: 'Event' | 'RequestResponse' | 'DryRun'
     WithLogs?: boolean
   },

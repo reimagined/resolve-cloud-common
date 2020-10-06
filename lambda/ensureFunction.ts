@@ -81,7 +81,7 @@ async function createFunction(
     S3Bucket?: string
     S3Key?: string
     ZipFile?: Buffer
-    Environment?: object
+    Environment?: { Variables: Record<string, string> }
     Tags: Record<string, string>
     Runtime: string
     Timeout: number

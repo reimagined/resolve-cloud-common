@@ -15,7 +15,17 @@ const logLevels: Array<[string, Chalk]> = [
 ]
 const emptyFunction = Function() // eslint-disable-line no-new-func
 
-const createLogger = (namespace, getCorrelationId): any => {
+export type Log = {
+  log: (...args: Array<any>) => void
+  error: (...args: Array<any>) => void
+  warn: (...args: Array<any>) => void
+  debug: (...args: Array<any>) => void
+  info: (...args: Array<any>) => void
+  verbose: (...args: Array<any>) => void
+  verboseInspect: (...args: Array<any>) => void
+}
+
+const createLogger = (namespace: string, getCorrelationId: () => any): any => {
   let logLevel = 'info'
   // eslint-disable-next-line no-prototype-builtins
   if (process.env.hasOwnProperty(EnvVar.logLevel)) {
@@ -37,11 +47,11 @@ const createLogger = (namespace, getCorrelationId): any => {
   const allowedLevels = logLevels.slice(0, logLevelIndex + 1).map(([levelName]) => levelName)
 
   const originalLogger = debug(namespace)
-  const leveledLogger = {}
+  const leveledLogger: Record<string, any> = {}
 
   for (const [levelName, levelColor] of logLevels) {
     if (allowedLevels.indexOf(levelName) > -1) {
-      leveledLogger[levelName] = (...args): any => {
+      leveledLogger[levelName] = (...args: Array<any>): any => {
         originalLogger(
           `${levelColor(levelName.toUpperCase())} <${getCorrelationId()}> ${args.map((arg) =>
             Object(arg) === arg ? JSON.stringify(arg) : arg
@@ -65,16 +75,6 @@ export const setLogCorrelationId = (nextCorrelationId: string): void => {
 
 export const resetLogCorrelationId = (): void => {
   correlationId = DEFAULT_CORRELATION_ID
-}
-
-export type Log = {
-  log: (...args: Array<any>) => void
-  error: (...args: Array<any>) => void
-  warn: (...args: Array<any>) => void
-  debug: (...args: Array<any>) => void
-  info: (...args: Array<any>) => void
-  verbose: (...args: Array<any>) => void
-  verboseInspect: (...args: Array<any>) => void
 }
 
 export const getLog = (scope: string): Log => {

@@ -19,7 +19,7 @@ const getRestApi = async (
   const getRestApis = retry(gateway, gateway.getRestApis, Options.Defaults.override({ log }))
 
   do {
-    ;({ position: nextPosition, items } = await getRestApis({
+    void ({ position: nextPosition, items } = await getRestApis({
       limit: 100,
       position: nextPosition
     }))
