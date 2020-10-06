@@ -41,11 +41,11 @@ const checkIfBucketExists = async (
 
 async function ensureS3Bucket(
   params: {
-    Region
-    BucketName
+    Region: string
+    BucketName: string
     ACL?: AmazonACL
     Tags?: Record<string, string>
-    Policy?: object
+    Policy?: Record<string, any>
   },
   log: Log = getLog('ENSURE-S3-BUCKET')
 ): Promise<void> {

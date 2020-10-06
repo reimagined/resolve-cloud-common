@@ -1,7 +1,7 @@
-export function highloadExecute<Executor extends Function>(method: Executor): Executor {
+export function highloadExecute<Executor extends () => any>(method: Executor): Executor {
   const executor = function wrappedExecutor(...args: any): any {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const target = this
+    const target = this as any
     return {
       async promise(): Promise<any> {
         try {

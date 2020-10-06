@@ -9,29 +9,29 @@ type UserWithAdminFlagType = {
   IsAdmin: boolean
 }
 
-const getUser = async (
+const getUserById = async (
   params: {
     Region: string
     UserPoolArn: string
-    Username: string
+    UserId: string
   },
   log: Log = getLog('GET-USER')
 ): Promise<UserWithAdminFlagType> => {
-  const { Region, UserPoolArn, Username } = params
+  const { Region, UserPoolArn, UserId } = params
 
   const users = await listUsers({
     Region,
     UserPoolArn,
-    Filter: `email = ${JSON.stringify(Username)}`
+    Filter: `sub = ${JSON.stringify(UserId)}`
   })
 
   if (users == null || users.length === 0) {
-    const errorMessage = `User ${Username} is not found`
+    const errorMessage = `User ${UserId} is not found`
     log.error(errorMessage)
     throw new Error(errorMessage)
   }
   if (users.length > 1) {
-    const errorMessage = `To many users: ${Username}`
+    const errorMessage = `To many users: ${UserId}`
     log.error(errorMessage)
     throw new Error(errorMessage)
   }
@@ -39,4 +39,4 @@ const getUser = async (
   return users[0]
 }
 
-export default getUser
+export default getUserById

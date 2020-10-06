@@ -170,13 +170,18 @@ const deleteUserPool = async (
     })
 
     try {
-      await untagResourcesExecutor({
-        ResourceARNList: [UserPoolArn],
-        TagKeys: Object.keys(Tags)
-      })
+      const TagKeys = Object.keys(Tags)
 
-      log.debug(`User pool tags has been deleted`)
+      if (TagKeys.length > 0) {
+        log.debug(`Delete user pool tags: ${UserPoolArn} : ${JSON.stringify(TagKeys)}`)
+        await untagResourcesExecutor({
+          ResourceARNList: [UserPoolArn],
+          TagKeys
+        })
+        log.debug(`User pool tags has been deleted`)
+      }
     } catch (error) {
+      log.debug(`Failed to delete user pool tags`)
       log.warn(error)
     }
   } catch (error) {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-shadow
 export enum EnvVar {
   logLevel = 'DEBUG_LEVEL',
   debugNamespaces = 'DEBUG',

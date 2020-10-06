@@ -23,19 +23,11 @@ describe('Options', () => {
 })
 
 describe('retry', () => {
-  interface MockRequest {
-    requestData: string
-  }
-
-  interface MockResponse {
-    responseData: string
-  }
-
   class MockSdkResponse {
-    readonly result
-    readonly promise
+    readonly result: any
+    readonly promise: any
 
-    constructor(result) {
+    constructor(result: any) {
       this.result = result
       this.promise = jest.fn(() =>
         this.result instanceof Error ? Promise.reject(this.result) : Promise.resolve(this.result)
@@ -52,7 +44,7 @@ describe('retry', () => {
       this.method = jest.fn()
     }
 
-    public invoke(...args): MockSdkResponse {
+    public invoke(...args: any): MockSdkResponse {
       return this.method(...args)
     }
   }

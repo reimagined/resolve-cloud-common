@@ -17,7 +17,7 @@ Object.assign(getLog, {
 
 export const getAccountIdFromLambdaContext = jest.fn().mockReturnValue('accountId')
 
-export const retry = jest.fn((obj: object, fn: Function) => fn)
+export const retry = jest.fn((obj: Record<string, any>, fn: () => any) => fn)
 
 export const setLogCorrelationId = jest.fn()
 

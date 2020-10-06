@@ -36,9 +36,9 @@ function coercer(field: {
   throw new Error(`Unknown type ${JSON.stringify(field)}`)
 }
 
-async function executeStatement<T extends object>(
+async function executeStatement<T extends Record<string, any>>(
   params: { Region: string; ResourceArn: string; SecretArn: string; Sql: string },
-  log: Log = getLog('EXECUTE_STATEMENT')
+  log: Log = getLog('EXECUTE-STATEMENT')
 ): Promise<Array<T>> {
   const { Region, ResourceArn, SecretArn, Sql } = params
 
@@ -70,14 +70,15 @@ async function executeStatement<T extends object>(
 
   const rows: Array<T> = []
   for (const record of records) {
-    const row = {} as T
+    const row: Record<string, any> = {} as T
     for (let i = 0; i < columnMetadata.length; i++) {
       const meta = columnMetadata[i]
-      if (meta.name != null) {
-        row[meta.name] = coercer(record[i])
+      const metaName = meta.name
+      if (metaName != null) {
+        row[metaName] = coercer(record[i])
       }
     }
-    rows.push(row)
+    rows.push(row as T)
   }
 
   log.verbose(JSON.stringify(rows, null, 2))

@@ -22,7 +22,7 @@ const getUserPool = async (
   const describeUserPool = retry(
     cognito,
     cognito.describeUserPool,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
   )
 
   const { UserPool } = await describeUserPool({

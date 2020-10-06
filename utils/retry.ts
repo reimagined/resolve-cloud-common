@@ -40,10 +40,6 @@ export class Options implements OptionsStruct {
   }
 }
 
-interface SDKRequest<TResponse> {
-  promise: () => Promise<TResponse>
-}
-
 type AwsServicePromiseArgumentsType<T> = T extends { (args: infer A1): any; (args: infer A2): any }
   ? A1 | A2
   : T extends (args: infer A) => any
@@ -65,8 +61,8 @@ type UnwrapAwsPromise<AWSWrappedResult> = AWSWrappedResult extends {
 
 type GetPromiseType<PromiseLike> = PromiseLike extends Promise<infer R> ? R : never
 
-export function retry<Callback extends Function>(
-  client: object,
+export function retry<Callback extends (...args: any) => any>(
+  client: Record<string, any>,
   callable: Callback,
   options: Options = Options.Defaults
 ): (
