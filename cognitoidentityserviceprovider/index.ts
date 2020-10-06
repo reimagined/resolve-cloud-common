@@ -1,31 +1,29 @@
-import addCallbackUrl from './addCallbackUrl'
-import addLogoutUrl from './addLogoutUrl'
+import addClientAppUrls from './addClientAppUrls'
 import createUser from './createUser'
-import deleteUser from './deleteUser'
+import deleteUserByEmail from './deleteUserByEmail'
+import deleteUserById from './deleteUserById'
 import deleteUserPool from './deleteUserPool'
 import ensureUserPool from './ensureUserPool'
-import getUser from './getUser'
+import getUserByEmail from './getUserByEmail'
 import getUserById from './getUserById'
 import getUserPool from './getUserPool'
 import getUserPoolByTags from './getUserPoolByTags'
 import getUserPoolClients from './getUserPoolClients'
 import listUsers from './listUsers'
-import removeCallbackUrl from './removeCallbackUrl'
-import removeLogoutUrl from './removeLogoutUrl'
+import removeClientAppUrls from './removeClientAppUrls'
 
 export {
-  addCallbackUrl,
-  addLogoutUrl,
+  addClientAppUrls,
   createUser,
-  deleteUser,
+  deleteUserByEmail,
+  deleteUserById,
   deleteUserPool,
   ensureUserPool,
-  getUser,
+  getUserByEmail,
   getUserById,
   getUserPool,
   getUserPoolByTags,
   getUserPoolClients,
   listUsers,
-  removeCallbackUrl,
-  removeLogoutUrl
+  removeClientAppUrls
 }

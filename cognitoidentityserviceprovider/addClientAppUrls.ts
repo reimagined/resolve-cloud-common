@@ -2,16 +2,17 @@ import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityservi
 
 import { getLog, Log, Options, retry } from '../utils'
 
-const removeCallbackUrl = async (
+const addClientAppUrls = async (
   params: {
     Region: string
     UserPoolArn: string
     ClientId: string
-    Url: string
+    CallbackUrl?: string
+    LogoutUrl?: string
   },
-  log: Log = getLog('REMOVE-CALLBACK-URL')
+  log: Log = getLog('ADD-CLIENT-APP-URLS')
 ): Promise<void> => {
-  const { Region, UserPoolArn, ClientId, Url } = params
+  const { Region, UserPoolArn, ClientId, CallbackUrl, LogoutUrl } = params
 
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
@@ -33,36 +34,51 @@ const removeCallbackUrl = async (
   )
 
   const { UserPoolClient } = await describeUserPoolClient({
-    UserPoolId,
-    ClientId
+    ClientId,
+    UserPoolId
   })
   if (UserPoolClient == null) {
     throw new Error(`User pool client ${ClientId} not found`)
   }
 
-  const { CallbackURLs = [] } = UserPoolClient
+  const { CallbackURLs = [], LogoutURLs = [] } = UserPoolClient
 
-  if (!CallbackURLs.includes(Url)) {
-    log.warn(`This URL "${Url}" was not found in client`)
-    return
+  if (CallbackUrl != null) {
+    if (CallbackURLs.includes(CallbackUrl)) {
+      log.warn(`This callback URL "${CallbackUrl}" already exists`)
+    } else {
+      CallbackURLs.push(CallbackUrl)
+    }
+  }
+
+  if (LogoutUrl != null) {
+    if (LogoutURLs.includes(LogoutUrl)) {
+      log.warn(`This logout URL "${LogoutUrl}" already exists`)
+    } else {
+      LogoutURLs.push(LogoutUrl)
+    }
   }
 
   try {
-    log.debug('Remove callback URL from client')
+    log.debug('Add client app URLs')
+
+    delete UserPoolClient.LastModifiedDate
+    delete UserPoolClient.CreationDate
 
     await updateUserPoolClient({
       ...UserPoolClient,
       UserPoolId,
       ClientId,
-      CallbackURLs: CallbackURLs.filter((callbackUrl) => callbackUrl !== Url)
+      CallbackURLs,
+      LogoutURLs
     })
 
-    log.debug(`Callback URL has been removed from the client`)
+    log.debug(`Client app URLs has been added.`)
   } catch (error) {
-    log.debug(`Failed to remove callback URL from the client`)
+    log.debug(`Failed to add client app URLs.`)
 
     throw error
   }
 }
 
-export default removeCallbackUrl
+export default addClientAppUrls

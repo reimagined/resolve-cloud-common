@@ -9,7 +9,7 @@ const createUser = async (
   params: {
     Region: string
     UserPoolArn: string
-    Username: string
+    Email: string
     TemporaryPassword: string
     ForceAliasCreation?: boolean
     MessageAction?: 'RESEND' | 'SUPPRESS'
@@ -24,7 +24,7 @@ const createUser = async (
   const {
     Region,
     UserPoolArn,
-    Username,
+    Email,
     ClientMetadata,
     DesiredDeliveryMediums,
     ForceAliasCreation,
@@ -55,7 +55,7 @@ const createUser = async (
 
   const createUserResult = await adminCreateUserExecutor({
     UserPoolId,
-    Username,
+    Username: Email,
     ClientMetadata,
     DesiredDeliveryMediums,
     ForceAliasCreation,
@@ -74,7 +74,7 @@ const createUser = async (
   if (IsAdmin === true) {
     const addUserResult = await adminAddUserToGroupExecutor({
       UserPoolId,
-      Username,
+      Username: Email,
       GroupName: ADMIN_GROUP_NAME
     })
 
