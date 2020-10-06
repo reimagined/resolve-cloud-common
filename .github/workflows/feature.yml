@@ -3,7 +3,7 @@ name: Feature CI/CD
 on:
   pull_request:
     branches-ignore:
-      - master/**
+      - master
 
 jobs:
   unit-test:
