@@ -1,9 +1,9 @@
-name: Release CI/CD
+name: Master CI/CD
 
 on:
   push:
     branches:
-      - release/**
+      - master/**
 
 jobs:
   release:
