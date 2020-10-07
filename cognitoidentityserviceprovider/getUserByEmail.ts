@@ -1,13 +1,6 @@
 import { getLog, Log } from '../utils'
 import listUsers from './listUsers'
-
-type UserWithAdminFlagType = {
-  UserId: string
-  Email: string
-  Status: boolean
-  UserStatus: string
-  IsAdmin: boolean
-}
+import { CognitoUser } from './constants'
 
 const getUserByEmail = async (
   params: {
@@ -16,7 +9,7 @@ const getUserByEmail = async (
     Email: string
   },
   log: Log = getLog('GET-USER-BY-EMAIL')
-): Promise<UserWithAdminFlagType> => {
+): Promise<CognitoUser> => {
   const { Region, UserPoolArn, Email } = params
 
   const users = await listUsers({

@@ -11,6 +11,7 @@ import getUserPoolByTags from './getUserPoolByTags'
 import getUserPoolClients from './getUserPoolClients'
 import listUsers from './listUsers'
 import removeClientAppUrls from './removeClientAppUrls'
+import { CognitoUser } from './constants'
 
 export {
   addClientAppUrls,
@@ -25,5 +26,6 @@ export {
   getUserPoolByTags,
   getUserPoolClients,
   listUsers,
-  removeClientAppUrls
+  removeClientAppUrls,
+  CognitoUser
 }

@@ -1,8 +1,6 @@
-import CognitoIdentityServiceProvider, {
-  UserType
-} from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
-import { ADMIN_GROUP_NAME } from './constants'
+import { ADMIN_GROUP_NAME, CognitoUser } from './constants'
 import { retry, Options, getLog, Log } from '../utils'
 
 const createUser = async (
@@ -20,7 +18,7 @@ const createUser = async (
     IsAdmin?: boolean
   },
   log: Log = getLog('CREATE_USER')
-): Promise<UserType> => {
+): Promise<CognitoUser> => {
   const {
     Region,
     UserPoolArn,
@@ -32,7 +30,7 @@ const createUser = async (
     TemporaryPassword,
     UserAttributes,
     ValidationData,
-    IsAdmin
+    IsAdmin = false
   } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
@@ -69,7 +67,7 @@ const createUser = async (
     throw new Error(`Failed to create user`)
   }
 
-  const { User } = createUserResult
+  const { User: { Username: UserId, Enabled, UserStatus } = {} } = createUserResult
 
   if (IsAdmin === true) {
     const addUserResult = await adminAddUserToGroupExecutor({
@@ -83,7 +81,23 @@ const createUser = async (
     }
   }
 
-  return User
+  if (UserId == null) {
+    throw new Error('Empty "UserId"')
+  }
+  if (UserStatus == null) {
+    throw new Error('Empty "UserStatus"')
+  }
+  if (Enabled == null) {
+    throw new Error('Empty "Enabled"')
+  }
+
+  return {
+    UserId,
+    Email,
+    IsAdmin,
+    Enabled,
+    UserStatus
+  }
 }
 
 export default createUser

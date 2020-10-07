@@ -3,15 +3,7 @@ import CognitoIdentityServiceProvider, {
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
 import { retry, Options, getLog, Log, maybeThrowErrors } from '../utils'
-import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE, EMAIL_ATTRIBUTE } from './constants'
-
-type UserListWithAdminFlagType = Array<{
-  UserId: string
-  Email: string
-  Status: boolean
-  UserStatus: string
-  IsAdmin: boolean
-}>
+import { ADMIN_GROUP_NAME, SUB_ATTRIBUTE, EMAIL_ATTRIBUTE, CognitoUser } from './constants'
 
 const listUsers = async (
   params: {
@@ -20,7 +12,7 @@ const listUsers = async (
     Filter?: string
   },
   log: Log = getLog('LIST-USERS')
-): Promise<UserListWithAdminFlagType> => {
+): Promise<Array<CognitoUser>> => {
   const { Region, UserPoolArn, Filter } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
@@ -76,12 +68,12 @@ const listUsers = async (
     }
   }
 
-  const result: UserListWithAdminFlagType = []
+  const result: Array<CognitoUser> = []
   const promises: Array<Promise<any>> = []
   const errors: Array<Error> = []
 
-  for (const { Username, Enabled: Status, UserStatus, Attributes } of users) {
-    if (Username != null && Status != null && UserStatus != null && Attributes != null) {
+  for (const { Username, Enabled, UserStatus, Attributes } of users) {
+    if (Username != null && Enabled != null && UserStatus != null && Attributes != null) {
       promises.push(
         (async (): Promise<void> => {
           try {
@@ -95,7 +87,7 @@ const listUsers = async (
             const Email = Attributes?.find(({ Name }) => Name === EMAIL_ATTRIBUTE)?.Value
 
             if (Email != null && Sub != null) {
-              result.push({ Email, Status, UserStatus, IsAdmin, UserId: Sub })
+              result.push({ Email, Enabled, UserStatus, IsAdmin, UserId: Sub })
             }
           } catch (err) {
             errors.push(err)
@@ -104,9 +96,7 @@ const listUsers = async (
       )
     } else {
       errors.push(
-        new Error(
-          `Either ${JSON.stringify({ Username, Enabled: Status, UserStatus, Attributes })} is null`
-        )
+        new Error(`Either ${JSON.stringify({ Username, Enabled, UserStatus, Attributes })} is null`)
       )
     }
   }
