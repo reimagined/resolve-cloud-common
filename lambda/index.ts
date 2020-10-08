@@ -8,6 +8,7 @@ import getFunctionByTags from './getFunctionByTags'
 import getFunctionConcurrency from './getFunctionConcurrency'
 import getFunctionConfiguration from './getFunctionConfiguration'
 import getFunctionRole from './getFunctionRole'
+import getFunctionVersion from './getFunctionVersion'
 import invokeFunction from './invokeFunction'
 import setFunctionConcurrency from './setFunctionConcurrency'
 import updateFunctionCode from './updateFunctionCode'
@@ -25,6 +26,7 @@ export {
   getFunctionConcurrency,
   getFunctionConfiguration,
   getFunctionRole,
+  getFunctionVersion,
   invokeFunction,
   setFunctionConcurrency,
   updateFunctionCode,
