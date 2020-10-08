@@ -27,21 +27,31 @@ const importCertificate = async (
       acm.importCertificate,
       Options.Defaults.override({ log })
     )
+    const addTagsToCertificateExecutor = retry(
+      acm,
+      acm.addTagsToCertificate,
+      Options.Defaults.override({ log })
+    )
 
     const { CertificateArn: ImportedCertificateArn } = await importCertificateExecutor({
       Certificate,
       PrivateKey,
       CertificateArn,
-      CertificateChain,
-      Tags: Object.entries(Tags).map(([Key, Value]) => ({
-        Key,
-        Value
-      }))
+      CertificateChain
     })
 
     if (ImportedCertificateArn == null) {
       throw new NotFoundError('Imported certificate was not found', 'ResourceNotFoundException')
     }
+
+    // Workaround - ValidationException: Tagging is not permitted on re-import.
+    await addTagsToCertificateExecutor({
+      CertificateArn: ImportedCertificateArn,
+      Tags: Object.entries(Tags).map(([Key, Value]) => ({
+        Key,
+        Value
+      }))
+    })
 
     log.debug(`Certificate import successful`)
 
