@@ -2,18 +2,16 @@ import Route53 from 'aws-sdk/clients/route53'
 
 import { retry, Options, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      HostedZoneId: string
-      RecordName: string
-      RecordType: string
-    },
-    log?: Log
-  ): Promise<{ DNSName: string } | null>
-}
-
-const getRoute53Record: TMethod = async ({ HostedZoneId, RecordName, RecordType }) => {
+const getRoute53Record = async (
+  params: {
+    HostedZoneId: string
+    RecordName: string
+    RecordType: string
+  },
+  log?: Log
+): Promise<{ DNSName: string } | null> => {
+  const { HostedZoneId, RecordName, RecordType } = params
+  void log
   const route53 = new Route53()
 
   const listResourceRecordSets = retry(

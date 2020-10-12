@@ -1,18 +1,19 @@
 import Route53 from 'aws-sdk/clients/route53'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-const createRoute53Record = async (
+const deleteRoute53Record = async (
   params: {
     HostedZoneId: string
     AliasHostedZoneId: string
     RecordName: string
     RecordType: string
     DNSName: string
+    IfExists?: boolean
   },
-  log: Log = getLog('CREATE-ROUTE-53-RECORD')
+  log: Log = getLog('DELETE-ROUTE-53-RECORD')
 ): Promise<void> => {
-  const { HostedZoneId, AliasHostedZoneId, RecordName, RecordType, DNSName } = params
+  const { HostedZoneId, AliasHostedZoneId, RecordName, RecordType, DNSName, IfExists } = params
 
   const route53 = new Route53()
 
@@ -21,7 +22,8 @@ const createRoute53Record = async (
     route53.changeResourceRecordSets,
     Options.Defaults.override({
       maxAttempts: 5,
-      delay: 1000
+      delay: 1000,
+      expectedErrors: ['InvalidChangeBatch']
     })
   )
 
@@ -33,7 +35,7 @@ const createRoute53Record = async (
       ChangeBatch: {
         Changes: [
           {
-            Action: 'CREATE',
+            Action: 'DELETE',
             ResourceRecordSet: {
               AliasTarget: {
                 DNSName,
@@ -50,9 +52,14 @@ const createRoute53Record = async (
 
     log.debug('Change resource record sets')
   } catch (error) {
-    log.error('Resource record sets change failed')
-    throw error
+    if (IfExists) {
+      log.debug('Skip delete route53 record')
+      ignoreNotFoundException(error)
+    } else {
+      log.error('Resource record sets change failed')
+      throw error
+    }
   }
 }
 
-export default createRoute53Record
+export default deleteRoute53Record

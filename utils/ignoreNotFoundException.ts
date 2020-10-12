@@ -14,7 +14,8 @@ export function ignoreNotFoundException(error?: Error & { code: string }): void 
       error.code === 'NoSuchUpload' ||
       error.code === 'NoSuchVersion' ||
       (error.code === 'InvalidParameterValueException' &&
-        error.message.includes('S3 Error Code: PermanentRedirect')))
+        error.message.includes('S3 Error Code: PermanentRedirect')) ||
+      (error.code === 'InvalidChangeBatch' && error.message.includes('was not found')))
   ) {
     return
   }
