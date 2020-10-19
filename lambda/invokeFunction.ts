@@ -1,4 +1,5 @@
 import { EOL } from 'os'
+import chalk from 'chalk'
 import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -31,8 +32,9 @@ async function invokeFunction<Response extends Record<string, any> | null>(
     })
 
     if (WithLogs && LogResult != null) {
+      const decodedLog = Buffer.from(LogResult, 'base64').toString()
       // eslint-disable-next-line no-console
-      console.log(LogResult)
+      console.log(chalk.cyanBright(decodedLog))
     }
 
     if (FunctionError != null && (InvocationType === 'RequestResponse' || InvocationType == null)) {
