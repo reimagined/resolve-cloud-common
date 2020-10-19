@@ -8,7 +8,7 @@ const listHostedZones = async (
 ): Promise<
   Array<{
     Name: string
-    Id: string
+    HostedZoneId: string
   }>
 > => {
   const route53 = new Route53()
@@ -30,7 +30,7 @@ const listHostedZones = async (
       })
 
       for (const { Id, Name } of HostedZones) {
-        zones.push({ Id, Name })
+        zones.push({ HostedZoneId: Id.replace(/^\/hostedzone\//, ''), Name })
       }
 
       if (

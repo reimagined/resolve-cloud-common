@@ -9,7 +9,7 @@ const getRoute53Record = async (
     RecordType: string
   },
   log?: Log
-): Promise<{ DNSName: string } | null> => {
+): Promise<{ RecordName: string; RecordType: string; DNSName: string } | null> => {
   const { HostedZoneId, RecordName, RecordType } = params
   void log
   const route53 = new Route53()
@@ -34,6 +34,8 @@ const getRoute53Record = async (
 
   if (record != null && record.Type === RecordType && record.AliasTarget != null) {
     return {
+      RecordName,
+      RecordType,
       DNSName: record.AliasTarget.DNSName
     }
   }
