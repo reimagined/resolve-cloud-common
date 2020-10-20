@@ -14,10 +14,11 @@ const createApiWithLambdaIntegration = async (
     AccountId: string
     ProtocolType: 'HTTP' | 'WEBSOCKET'
     RouteSelectionExpression?: string
+    Tags?: Record<string, string>
   },
   log: Log = getLog(`CREATE-API-WITH-LAMBDA-INTEGRATION`)
 ): Promise<{ ApiId: string; ApiEndpoint: string; IntegrationId: string }> => {
-  const { Region, Name, ApiStage, LambdaArn, ProtocolType, RouteSelectionExpression } = params
+  const { Region, Name, ApiStage, LambdaArn, ProtocolType, RouteSelectionExpression, Tags } = params
 
   const agv2 = new ApiGatewayV2({ region: Region })
 
@@ -29,7 +30,8 @@ const createApiWithLambdaIntegration = async (
     const { ApiId, ApiEndpoint } = await createApiExecutor({
       ProtocolType,
       Name,
-      RouteSelectionExpression
+      RouteSelectionExpression,
+      Tags
     })
 
     if (ApiId == null || ApiEndpoint == null) {

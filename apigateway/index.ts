@@ -13,6 +13,7 @@ import getApi from './getApi'
 import getApiGatewayResource from './getApiGatewayResource'
 import getApiGatewayRootResource from './getApiGatewayRootResource'
 import getRestApi from './getRestApi'
+import getApisByTags from './getApisByTags'
 
 export {
   createApiDeployment,
@@ -29,5 +30,6 @@ export {
   getApi,
   getApiGatewayResource,
   getApiGatewayRootResource,
-  getRestApi
+  getRestApi,
+  getApisByTags
 }
