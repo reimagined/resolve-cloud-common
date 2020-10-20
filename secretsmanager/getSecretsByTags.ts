@@ -24,32 +24,16 @@ const getSecretsByTags = async (
     Options.Defaults.override({ log })
   )
 
-  const Filters = []
-
-  for (const [key, value] of Object.entries(Tags)) {
-    Filters.push(
-      {
-        Key: 'tag-key',
-        Values: [key]
-      },
-      {
-        Key: 'tag-value',
-        Values: [value]
-      }
-    )
-  }
-
   const resources: Array<{ ResourceARN: string; Name: string; Tags: Record<string, string> }> = []
 
   try {
-    log.debug(`Find secret by tags`)
+    log.debug(`Find secrets by tags`)
 
     let NextToken: string | undefined
     for (;;) {
-      log.debug(`Get secret by NextToken = ${NextToken ?? '<none>'}`)
+      log.debug(`Get secrets by NextToken = ${NextToken ?? '<none>'}`)
 
       const { SecretList = [], NextToken: FollowingNextToken } = await listSecrets({
-        Filters,
         MaxResults: 100,
         NextToken
       })
@@ -57,16 +41,22 @@ const getSecretsByTags = async (
 
       for (const { ARN: ResourceARN, Tags: ResourceTags = [], Name } of SecretList) {
         if (ResourceARN != null && Name != null) {
-          resources.push({
-            ResourceARN,
-            Name,
-            Tags: ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
-              if (Key != null && Value != null) {
-                acc[Key] = Value
-              }
-              return acc
-            }, {})
-          })
+          const matchedTags = ResourceTags.reduce((acc: number, { Key, Value }) => {
+            return Key != null && Value != null && Tags[Key] === Value ? acc + 1 : acc
+          }, 0)
+
+          if (matchedTags === Object.keys(Tags).length) {
+            resources.push({
+              ResourceARN,
+              Name,
+              Tags: ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
+                if (Key != null && Value != null) {
+                  acc[Key] = Value
+                }
+                return acc
+              }, {})
+            })
+          }
         }
       }
 

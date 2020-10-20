@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.73",
+  "version": "0.0.74",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "@types/debug": "^4.1.5",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
-    "aws-sdk": "2.721.0",
+    "aws-sdk": "2.712.0",
     "jest": "^26.4.2",
     "lodash": "^4.17.15",
     "prettier": "^2.0.5",
