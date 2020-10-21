@@ -60,7 +60,7 @@ const createApiWithLambdaIntegration = async (
       IntegrationMethod: 'POST',
       IntegrationType: 'AWS_PROXY',
       IntegrationUri: buildIntegrationUri(Region, LambdaArn),
-      PayloadFormatVersion: '2.0'
+      PayloadFormatVersion: ProtocolType === 'HTTP' ? '2.0' : undefined
     })
 
     if (IntegrationId == null) {
