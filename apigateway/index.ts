@@ -9,6 +9,7 @@ import createRouteWithLambdaIntegration from './createRouteWithLambdaIntegration
 import createWebSocketApi from './createWebSocketApi'
 import deleteApiGatewayResource from './deleteApiGatewayResource'
 import deleteRestApi from './deleteRestApi'
+import deleteWebSocketApi from './deleteWebSocketApi'
 import getApi from './getApi'
 import getApiGatewayResource from './getApiGatewayResource'
 import getApiGatewayRootResource from './getApiGatewayRootResource'
@@ -27,6 +28,7 @@ export {
   createWebSocketApi,
   deleteApiGatewayResource,
   deleteRestApi,
+  deleteWebSocketApi,
   getApi,
   getApiGatewayResource,
   getApiGatewayRootResource,
