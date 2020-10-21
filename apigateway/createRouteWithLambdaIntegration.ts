@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 import Lambda from 'aws-sdk/clients/lambda'
 
@@ -14,7 +15,6 @@ const createRouteWithLambdaIntegration = async (
   params: {
     Region: string
     IntegrationId: string
-    StatementId: string
     ApiId: string
     RouteKey: string
     Path: string
@@ -23,7 +23,7 @@ const createRouteWithLambdaIntegration = async (
   },
   log: Log = getLog(`CREATE-ROUTE-WITH-LAMBDA-INTEGRATION`)
 ): Promise<void> => {
-  const { Region, IntegrationId, StatementId, ApiId, RouteKey, Path, LambdaArn, AccountId } = params
+  const { Region, IntegrationId, ApiId, RouteKey, Path, LambdaArn, AccountId } = params
 
   const agv2 = new ApiGatewayV2({ region: Region })
   const lambda = new Lambda({ region: Region })
@@ -44,7 +44,7 @@ const createRouteWithLambdaIntegration = async (
 
   await addPermission({
     FunctionName: LambdaArn,
-    StatementId,
+    StatementId: uuid(),
     Action: 'lambda:InvokeFunction',
     Principal: 'apigateway.amazonaws.com',
     SourceArn: buildExecuteApiArn(Region, AccountId, ApiId, Path)

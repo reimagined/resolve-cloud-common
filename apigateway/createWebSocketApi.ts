@@ -12,7 +12,6 @@ const createWebSocketApi = async (
     Region: string
     Stage: string
     Name: string
-    StatementId: string
     RouteSelectionExpression: string
     ApiStage: string
     LambdaArn: string
@@ -25,7 +24,6 @@ const createWebSocketApi = async (
     Region,
     Stage,
     Name,
-    StatementId,
     RouteSelectionExpression,
     ApiStage,
     LambdaArn,
@@ -58,7 +56,6 @@ const createWebSocketApi = async (
             Region,
             ApiId,
             IntegrationId,
-            StatementId,
             LambdaArn,
             AccountId,
             RouteKey: routeKey,
