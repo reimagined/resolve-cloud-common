@@ -1,4 +1,4 @@
-import S3 from 'aws-sdk/clients/s3'
+import S3, { CORSConfiguration } from 'aws-sdk/clients/s3'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -7,13 +7,14 @@ interface TMethod {
     params: {
       Region: string
       BucketName: string
+      CORSConfiguration?: CORSConfiguration
     },
     log?: Log
   ): Promise<void>
 }
 
 const putS3BucketCors: TMethod = async (
-  { Region, BucketName },
+  { Region, BucketName, CORSConfiguration: Config },
   log = getLog('PUT-S3-BUCKET-CORS')
 ) => {
   const s3 = new S3({ region: Region })
@@ -32,7 +33,7 @@ const putS3BucketCors: TMethod = async (
 
     await putBucketCors({
       Bucket: BucketName,
-      CORSConfiguration: {
+      CORSConfiguration: Config ?? {
         CORSRules: [
           {
             AllowedOrigins: ['*'],
