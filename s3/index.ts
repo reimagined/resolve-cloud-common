@@ -10,6 +10,7 @@ import getS3BucketNameByArn from './getS3BucketNameByArn'
 import getS3ObjectAsStream from './getS3ObjectAsStream'
 import listDirectory from './listDirectory'
 import listObjects from './listObjects'
+import putS3BucketAccelerateConfiguration from './putS3BucketAccelerateConfiguration'
 import putS3BucketCors from './putS3BucketCors'
 import putS3BucketLifecycle from './putS3BucketLifecycle'
 import putS3PublicAccessBlock from './putS3PublicAccessBlock'
@@ -29,6 +30,7 @@ export {
   getS3ObjectAsStream,
   listDirectory,
   listObjects,
+  putS3BucketAccelerateConfiguration,
   putS3BucketCors,
   putS3BucketLifecycle,
   putS3PublicAccessBlock,
