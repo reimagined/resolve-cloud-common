@@ -8,7 +8,7 @@ const filterLogEvents = async (
     LogGroupName: string
     StartTime?: number
     EndTime?: number
-    FilterPattern: string
+    FilterPattern?: string
     LogStreamNames?: Array<LogStreamName>
   },
   log: Log = getLog('FILTER-LOG-EVENTS')
