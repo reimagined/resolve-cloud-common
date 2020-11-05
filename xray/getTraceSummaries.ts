@@ -7,7 +7,7 @@ const getTraceSummaries = async (
     Region: string
     StartTime: Date
     EndTime: Date
-    FilterExpression: string
+    FilterExpression?: string
   },
   log: Log = getLog('GET-TRACE-SUMMARIES')
 ): Promise<TraceSummaryList> => {
