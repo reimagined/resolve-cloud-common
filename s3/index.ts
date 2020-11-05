@@ -16,6 +16,7 @@ import putS3BucketLifecycle from './putS3BucketLifecycle'
 import putS3PublicAccessBlock from './putS3PublicAccessBlock'
 import uploadPart from './uploadPart'
 import uploadS3Object from './uploadS3Object'
+import getMetadata from './getMetadata'
 
 export {
   completeMultipartUpload,
@@ -35,5 +36,6 @@ export {
   putS3BucketLifecycle,
   putS3PublicAccessBlock,
   uploadPart,
-  uploadS3Object
+  uploadS3Object,
+  getMetadata
 }
