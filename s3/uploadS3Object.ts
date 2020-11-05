@@ -1,5 +1,4 @@
-import S3 from 'aws-sdk/clients/s3'
-import { Writable } from 'stream'
+import S3, { Body as S3ObjectBody } from 'aws-sdk/clients/s3'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -8,7 +7,7 @@ async function uploadS3Object(
     Region: string
     BucketName: string
     FileKey: string
-    Body: Writable
+    Body: S3ObjectBody
     ContentType?: string
   },
   log: Log = getLog('UPLOAD-S3-OBJECT')
