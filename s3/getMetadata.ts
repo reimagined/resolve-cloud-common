@@ -8,7 +8,7 @@ async function getMetadata(
 ): Promise<Record<string, string>> {
   const { Region, BucketName, FileKey } = params
 
-  log.debug(`Get a file size for "${BucketName}"/$"{FileKey}"`)
+  log.debug(`Get a metadata for "${BucketName}"/$"{FileKey}"`)
 
   const s3 = new S3({
     region: Region
