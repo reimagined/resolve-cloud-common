@@ -15,6 +15,7 @@ import setFunctionConcurrency from './setFunctionConcurrency'
 import updateFunctionCode from './updateFunctionCode'
 import updateFunctionEnvironment from './updateFunctionEnvironment'
 import updateFunctionHandler from './updateFunctionHandler'
+import updateFunctionTracingMode from './updateFunctionTracingMode'
 
 export {
   addFunctionPermission,
@@ -33,5 +34,6 @@ export {
   setFunctionConcurrency,
   updateFunctionCode,
   updateFunctionEnvironment,
-  updateFunctionHandler
+  updateFunctionHandler,
+  updateFunctionTracingMode
 }
