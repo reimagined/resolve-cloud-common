@@ -9,10 +9,11 @@ async function uploadS3Object(
     FileKey: string
     Body: S3ObjectBody
     ContentType?: string
+    Metadata?: Record<string, string>
   },
   log: Log = getLog('UPLOAD-S3-OBJECT')
 ): Promise<void> {
-  const { Region, BucketName, FileKey, Body, ContentType } = params
+  const { Region, BucketName, FileKey, Body, ContentType, Metadata } = params
 
   const s3 = new S3({ region: Region })
 
@@ -29,7 +30,8 @@ async function uploadS3Object(
       Bucket: BucketName,
       Key: FileKey,
       Body,
-      ContentType
+      ContentType,
+      Metadata
     })
   } catch (error) {
     log.debug(`Failed to upload the S3 object "${FileKey}" to "${BucketName}"`)
