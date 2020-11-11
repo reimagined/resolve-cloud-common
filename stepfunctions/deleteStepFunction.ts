@@ -50,10 +50,10 @@ async function processPage(
 }
 
 const deleteStepFunction = async (
-  params: { Region: string; StepFunctionArn: string; IfExists?: boolean },
+  params: { Region: string; StepFunctionArn: string; IfExists?: boolean; SkipWait?: boolean },
   log: Log = getLog('DELETE-STATE-MACHINE')
 ): Promise<void> => {
-  const { Region, StepFunctionArn, IfExists } = params
+  const { Region, StepFunctionArn, IfExists, SkipWait = false } = params
 
   const stepFunctions = new StepFunctions({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
@@ -86,8 +86,14 @@ const deleteStepFunction = async (
     resourceArn: StepFunctionArn
   })
 
-  log.debug(`Enumerate and stop active executions`)
-  await processPage({ Region, StepFunctionArn }, log)
+  const { type } = await describeStateMachine({
+    stateMachineArn: StepFunctionArn
+  })
+
+  if (type === 'STANDARD') {
+    log.debug(`Enumerate and stop active executions`)
+    await processPage({ Region, StepFunctionArn }, log)
+  }
 
   try {
     log.debug(`Delete step function "${StepFunctionArn}"`)
@@ -95,16 +101,18 @@ const deleteStepFunction = async (
       stateMachineArn: StepFunctionArn
     })
 
-    log.debug('Wait for deleting')
-    for (;;) {
-      if (
-        (await describeStateMachine({
-          stateMachineArn: StepFunctionArn
-        }).catch(ignoreNotFoundException)) == null
-      ) {
-        break
+    if (!SkipWait) {
+      log.debug('Wait for deleting')
+      for (;;) {
+        if (
+          (await describeStateMachine({
+            stateMachineArn: StepFunctionArn
+          }).catch(ignoreNotFoundException)) == null
+        ) {
+          break
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000))
       }
-      await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
     try {
