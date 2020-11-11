@@ -4,12 +4,7 @@ import { retry, Options, getLog, Log } from '../utils'
 
 import setFunctionConcurrency from './setFunctionConcurrency'
 import deleteFunctionConcurrency from './deleteFunctionConcurrency'
-
-const LambdaDefaults = {
-  MEMORY_SIZE: 512,
-  TIMEOUT: 900,
-  RUNTIME: 'nodejs10.x'
-}
+import createFunction, { LambdaDefaults } from './createFunction'
 
 async function setupFunctionEventInvokeConfig(
   params: {
@@ -69,80 +64,6 @@ async function updateFunctionCode(
   }
 
   return Version
-}
-
-async function createFunction(
-  params: {
-    Region: string
-    FunctionName: string
-    Description?: string
-    Handler: string
-    RoleArn: string
-    S3Bucket?: string
-    S3Key?: string
-    ZipFile?: Buffer
-    Environment?: { Variables: Record<string, string> }
-    Tags: Record<string, string>
-    Runtime: string
-    Timeout: number
-    MemorySize: number
-    Layers?: Array<string>
-    Publish?: boolean
-  },
-  log: Log
-): Promise<{
-  FunctionArn: string
-  Version?: string
-}> {
-  const {
-    Region,
-    FunctionName,
-    Description,
-    Handler,
-    RoleArn,
-    S3Bucket,
-    S3Key,
-    ZipFile,
-    Environment,
-    Tags,
-    Runtime,
-    Timeout,
-    MemorySize,
-    Layers,
-    Publish
-  } = params
-
-  const lambda = new Lambda({ region: Region })
-
-  const addFunction = retry(lambda, lambda.createFunction, Options.Defaults.override({ log }))
-
-  const { FunctionArn, Version } = await addFunction({
-    FunctionName,
-    Handler,
-    Role: RoleArn,
-    Runtime,
-    Code: {
-      S3Bucket,
-      S3Key,
-      ZipFile
-    },
-    Timeout,
-    MemorySize,
-    Tags,
-    Description,
-    Environment,
-    Layers,
-    Publish
-  })
-
-  if (FunctionArn == null) {
-    throw new Error('Unknown function ARN')
-  }
-
-  return {
-    FunctionArn,
-    Version
-  }
 }
 
 async function listTags(
@@ -252,14 +173,6 @@ const ensureFunction = async (
   } = params
 
   const Tags = { ...RawTags, Owner: 'reimagined' }
-  const Environment = Variables
-    ? {
-        Variables: Object.keys(Variables).reduce((acc: Record<string, string>, key: string) => {
-          acc[key] = `${Variables[key]}`
-          return acc
-        }, {})
-      }
-    : undefined
 
   log.verbose({
     FunctionName,
@@ -333,7 +246,12 @@ const ensureFunction = async (
       Role: RoleArn,
       Runtime,
       Timeout,
-      Environment,
+      Environment:
+        Variables != null
+          ? {
+              Variables
+            }
+          : undefined,
       Layers
     })
 
@@ -426,7 +344,7 @@ const ensureFunction = async (
           S3Key,
           ZipFile,
           Region,
-          Environment,
+          Variables,
           Tags,
           Runtime,
           Timeout,
