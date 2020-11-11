@@ -62,13 +62,15 @@ const deleteS3Folder = async (
 
     maybeThrowErrors(errors)
 
-    log.debug(`The bucket "${BucketName}" has been deleted`)
+    log.debug(
+      `The folder "${FolderName}" with ${promises.length} objects in bucket "${BucketName}" has been deleted`
+    )
   } catch (error) {
     if (IfExists) {
-      log.error(`Skip delete the bucket "${BucketName}"`)
+      log.error(`Skip delete the folder "${FolderName}" in bucket "${BucketName}"`)
       ignoreNotFoundException(error)
     } else {
-      log.error(`Failed to delete the bucket "${BucketName}"`)
+      log.error(`Failed to delete the folder "${FolderName}" in bucket "${BucketName}"`)
       throw error
     }
   }
