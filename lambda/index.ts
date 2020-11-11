@@ -1,4 +1,5 @@
 import addFunctionPermission from './addFunctionPermission'
+import createFunction from './createFunction'
 import deleteFunction from './deleteFunction'
 import deleteFunctionConcurrency from './deleteFunctionConcurrency'
 import deleteFunctionPermission from './deleteFunctionPermission'
@@ -19,6 +20,7 @@ import updateFunctionTracingMode from './updateFunctionTracingMode'
 
 export {
   addFunctionPermission,
+  createFunction,
   deleteFunction,
   deleteFunctionConcurrency,
   deleteFunctionPermission,
