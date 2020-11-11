@@ -1,7 +1,6 @@
-import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
-import StepFunctions from 'aws-sdk/clients/stepfunctions'
+import getStepFunctionsByTags from './getStepFunctionsByTags'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { getLog, Log } from '../utils'
 
 const getStepFunctionByTags = async (
   params: {
@@ -15,56 +14,10 @@ const getStepFunctionByTags = async (
 } | null> => {
   const { Region, Tags } = params
 
-  const api = new TaggingAPI({ region: Region })
-  const stepFunctions = new StepFunctions({ region: Region })
-
-  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
-
-  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
-  const describeStateMachine = retry(
-    stepFunctions,
-    stepFunctions.describeStateMachine,
-    Options.Defaults.override({ log })
-  )
-
-  let resources: ResourceTagMappingList | undefined
-
-  try {
-    log.debug(`Find resources by tags`)
-    resources = (
-      await getResources({
-        ResourceTypeFilters: ['states'],
-        TagFilters
-      })
-    ).ResourceTagMappingList
-
-    log.debug(`Resources have been found`)
-  } catch (error) {
-    log.debug(`Failed to find resources by tags`)
-    throw error
-  }
-
-  if (resources == null) {
-    return null
-  }
-
-  const allResources = resources
-  resources = []
-  for (const resource of allResources) {
-    try {
-      if (
-        resource.ResourceARN != null &&
-        (await describeStateMachine({ stateMachineArn: resource.ResourceARN })) != null
-      ) {
-        resources.push(resource)
-      }
-    } catch (error) {
-      if (error != null && error.code === 'StateMachineDoesNotExist') {
-        continue
-      }
-      throw error
-    }
-  }
+  const resources = await getStepFunctionsByTags({
+    Region,
+    Tags
+  })
 
   if (resources.length === 0) {
     return null
@@ -75,20 +28,14 @@ const getStepFunctionByTags = async (
     throw new Error('Too Many Resources')
   }
 
-  const { ResourceARN, Tags: ResourceTagList = [] } = resources[0]
-  if (ResourceARN == null) {
-    return null
-  }
+  const { ResourceARN, Tags: ResourceTagList } = resources[0]
 
   log.verbose(ResourceARN)
   log.verbose(ResourceTagList)
 
   return {
     ResourceARN,
-    Tags: ResourceTagList.reduce((acc: Record<string, string>, { Key, Value }) => {
-      acc[Key] = Value
-      return acc
-    }, {})
+    Tags: ResourceTagList
   }
 }
 
