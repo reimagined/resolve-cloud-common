@@ -3,6 +3,7 @@ import createMultipartUpload from './createMultipartUpload'
 import createPresignedPost from './createPresignedPost'
 import createPresignedPut from './createPresignedPut'
 import deleteS3Bucket from './deleteS3Bucket'
+import deleteS3Folder from './deleteS3Folder'
 import ensureS3Bucket from './ensureS3Bucket'
 import getFileSize from './getFileSize'
 import getS3BucketByTags from './getS3BucketByTags'
@@ -24,6 +25,7 @@ export {
   createPresignedPost,
   createPresignedPut,
   deleteS3Bucket,
+  deleteS3Folder,
   ensureS3Bucket,
   getFileSize,
   getS3BucketByTags,
