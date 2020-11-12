@@ -116,7 +116,7 @@ describe('ensureFunction', () => {
       Role: 'roleArn',
       MemorySize: 512,
       Layers: undefined,
-      Runtime: 'nodejs10.x',
+      Runtime: 'nodejs12.x',
       Tags: {
         Owner: 'reimagined'
       },
