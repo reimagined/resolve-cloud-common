@@ -1,11 +1,11 @@
 import Lambda from 'aws-sdk/clients/lambda'
 
-import { Log, Options, retry } from '../utils'
+import { Log, Options, retry, getLog } from '../utils'
 
 export const LambdaDefaults = {
   MEMORY_SIZE: 512,
   TIMEOUT: 900,
-  RUNTIME: 'nodejs10.x'
+  RUNTIME: 'nodejs12.x'
 }
 
 async function createFunction(
@@ -26,7 +26,7 @@ async function createFunction(
     Layers?: Array<string>
     Publish?: boolean
   },
-  log: Log
+  log: Log = getLog('CREATE-FUNCTION')
 ): Promise<{
   FunctionArn: string
   Version?: string
