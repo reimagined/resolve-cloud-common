@@ -1,15 +1,16 @@
 import IAM, { Tag as RoleTag } from 'aws-sdk/clients/iam'
 
+import { createRole, putRolePolicy, getTags } from './createRoleWithPolicy'
 import { retry, Options, getLog, Log } from '../utils'
 
-async function updateAssumeRolePolicy(
+const updateAssumeRolePolicy = async (
   params: {
     Region: string
     RoleName: string
     PolicyDocument: Record<string, any>
   },
   log: Log
-): Promise<void> {
+): Promise<void> => {
   const { Region, RoleName, PolicyDocument } = params
 
   const iam = new IAM({ region: Region })
@@ -25,14 +26,14 @@ async function updateAssumeRolePolicy(
   })
 }
 
-async function updateRole(
+const updateRole = async (
   params: {
     Region: string
     RoleName: string
     Description?: string
   },
   log: Log
-): Promise<void> {
+): Promise<void> => {
   const { Region, RoleName, Description } = params
 
   const iam = new IAM({ region: Region })
@@ -44,41 +45,14 @@ async function updateRole(
   })
 }
 
-async function createRole(
-  params: {
-    Region: string
-    AssumeRolePolicyDocument: Record<string, any>
-    RoleName: string
-    Description?: string
-    Tags: Array<RoleTag>
-  },
-  log: Log
-): Promise<string> {
-  const { Region, AssumeRolePolicyDocument, RoleName, Description, Tags } = params
-
-  const iam = new IAM({ region: Region })
-
-  const addRole = retry(iam, iam.createRole, Options.Defaults.override({ log, maxAttempts: 1 }))
-  const {
-    Role: { Arn }
-  } = await addRole({
-    AssumeRolePolicyDocument: JSON.stringify(AssumeRolePolicyDocument),
-    RoleName,
-    Description,
-    Tags
-  })
-
-  return Arn
-}
-
-async function tagRole(
+const tagRole = async (
   params: {
     Region: string
     RoleName: string
     Tags: Array<{ Key: string; Value: string }>
   },
   log: Log
-): Promise<void> {
+): Promise<void> => {
   const { Region, RoleName, Tags } = params
 
   const iam = new IAM({ region: Region })
@@ -90,14 +64,14 @@ async function tagRole(
   })
 }
 
-async function untagRole(
+const untagRole = async (
   params: {
     Region: string
     RoleName: string
     TagKeys: Array<string>
   },
   log: Log
-): Promise<void> {
+): Promise<void> => {
   const { Region, RoleName, TagKeys } = params
 
   const iam = new IAM({ region: Region })
@@ -109,7 +83,7 @@ async function untagRole(
   })
 }
 
-async function ensureRole(
+const ensureRole = async (
   params: {
     Region: string
     AssumeRolePolicyDocument: Record<string, any>
@@ -118,7 +92,7 @@ async function ensureRole(
     Tags: Array<RoleTag>
   },
   log: Log
-): Promise<{ Arn: string; IsCreated: boolean }> {
+): Promise<{ Arn: string; IsCreated: boolean }> => {
   const { Region, AssumeRolePolicyDocument, RoleName, Description, Tags } = params
 
   try {
@@ -232,39 +206,14 @@ async function ensureRole(
   }
 }
 
-async function putRolePolicy(
-  params: {
-    Region: string
-    RoleName: string
-    PolicyName: string
-    PolicyDocument: Record<string, any>
-  },
-  log: Log
-): Promise<void> {
-  const { Region, RoleName, PolicyName, PolicyDocument } = params
-
-  const iam = new IAM({ region: Region })
-
-  const addRolePolicy = retry(
-    iam,
-    iam.putRolePolicy,
-    Options.Defaults.override({ log, maxAttempts: 1 })
-  )
-  await addRolePolicy({
-    RoleName,
-    PolicyName,
-    PolicyDocument: JSON.stringify(PolicyDocument)
-  })
-}
-
-async function deleteRolePolicy(
+const deleteRolePolicy = async (
   params: {
     Region: string
     RoleName: string
     PolicyName: string
   },
   log: Log
-): Promise<void> {
+): Promise<void> => {
   const { Region, RoleName, PolicyName } = params
 
   const iam = new IAM({ region: Region })
@@ -323,62 +272,46 @@ const listRolePolicies: ListRolePoliciesMethod = listRolePoliciesLoop.bind(
   listRolePoliciesLoop
 )
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      AssumeRolePolicyDocument: {
-        Version: string
-        Statement: Array<{
-          Action: string | Array<string>
-          Principal: {
-            Service: string | Array<string>
-            AWS?: string | Array<string>
-          }
-          Effect: 'Allow' | 'Deny'
-        }>
-      }
-      RoleName: string
-      PolicyName: string
-      PolicyDocument: {
-        Version: string
-        Statement: Array<{
-          Action: string | Array<string>
-          Resource: string | Array<string>
-          Effect: 'Allow' | 'Deny'
-        }>
-      }
-      Description?: string
-      Tags?: { [Key: string]: string }
-    },
-    log?: Log
-  ): Promise<string>
-}
-
-const ensureRoleWithPolicy: TMethod = async (
-  {
+const ensureRoleWithPolicy = async (
+  params: {
+    Region: string
+    AssumeRolePolicyDocument: {
+      Version: string
+      Statement: Array<{
+        Action: string | Array<string>
+        Principal: {
+          Service: string | Array<string>
+          AWS?: string | Array<string>
+        }
+        Effect: 'Allow' | 'Deny'
+      }>
+    }
+    RoleName: string
+    PolicyName: string
+    PolicyDocument: {
+      Version: string
+      Statement: Array<{
+        Action: string | Array<string>
+        Resource: string | Array<string>
+        Effect: 'Allow' | 'Deny'
+      }>
+    }
+    Description?: string
+    Tags?: { [Key: string]: string }
+  },
+  log = getLog('ENSURE-ROLE-WITH-POLICY')
+): Promise<string> => {
+  const {
     Region,
     AssumeRolePolicyDocument,
     RoleName,
     PolicyName,
     PolicyDocument,
     Description = '',
-    Tags: { ...RawTags } = {}
-  },
-  log = getLog('ENSURE-ROLE-WITH-POLICY')
-) => {
-  delete RawTags.Owner
+    Tags: RawTags = {}
+  } = params
 
-  const Tags = [
-    ...Array.from(Object.entries(RawTags)).map(([Key, Value]) => ({
-      Key,
-      Value
-    })),
-    {
-      Key: 'Owner',
-      Value: 'reimagined'
-    }
-  ]
+  const Tags = getTags(RawTags)
 
   log.verbose({
     Region,
