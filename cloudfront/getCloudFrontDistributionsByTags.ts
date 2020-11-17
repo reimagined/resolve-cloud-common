@@ -1,4 +1,4 @@
-import Cloudfront from 'aws-sdk/clients/cloudfront'
+import Cloudfront, { DistributionSummary } from 'aws-sdk/clients/cloudfront'
 import TaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -10,7 +10,7 @@ async function getResourcesByTags(
     Tags: Record<string, string>
   },
   log: Log
-): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
+): Promise<Record<string, Record<string, string>>> {
   const { Region, Tags } = params
 
   const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
@@ -19,7 +19,7 @@ async function getResourcesByTags(
 
   const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
 
-  const resources: Array<{ ResourceARN: string; Tags: Record<string, string> }> = []
+  const resources: Record<string, Record<string, string>> = {}
 
   try {
     log.debug(`Find resources by tags`)
@@ -40,13 +40,13 @@ async function getResourcesByTags(
 
       for (const { ResourceARN, Tags: ResourceTags = [] } of ResourceTagMappingList) {
         if (ResourceARN != null) {
-          resources.push({
-            ResourceARN,
-            Tags: ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
+          resources[ResourceARN] = ResourceTags.reduce(
+            (acc: Record<string, string>, { Key, Value }) => {
               acc[Key] = Value
               return acc
-            }, {})
-          })
+            },
+            {}
+          )
         }
       }
 
@@ -69,12 +69,12 @@ async function getResourcesByTags(
   return resources
 }
 
-async function getResourceArns(
+async function listResources(
   params: {
     Region: string
   },
   log: Log
-): Promise<Set<string>> {
+): Promise<Array<DistributionSummary>> {
   const { Region } = params
 
   const cloudFront = new Cloudfront({ region: Region })
@@ -85,7 +85,7 @@ async function getResourceArns(
     Options.Defaults.override({ log })
   )
 
-  const items: Array<string> = []
+  const items: Array<DistributionSummary> = []
 
   try {
     log.debug(`List distributions`)
@@ -99,7 +99,7 @@ async function getResourceArns(
         Marker
       })
 
-      items.push(...Items.map(({ ARN }) => ARN))
+      items.push(...Items)
 
       if (
         !IsTruncated ||
@@ -120,7 +120,7 @@ async function getResourceArns(
     throw error
   }
 
-  return new Set(items)
+  return items
 }
 
 async function getCloudFrontDistributionsByTags(
@@ -129,10 +129,17 @@ async function getCloudFrontDistributionsByTags(
     Tags: Record<string, string>
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTIONS-BY-TAGS')
-): Promise<Array<{ ResourceARN: string; Tags: Record<string, string> }>> {
+): Promise<
+  Array<
+    {
+      Tags: Record<string, string>
+      ResourceARN: string
+    } & Omit<DistributionSummary, 'ARN'>
+  >
+> {
   const { Tags, Region = DEFAULT_REGION } = params
 
-  const [resourcesByTags, listResources] = await Promise.all([
+  const [resourcesByTags, distributions] = await Promise.all([
     getResourcesByTags(
       {
         Tags,
@@ -140,10 +147,16 @@ async function getCloudFrontDistributionsByTags(
       },
       log
     ),
-    getResourceArns({ Region }, log)
+    listResources({ Region }, log)
   ])
 
-  const resources = resourcesByTags.filter(({ ResourceARN }) => listResources.has(ResourceARN))
+  const resources = distributions
+    .filter(({ ARN }) => resourcesByTags[ARN] != null)
+    .map(({ ARN: ResourceARN, ...other }) => ({
+      ...other,
+      ResourceARN,
+      Tags: resourcesByTags[ResourceARN]
+    }))
 
   log.verbose(resources)
 
