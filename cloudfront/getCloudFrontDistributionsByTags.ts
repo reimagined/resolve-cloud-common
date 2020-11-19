@@ -130,12 +130,10 @@ async function getCloudFrontDistributionsByTags(
   },
   log: Log = getLog('GET-CLOUD-FRONT-DISTRIBUTIONS-BY-TAGS')
 ): Promise<
-  Array<
-    {
-      Tags: Record<string, string>
-      ResourceARN: string
-    } & Omit<DistributionSummary, 'ARN'>
-  >
+  Array<{
+    Tags: Record<string, string>
+    Distribution: DistributionSummary
+  }>
 > {
   const { Tags, Region = DEFAULT_REGION } = params
 
@@ -152,10 +150,9 @@ async function getCloudFrontDistributionsByTags(
 
   const resources = distributions
     .filter(({ ARN }) => resourcesByTags[ARN] != null)
-    .map(({ ARN: ResourceARN, ...other }) => ({
-      ...other,
-      ResourceARN,
-      Tags: resourcesByTags[ResourceARN]
+    .map((Distribution) => ({
+      Distribution,
+      Tags: resourcesByTags[Distribution.ARN]
     }))
 
   log.verbose(resources)
