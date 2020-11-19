@@ -9,16 +9,16 @@ const trimString = (input: string, maxLength: number): string => {
 
   return input.length > maxLength
     ? `${input.slice(
-      0,
-      MAX_METRICS_DIMENSION_VALUE_LENGTH - trimmedStringEnd.length
-    )}${trimmedStringEnd}`
+        0,
+        MAX_METRICS_DIMENSION_VALUE_LENGTH - trimmedStringEnd.length
+      )}${trimmedStringEnd}`
     : input
 }
 
 export const putMetricData = async (
   params: {
-    Message: string,
-    Resource: string,
+    Message: string
+    Resource: string
     MetricName: 'Errors' | 'Warnings'
   },
   log: Log = getLog('PUT-METRIC-DATA')
@@ -41,13 +41,13 @@ export const putMetricData = async (
           Dimensions: [
             {
               Name: 'Resource',
-              Value: params.Resource,
+              Value: params.Resource
             },
             {
               Name: 'Message',
-              Value: message,
-            },
-          ],
+              Value: message
+            }
+          ]
         },
         {
           MetricName: params.MetricName,
@@ -57,17 +57,17 @@ export const putMetricData = async (
           Dimensions: [
             {
               Name: 'Resource',
-              Value: params.Resource,
-            },
-          ],
+              Value: params.Resource
+            }
+          ]
         },
         {
           MetricName: params.MetricName,
           Timestamp: now,
           Unit: 'Count',
           Value: 1
-        },
-      ],
+        }
+      ]
     })
   } catch (e) {
     log.error(e)
