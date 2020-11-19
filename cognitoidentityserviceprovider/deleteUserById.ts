@@ -1,6 +1,6 @@
 import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, isNotFoundException } from '../utils'
 import { ADMIN_GROUP_NAME } from './constants'
 import getUserById from './getUserById'
 
@@ -54,7 +54,7 @@ const deleteUserById = async (
       Username: UserId
     })
   } catch (error) {
-    if (!(IfExists && error != null && error.code === 'UserNotFoundException')) {
+    if (!(IfExists && isNotFoundException(error))) {
       throw error
     }
   }

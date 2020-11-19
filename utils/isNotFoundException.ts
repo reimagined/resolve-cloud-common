@@ -13,6 +13,7 @@ export function isNotFoundException(error?: Error & { code: string }): boolean {
       error.code === 'NoSuchLifecycleConfiguration' ||
       error.code === 'NoSuchUpload' ||
       error.code === 'NoSuchVersion' ||
+      error.code === 'UserNotFoundException' ||
       (error.code === 'InvalidParameterValueException' &&
         error.message.includes('S3 Error Code: PermanentRedirect')) ||
       (error.code === 'InvalidChangeBatch' && error.message.includes('was not found')))
