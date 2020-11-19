@@ -1,7 +1,10 @@
-import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import CognitoIdentityServiceProvider, {
+  AdminCreateUserResponse
+} from 'aws-sdk/clients/cognitoidentityserviceprovider'
 
+import getUserByEmail from './getUserByEmail'
 import { ADMIN_GROUP_NAME, CognitoUser } from './constants'
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, isAlreadyExistsException } from '../utils'
 
 const createUser = async (
   params: {
@@ -16,6 +19,7 @@ const createUser = async (
     UserAttributes?: Array<{ Name: string; Value: string }>
     ValidationData?: Array<{ Name: string; Value: string }>
     IsAdmin?: boolean
+    IfNotExists?: boolean
   },
   log: Log = getLog('CREATE_USER')
 ): Promise<CognitoUser> => {
@@ -30,7 +34,8 @@ const createUser = async (
     TemporaryPassword,
     UserAttributes,
     ValidationData,
-    IsAdmin = false
+    IsAdmin = false,
+    IfNotExists = false
   } = params
   const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider({ region: Region })
 
@@ -51,17 +56,34 @@ const createUser = async (
     throw new Error(`Invalid UserPoolArn "${UserPoolArn}"`)
   }
 
-  const createUserResult = await adminCreateUserExecutor({
-    UserPoolId,
-    Username: Email,
-    ClientMetadata,
-    DesiredDeliveryMediums,
-    ForceAliasCreation,
-    MessageAction,
-    TemporaryPassword,
-    UserAttributes,
-    ValidationData
-  })
+  let createUserResult: AdminCreateUserResponse
+
+  try {
+    createUserResult = await adminCreateUserExecutor({
+      UserPoolId,
+      Username: Email,
+      ClientMetadata,
+      DesiredDeliveryMediums,
+      ForceAliasCreation,
+      MessageAction,
+      TemporaryPassword,
+      UserAttributes,
+      ValidationData
+    })
+  } catch (error) {
+    if (IfNotExists && isAlreadyExistsException(error)) {
+      return getUserByEmail(
+        {
+          Region,
+          UserPoolArn,
+          Email
+        },
+        log
+      )
+    } else {
+      throw error
+    }
+  }
 
   if (createUserResult == null || createUserResult.User == null) {
     throw new Error(`Failed to create user`)

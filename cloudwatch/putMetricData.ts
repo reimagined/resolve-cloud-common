@@ -22,7 +22,7 @@ export const putMetricData = async (
     MetricName: 'Errors' | 'Warnings'
   },
   log: Log = getLog('PUT-METRIC-DATA')
-) => {
+): Promise<void> => {
   const cw = new CloudWatch()
 
   try {
