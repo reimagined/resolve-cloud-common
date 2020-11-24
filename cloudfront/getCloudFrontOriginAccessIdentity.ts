@@ -1,6 +1,7 @@
+import CloudFront from 'aws-sdk/clients/cloudfront'
 import listCloudFrontOriginAccessIdentities from './listCloudFrontOriginAccessIdentities'
 
-import { Log, getLog } from '../utils'
+import { Log, getLog, retry, Options } from '../utils'
 import { DEFAULT_REGION } from './constants'
 
 const getCloudFrontOriginAccessIdentity = async (
@@ -12,10 +13,18 @@ const getCloudFrontOriginAccessIdentity = async (
 ): Promise<{
   Id: string
   S3CanonicalUserId: string
+  ETag: string | undefined
 }> => {
   const { Region = DEFAULT_REGION, Comment } = params
+  const cloudFront = new CloudFront({ region: Region })
 
   let Marker: string | undefined
+
+  const getCloudFrontOriginAccessIdentityExecutor = retry(
+    cloudFront,
+    cloudFront.getCloudFrontOriginAccessIdentity,
+    Options.Defaults.override({ maxAttempts: 5, delay: 1000, log })
+  )
 
   try {
     log.debug('Get list of cloud front origin access identities')
@@ -38,10 +47,13 @@ const getCloudFrontOriginAccessIdentity = async (
 
       if (identity != null) {
         log.debug('Identity successfully found')
-
+        const { ETag } = await getCloudFrontOriginAccessIdentityExecutor({
+          Id: identity.Id
+        })
         return {
           Id: identity.Id,
-          S3CanonicalUserId: identity.S3CanonicalUserId
+          S3CanonicalUserId: identity.S3CanonicalUserId,
+          ETag
         }
       }
 
