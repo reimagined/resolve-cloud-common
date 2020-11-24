@@ -5,6 +5,7 @@ const toleratedErrors: Array<string> = [
   'LimitExceededException',
   'RequestLimitExceeded',
   'ThrottlingException',
+  'Throttling',
   'TooManyRequestsException',
   'NetworkingError'
 ]
@@ -75,7 +76,7 @@ export function retry<Callback extends (...args: any) => any>(
     const callback = callable.bind(client)
     let lastError: Error | undefined
 
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    for (let attempt = 0; attempt < maxAttempts; ) {
       try {
         return await callback(params).promise()
       } catch (error) {
@@ -83,17 +84,16 @@ export function retry<Callback extends (...args: any) => any>(
           throw error
         }
 
-        const nextAttempt =
-          attempt +
-          (error != null && error.code != null && toleratedErrors.includes(error.code) ? 0 : 1)
+        attempt +=
+          error != null && error.code != null && toleratedErrors.includes(error.code) ? 0 : 1
 
-        if (nextAttempt > attempt) {
+        if (attempt !== maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, delay))
         }
 
         if (!silent) {
           log.debug(
-            `${callable.name} invocation attempt [${nextAttempt}/${maxAttempts}], last error ${error.message}`
+            `${callable.name} invocation attempt [${attempt}/${maxAttempts}], last error ${error.message}`
           )
         }
 
