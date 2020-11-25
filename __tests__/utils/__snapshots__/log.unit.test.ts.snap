@@ -3,249 +3,249 @@
 exports[`log should not write to scope "test-scope" 1`] = `""`;
 
 exports[`log should write to scope "resolve:*" (log,error,warn,debug,info,verbose) (resolve:*) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+"  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 "
 `;
 
 exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+"  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 "
 `;
 
 exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+"  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 "
 `;
 
 exports[`log with correlationId should not write to scope "test-scope" 1`] = `""`;
 
 exports[`log with correlationId should write to scope "resolve:*" (log,error,warn,debug,info,verbose) (resolve:*) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+"  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> test text
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> test text [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> 42
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> 42 [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:storage undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;57;1mresolve:storage [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;57m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> test text
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> test text [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> 42
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> 42 [38;5;178m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:bus undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;178;1mresolve:bus [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;178m+0ms[0m
 "
 `;
 
 exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+"  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 "
 `;
 
 exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
-"1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+"  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> test text
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> test text [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> 42
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> 42 [38;5;198m+0ms[0m
 
-1970-01-01T00:00:00.000Z resolve:cloud:lambda:environment:my-test undefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
+  [38;5;198;1mresolve:cloud:lambda:environment:my-test [0mundefined <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} [38;5;198m+0ms[0m
 "
 `;

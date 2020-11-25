@@ -35,10 +35,6 @@ const deleteCloudFrontDistributionTags = async (
       Id
     })
 
-    if (Distribution == null) {
-      throw new Error(`Cloudfront distribution with "${Id}" id not found`)
-    }
-
     await untagResource({
       Resource: Distribution.ARN,
       TagKeys: {
