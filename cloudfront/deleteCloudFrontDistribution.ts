@@ -19,43 +19,32 @@ const deleteCloudFrontDistribution = async (
   const cloudFront = new CloudFront({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
 
+  const deleteDistribution = retry(
+    cloudFront,
+    cloudFront.deleteDistribution,
+    Options.Defaults.override({
+      maxAttempts: 5,
+      delay: 1000,
+      log
+    })
+  )
+
+  const untagResources = retry(
+    taggingAPI,
+    taggingAPI.untagResources,
+    Options.Defaults.override({
+      maxAttempts: 5,
+      delay: 1000,
+      log
+    })
+  )
+
   try {
     log.debug('Delete cloud front distribution')
 
-    const deleteDistribution = retry(
-      cloudFront,
-      cloudFront.deleteDistribution,
-      Options.Defaults.override({
-        maxAttempts: 5,
-        delay: 1000,
-        log
-      })
-    )
-    const listTagsForResource = retry(
-      cloudFront,
-      cloudFront.listTagsForResource,
-      Options.Defaults.override({
-        maxAttempts: 5,
-        delay: 1000,
-        log
-      })
-    )
+    const { Distribution, Tags } = await getCloudFrontDistributionById({ Region, Id })
 
-    const untagResources = retry(
-      taggingAPI,
-      taggingAPI.untagResources,
-      Options.Defaults.override({
-        maxAttempts: 5,
-        delay: 1000,
-        log
-      })
-    )
-
-    const { Distribution: { ARN } = {} } = await getCloudFrontDistributionById({ Region, Id })
-    if (ARN == null) {
-      throw new Error(`CloudFront distribution ARN Not found for ID=${Id}`)
-    }
-    const { Tags: TagsWithItems } = await listTagsForResource({ Resource: ARN })
+    const TagKeys = Object.keys(Tags)
 
     await deleteDistribution({
       Id,
@@ -63,19 +52,15 @@ const deleteCloudFrontDistribution = async (
     })
 
     try {
-      if (TagsWithItems != null && TagsWithItems.Items != null) {
-        const TagKeys = TagsWithItems.Items.map(({ Key }) => Key)
-
-        if (TagKeys.length > 0) {
-          await untagResources({
-            ResourceARNList: [ARN],
-            TagKeys
-          })
-        }
-
-        log.debug(`Cloud front distribution tags has been deleted`)
-        log.verbose({ TagKeys })
+      if (TagKeys.length > 0) {
+        await untagResources({
+          ResourceARNList: [Distribution.ARN],
+          TagKeys
+        })
       }
+
+      log.debug(`Cloud front distribution tags has been deleted`)
+      log.verbose({ TagKeys })
     } catch (error) {
       log.warn(error)
     }

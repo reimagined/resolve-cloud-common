@@ -19,7 +19,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn
+          yarn install --frozen-lock
           yarn prepare
 
       - name: Lint
@@ -32,6 +32,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
         run: |
-          yarn
+          yarn install --frozen-lock
           yarn prepare
           npm publish --access=public
