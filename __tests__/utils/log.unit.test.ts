@@ -13,10 +13,10 @@ const prettify = ({ mock }: any): any =>
     .replace(/\+\d+ms/gi, '')
     // eslint-disable-next-line no-control-regex
     .replace(/[^m]+m/g, '')
+    .replace(/ +/g, '')
     .replace(/\n /g, '\n')
     .replace(/ \n/g, '\n')
     .replace(/^ /g, '')
-    .replace(/ {2}/g, '')
 
 const writeTestLogs = (log: any): any => {
   const largeObject = {
