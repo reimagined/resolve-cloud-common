@@ -5,14 +5,16 @@ export interface Chalk {
   red: any
 }
 
+const fn = (str: string): string => str
+
 const chalk: Chalk = {
-  white: jest.fn(),
+  white: fn,
   yellow: {
-    inverse: jest.fn()
+    inverse: fn
   },
-  green: jest.fn(),
+  green: fn,
   red: {
-    inverse: jest.fn()
+    inverse: fn
   }
 }
 

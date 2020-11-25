@@ -7,12 +7,17 @@ import {
 
 const prettify = ({ mock }: any): any =>
   mock.calls
+    .map((str: string) => `${str}`.trim())
     .join('\n')
     .replace(
       /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/gi,
-      new Date(0).toISOString()
+      ''
     )
-    .replace(/\+\d+ms/gi, '+0ms')
+    .replace(/\+\d+ms/gi, '')
+    .replace(/[^m]+m/g, '')
+    .replace(/\n /g, '\n')
+    .replace(/^ /g, '')
+    .replace(/  /g, '')
 
 const writeTestLogs = (log: any): any => {
   const largeObject = {
