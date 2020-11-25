@@ -38,7 +38,7 @@ resolve:bus INFO <no-correlation-id> 42
 resolve:bus INFO <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:bus VERBOSE <no-correlation-id> test text
 resolve:bus VERBOSE <no-correlation-id> 42
-resolve:bus VERBOSE <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:bus VERBOSE <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
 
 exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
@@ -47,7 +47,7 @@ resolve:cloud:lambda:environment:my-test LOG <no-correlation-id> 42
 resolve:cloud:lambda:environment:my-test LOG <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:cloud:lambda:environment:my-test ERROR <no-correlation-id> test text
 resolve:cloud:lambda:environment:my-test ERROR <no-correlation-id> 42
-resolve:cloud:lambda:environment:my-test ERROR <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:cloud:lambda:environment:my-test ERROR <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
 
 exports[`log should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
@@ -65,7 +65,7 @@ resolve:cloud:lambda:environment:my-test DEBUG <no-correlation-id> 42
 resolve:cloud:lambda:environment:my-test DEBUG <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:cloud:lambda:environment:my-test INFO <no-correlation-id> test text
 resolve:cloud:lambda:environment:my-test INFO <no-correlation-id> 42
-resolve:cloud:lambda:environment:my-test INFO <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:cloud:lambda:environment:my-test INFO <no-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
 
 exports[`log with correlationId should not write to scope "test-scope" 1`] = `""`;
@@ -106,7 +106,7 @@ resolve:bus INFO <test-correlation-id> 42
 resolve:bus INFO <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:bus VERBOSE <test-correlation-id> test text
 resolve:bus VERBOSE <test-correlation-id> 42
-resolve:bus VERBOSE <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:bus VERBOSE <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
 
 exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error) 1`] = `
@@ -115,7 +115,7 @@ resolve:cloud:lambda:environment:my-test LOG <test-correlation-id> 42
 resolve:cloud:lambda:environment:my-test LOG <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:cloud:lambda:environment:my-test ERROR <test-correlation-id> test text
 resolve:cloud:lambda:environment:my-test ERROR <test-correlation-id> 42
-resolve:cloud:lambda:environment:my-test ERROR <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:cloud:lambda:environment:my-test ERROR <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
 
 exports[`log with correlationId should write to scope "resolve:cloud:lambda:environment:my-test" (log,error,warn,debug,info) 1`] = `
@@ -133,5 +133,5 @@ resolve:cloud:lambda:environment:my-test DEBUG <test-correlation-id> 42
 resolve:cloud:lambda:environment:my-test DEBUG <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}
 resolve:cloud:lambda:environment:my-test INFO <test-correlation-id> test text
 resolve:cloud:lambda:environment:my-test INFO <test-correlation-id> 42
-resolve:cloud:lambda:environment:my-test INFO <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}} "
+resolve:cloud:lambda:environment:my-test INFO <test-correlation-id> {\\"a\\":{\\"b\\":{\\"c\\":{\\"arr\\":[1,2,3,4,5,6,7,8,{\\"a\\":{\\"b\\":{\\"c\\":true}}}]}}}}"
 `;
