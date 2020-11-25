@@ -14,6 +14,7 @@ const prettify = ({ mock }: any): any =>
     // eslint-disable-next-line no-control-regex
     .replace(/[^m]+m/g, '')
     .replace(/\n /g, '\n')
+    .replace(/ \n/g, '\n')
     .replace(/^ /g, '')
     .replace(/ {2}/g, '')
 
