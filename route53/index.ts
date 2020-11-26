@@ -1,12 +1,12 @@
-import createRoute53Record from './createRoute53Record'
-import deleteRoute53Record from './deleteRoute53Record'
+import ensureRoute53Records from './ensureRoute53Records'
+import deleteRoute53Records from './deleteRoute53Records'
 import getRoute53Record from './getRoute53Record'
 import listHostedZones from './listHostedZones'
 import listRoute53Records from './listRoute53Records'
 
 export {
-  createRoute53Record,
-  deleteRoute53Record,
+  ensureRoute53Records,
+  deleteRoute53Records,
   getRoute53Record,
   listHostedZones,
   listRoute53Records

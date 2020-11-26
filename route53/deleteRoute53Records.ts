@@ -1,19 +1,18 @@
 import Route53 from 'aws-sdk/clients/route53'
 
+import listRoute53Records from './listRoute53Records'
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-const deleteRoute53Record = async (
+const deleteRoute53Records = async (
   params: {
     HostedZoneId: string
     AliasHostedZoneId: string
-    RecordName: string
-    RecordType: string
-    DNSName: string
+    Records: Array<{ RecordName: string; RecordType: string }>
     IfExists?: boolean
   },
-  log: Log = getLog('DELETE-ROUTE-53-RECORD')
+  log: Log = getLog('DELETE-ROUTE-53-RECORDS')
 ): Promise<void> => {
-  const { HostedZoneId, AliasHostedZoneId, RecordName, RecordType, DNSName, IfExists } = params
+  const { HostedZoneId, AliasHostedZoneId, Records, IfExists } = params
 
   const route53 = new Route53()
 
@@ -30,11 +29,19 @@ const deleteRoute53Record = async (
   try {
     log.debug(`Change resource record sets for "${HostedZoneId}" zone id`)
 
+    const listRecords = await listRoute53Records({ HostedZoneId })
+
     await changeResourceRecordSets({
       HostedZoneId,
       ChangeBatch: {
-        Changes: [
-          {
+        Changes: listRecords
+          .filter(({ RecordType: foundRecordType, RecordName: foundRecordName }) =>
+            Records.find(
+              ({ RecordType, RecordName }) =>
+                foundRecordName === RecordName && foundRecordType === RecordType
+            )
+          )
+          .map(({ RecordType, RecordName, DNSName }) => ({
             Action: 'DELETE',
             ResourceRecordSet: {
               AliasTarget: {
@@ -45,8 +52,7 @@ const deleteRoute53Record = async (
               Name: RecordName,
               Type: RecordType
             }
-          }
-        ]
+          }))
       }
     })
 
@@ -62,4 +68,4 @@ const deleteRoute53Record = async (
   }
 }
 
-export default deleteRoute53Record
+export default deleteRoute53Records
