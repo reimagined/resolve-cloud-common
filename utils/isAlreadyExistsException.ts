@@ -6,6 +6,7 @@ export function isAlreadyExistsException(error?: Error & { code: string }): bool
       error.code === 'EntityAlreadyExists' ||
       error.code === 'BucketAlreadyExists' ||
       error.code === 'UsernameExistsException' ||
-      error.code === 'StateMachineAlreadyExists')
+      error.code === 'StateMachineAlreadyExists' ||
+      (error.code === 'InvalidChangeBatch' && error.message?.includes('already exists')))
   )
 }

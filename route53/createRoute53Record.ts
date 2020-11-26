@@ -1,6 +1,6 @@
 import Route53 from 'aws-sdk/clients/route53'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, isAlreadyExistsException } from '../utils'
 
 const createRoute53Record = async (
   params: {
@@ -9,10 +9,11 @@ const createRoute53Record = async (
     RecordName: string
     RecordType: string
     DNSName: string
+    IfNotExists?: boolean
   },
   log: Log = getLog('CREATE-ROUTE-53-RECORD')
 ): Promise<void> => {
-  const { HostedZoneId, AliasHostedZoneId, RecordName, RecordType, DNSName } = params
+  const { HostedZoneId, AliasHostedZoneId, RecordName, RecordType, DNSName, IfNotExists } = params
 
   const route53 = new Route53()
 
@@ -50,8 +51,10 @@ const createRoute53Record = async (
 
     log.debug('Change resource record sets')
   } catch (error) {
-    log.error('Resource record sets change failed')
-    throw error
+    if (!IfNotExists || !isAlreadyExistsException(error)) {
+      log.error('Resource record sets change failed')
+      throw error
+    }
   }
 }
 
