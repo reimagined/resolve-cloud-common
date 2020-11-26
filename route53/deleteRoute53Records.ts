@@ -31,30 +31,34 @@ const deleteRoute53Records = async (
 
     const listRecords = await listRoute53Records({ HostedZoneId })
 
-    await changeResourceRecordSets({
-      HostedZoneId,
-      ChangeBatch: {
-        Changes: listRecords
-          .filter(({ RecordType: foundRecordType, RecordName: foundRecordName }) =>
-            Records.find(
-              ({ RecordType, RecordName }) =>
-                foundRecordName === RecordName && foundRecordType === RecordType
-            )
-          )
-          .map(({ RecordType, RecordName, DNSName }) => ({
-            Action: 'DELETE',
-            ResourceRecordSet: {
-              AliasTarget: {
-                DNSName,
-                EvaluateTargetHealth: false,
-                HostedZoneId: AliasHostedZoneId
-              },
-              Name: RecordName,
-              Type: RecordType
-            }
-          }))
-      }
-    })
+    const Changes = listRecords
+      .filter(({ RecordType: foundRecordType, RecordName: foundRecordName }) =>
+        Records.find(
+          ({ RecordType, RecordName }) =>
+            foundRecordName === RecordName && foundRecordType === RecordType
+        )
+      )
+      .map(({ RecordType, RecordName, DNSName }) => ({
+        Action: 'DELETE',
+        ResourceRecordSet: {
+          AliasTarget: {
+            DNSName,
+            EvaluateTargetHealth: false,
+            HostedZoneId: AliasHostedZoneId
+          },
+          Name: RecordName,
+          Type: RecordType
+        }
+      }))
+
+    if (Changes.length > 0) {
+      await changeResourceRecordSets({
+        HostedZoneId,
+        ChangeBatch: {
+          Changes
+        }
+      })
+    }
 
     log.debug('Change resource record sets')
   } catch (error) {
