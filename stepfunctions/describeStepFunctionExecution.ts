@@ -1,21 +1,18 @@
-import StepFunctions, { ExecutionStatus } from 'aws-sdk/clients/stepfunctions'
+import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      ExecutionArn: string
-    },
-    log?: Log
-  ): Promise<ExecutionStatus>
-}
-
-const describeStepFunctionExecution: TMethod = async (
-  { Region, ExecutionArn },
+const describeStepFunctionExecution = async (
+  params: {
+    Region: string
+    ExecutionArn: string
+  },
   log = getLog('DESCRIBE-STEP-FUNCTION-EXECUTION')
-) => {
+): Promise<{
+  Status: string
+  Output: Record<string, any> | null
+}> => {
+  const { Region, ExecutionArn } = params
   const stepFunctions = new StepFunctions({ region: Region })
 
   const describeExecution = retry(
@@ -26,11 +23,14 @@ const describeStepFunctionExecution: TMethod = async (
 
   try {
     log.debug(`Describe the execution "${ExecutionArn}" status`)
-    const { status: executionStatus } = await describeExecution({
+    const { status: executionStatus, output: executionOutput } = await describeExecution({
       executionArn: ExecutionArn
     })
     log.debug(`The execution "${ExecutionArn}" status = "${executionStatus}"`)
-    return executionStatus
+    return {
+      Status: executionStatus,
+      Output: executionOutput != null ? JSON.parse(executionOutput) : null
+    }
   } catch (error) {
     log.debug(`Failed to describe the execution "${ExecutionArn}" status`)
     throw error
