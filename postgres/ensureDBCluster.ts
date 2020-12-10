@@ -1,4 +1,7 @@
-import RDS, { DBCluster } from 'aws-sdk/clients/rds'
+import RDS, {
+  DBCluster,
+  ScalingConfiguration as ScalingConfigurationType
+} from 'aws-sdk/clients/rds'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -10,6 +13,7 @@ const ensureDBCluster = async (
     MasterUserPassword: string
     MinCapacity?: number
     MaxCapacity?: number
+    SecondsUntilAutoPause?: number | null
     Tags?: Record<string, string>
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
@@ -21,6 +25,7 @@ const ensureDBCluster = async (
     MasterUserPassword,
     MinCapacity,
     MaxCapacity,
+    SecondsUntilAutoPause,
     Tags = {}
   } = params
 
@@ -62,6 +67,16 @@ const ensureDBCluster = async (
     }
   }
 
+  const ScalingConfiguration: ScalingConfigurationType = {
+    MinCapacity,
+    MaxCapacity
+  }
+
+  if (SecondsUntilAutoPause != null) {
+    ScalingConfiguration.AutoPause = true
+    ScalingConfiguration.SecondsUntilAutoPause = SecondsUntilAutoPause
+  }
+
   try {
     const createResult = await createDBClusterExecutor({
       DBClusterIdentifier,
@@ -70,12 +85,7 @@ const ensureDBCluster = async (
       Engine: 'aurora-postgresql',
       EngineVersion: '10.7',
       EngineMode: 'serverless',
-      ScalingConfiguration: {
-        AutoPause: true,
-        SecondsUntilAutoPause: 300,
-        MinCapacity,
-        MaxCapacity
-      },
+      ScalingConfiguration,
       StorageEncrypted: true,
       EnableHttpEndpoint: true,
       Tags: Object.entries(Tags).map(([Key, Value]) => ({ Key, Value }))
