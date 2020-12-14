@@ -75,6 +75,8 @@ const ensureDBCluster = async (
   if (SecondsUntilAutoPause != null) {
     ScalingConfiguration.AutoPause = true
     ScalingConfiguration.SecondsUntilAutoPause = SecondsUntilAutoPause
+  } else {
+    ScalingConfiguration.AutoPause = false
   }
 
   try {
