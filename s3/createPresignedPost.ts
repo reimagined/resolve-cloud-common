@@ -36,6 +36,8 @@ function getConditions(params: {
     } else {
       Conditions.push(['eq', '$Content-Type', ContentType])
     }
+  } else {
+    Conditions.push(['starts-with', '$Content-Type', ''])
   }
   if (Metadata != null) {
     for (const [key, value] of Object.entries(Metadata)) {

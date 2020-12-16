@@ -26,6 +26,7 @@ describe('createPresignedPost', () => {
 
     expect(mockS3.createPresignedPost).toHaveBeenCalledWith({
       Bucket: 'bucket',
+      Conditions: [['starts-with', '$Content-Type', '']],
       Fields: {
         Key: 'key'
       }
@@ -53,6 +54,7 @@ describe('createPresignedPost', () => {
       Fields: {
         Key: 'key'
       },
+      Conditions: [['starts-with', '$Content-Type', '']],
       Expires: 60
     })
   })
@@ -132,6 +134,7 @@ describe('createPresignedPost', () => {
         Key: 'key'
       },
       Conditions: [
+        ['starts-with', '$Content-Type', ''],
         ['eq', '$x-amz-meta-userId', 'userId'],
         ['eq', '$x-amz-meta-deploymentId', 'deploymentId']
       ]
