@@ -4,7 +4,7 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-async function invokeFunction<Response extends Record<string, any> | null>(
+async function invokeFunction<Response extends any>(
   params: {
     Region: string
     FunctionName: string
