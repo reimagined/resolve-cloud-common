@@ -97,7 +97,17 @@ async function getResourcesByList(
       log.debug(`Get resources by Marker = ${NextToken ?? '<none>'}`)
       const { CertificateSummaryList, NextToken: FollowingNextToken } = await listCertificates({
         MaxItems: 50,
-        NextToken
+        NextToken,
+        Includes: {
+          keyTypes: [
+            'RSA_1024',
+            'RSA_2048',
+            'RSA_4096',
+            'EC_prime256v1',
+            'EC_secp384r1',
+            'EC_secp521r1'
+          ]
+        }
       })
 
       if (CertificateSummaryList != null) {
