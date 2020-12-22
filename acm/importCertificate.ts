@@ -36,7 +36,7 @@ const importCertificate = async (
 
     const keySize = new NodeRSA(PrivateKey).getKeySize()
 
-    if (keySize > 4096) {
+    if (keySize !== 1024 && keySize !== 2048) {
       throw new Error('Public key length must be 1024 bits or 2048 bits')
     }
 
