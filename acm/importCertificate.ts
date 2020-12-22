@@ -1,4 +1,5 @@
 import ACM from 'aws-sdk/clients/acm'
+import NodeRSA from 'node-rsa'
 
 import { retry, Options, getLog, Log, NotFoundError } from '../utils'
 
@@ -32,6 +33,12 @@ const importCertificate = async (
       acm.addTagsToCertificate,
       Options.Defaults.override({ log })
     )
+
+    const keySize = new NodeRSA(PrivateKey).getKeySize()
+
+    if (keySize !== 1024 && keySize !== 2048) {
+      throw new Error('Public key length must be 1024 bits or 2048 bits')
+    }
 
     const { CertificateArn: ImportedCertificateArn } = await importCertificateExecutor({
       Certificate,
