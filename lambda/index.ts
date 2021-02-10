@@ -11,6 +11,7 @@ import getFunctionsByTags from './getFunctionsByTags'
 import getFunctionConcurrency from './getFunctionConcurrency'
 import getFunctionConfiguration from './getFunctionConfiguration'
 import getFunctionRole from './getFunctionRole'
+import getFunctionTags from './getFunctionTags'
 import getFunctionVersion from './getFunctionVersion'
 import invokeFunction from './invokeFunction'
 import setFunctionConcurrency from './setFunctionConcurrency'
@@ -34,6 +35,7 @@ export {
   getFunctionConcurrency,
   getFunctionConfiguration,
   getFunctionRole,
+  getFunctionTags,
   getFunctionVersion,
   invokeFunction,
   setFunctionConcurrency,
