@@ -1,73 +1,7 @@
 import Cloudfront, { DistributionSummary } from 'aws-sdk/clients/cloudfront'
-import TaggingAPI from 'aws-sdk/clients/resourcegroupstaggingapi'
 
 import { retry, Options, getLog, Log } from '../utils'
 import { DEFAULT_REGION } from './constants'
-
-async function getResourcesByTags(
-  params: {
-    Region: string
-    Tags: Record<string, string>
-  },
-  log: Log
-): Promise<Record<string, Record<string, string>>> {
-  const { Region, Tags } = params
-
-  const TagFilters = Object.entries(Tags).map(([Key, Value]) => ({ Key, Values: [Value] }))
-
-  const api = new TaggingAPI({ region: Region })
-
-  const getResources = retry(api, api.getResources, Options.Defaults.override({ log }))
-
-  const resources: Record<string, Record<string, string>> = {}
-
-  try {
-    log.debug(`Find resources by tags`)
-
-    let PaginationToken: string | undefined
-    for (;;) {
-      log.debug(`Get resources by PaginationToken = ${PaginationToken ?? '<none>'}`)
-
-      const {
-        ResourceTagMappingList = [],
-        PaginationToken: NextPaginationToken
-      } = await getResources({
-        ResourceTypeFilters: ['cloudfront'],
-        TagFilters,
-        PaginationToken
-      })
-      PaginationToken = NextPaginationToken
-
-      for (const { ResourceARN, Tags: ResourceTags = [] } of ResourceTagMappingList) {
-        if (ResourceARN != null) {
-          resources[ResourceARN] = ResourceTags.reduce(
-            (acc: Record<string, string>, { Key, Value }) => {
-              acc[Key] = Value
-              return acc
-            },
-            {}
-          )
-        }
-      }
-
-      if (
-        ResourceTagMappingList == null ||
-        ResourceTagMappingList.length === 0 ||
-        NextPaginationToken == null ||
-        NextPaginationToken === ''
-      ) {
-        break
-      }
-    }
-
-    log.debug(`Resources have been found`)
-  } catch (error) {
-    log.debug(`Failed to find resources by tags`)
-    throw error
-  }
-
-  return resources
-}
 
 async function listResources(
   params: {
@@ -137,16 +71,37 @@ async function getCloudFrontDistributionsByTags(
 > {
   const { Tags, Region = DEFAULT_REGION } = params
 
-  const [resourcesByTags, distributions] = await Promise.all([
-    getResourcesByTags(
-      {
-        Tags,
-        Region
-      },
-      log
-    ),
-    listResources({ Region }, log)
-  ])
+  const distributions = await listResources({ Region }, log)
+
+  const cloudFront = new Cloudfront({ region: Region })
+
+  const listTagsForResource = retry(
+    cloudFront,
+    cloudFront.listTagsForResource,
+    Options.Defaults.override({ log })
+  )
+
+  const resourcesByTags: Record<string, Record<string, string>> = {}
+
+  await Promise.all(
+    distributions.map(async (distribution) => {
+      const { Tags: { Items = [] } = {} } = await listTagsForResource({
+        Resource: distribution.ARN
+      })
+      const tags: Record<string, string> = {}
+      for (const { Key, Value } of Items) {
+        if (Key != null && Value != null) {
+          tags[Key] = Value
+        }
+      }
+      for (const [Key, Value] of Object.entries(Tags)) {
+        if (tags[Key] !== Value) {
+          return
+        }
+      }
+      resourcesByTags[distribution.ARN] = tags
+    })
+  )
 
   const resources = distributions
     .filter(({ ARN }) => resourcesByTags[ARN] != null)
