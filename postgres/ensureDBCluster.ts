@@ -14,6 +14,7 @@ const ensureDBCluster = async (
     MinCapacity?: number
     MaxCapacity?: number
     SecondsUntilAutoPause?: number | null
+    TimeoutAction?: 'ForceApplyCapacityChange' | 'RollbackCapacityChange'
     Tags?: Record<string, string>
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
@@ -26,6 +27,7 @@ const ensureDBCluster = async (
     MinCapacity,
     MaxCapacity,
     SecondsUntilAutoPause,
+    TimeoutAction = 'RollbackCapacityChange',
     Tags = {}
   } = params
 
@@ -69,7 +71,8 @@ const ensureDBCluster = async (
 
   const ScalingConfiguration: ScalingConfigurationType = {
     MinCapacity,
-    MaxCapacity
+    MaxCapacity,
+    TimeoutAction
   }
 
   if (SecondsUntilAutoPause != null) {
