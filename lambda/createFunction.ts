@@ -53,7 +53,11 @@ async function createFunction(
 
   const lambda = new Lambda({ region: Region })
 
-  const addFunction = retry(lambda, lambda.createFunction, Options.Defaults.override({ log }))
+  const addFunction = retry(
+    lambda,
+    lambda.createFunction,
+    Options.Defaults.override({ log, maxAttempts: 30 })
+  )
 
   const { FunctionArn, Version } = await addFunction({
     FunctionName,
