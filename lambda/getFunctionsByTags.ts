@@ -1,4 +1,7 @@
-import TaggingAPI, { ResourceTagMappingList } from 'aws-sdk/clients/resourcegroupstaggingapi'
+import TaggingAPI, {
+  ResourceTagMappingList,
+  PaginationToken
+} from 'aws-sdk/clients/resourcegroupstaggingapi'
 import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
@@ -30,49 +33,60 @@ async function getFunctionsByTags(
   )
 
   let foundResources: ResourceTagMappingList | undefined
+  let paginationToken: PaginationToken | undefined
+  let nextPaginationToken: PaginationToken | undefined
+  const foundResourcesList:Array<ResourceTagMappingList> = []
 
   try {
     log.debug(`Find resources by tags`)
-    foundResources = (
-      await getResources({
+    do {
+      void ({
+        ResourceTagMappingList: foundResources=[],
+        PaginationToken: nextPaginationToken
+      } = await getResources({
+        PaginationToken: paginationToken,
         ResourceTypeFilters: ['lambda'],
         TagFilters
-      })
-    ).ResourceTagMappingList
-
+      }))
+      paginationToken = nextPaginationToken
+      foundResourcesList.push(foundResources)      
+    } while (nextPaginationToken)
+   
     log.debug(`Resources have been found`)
   } catch (error) {
     log.debug(`Failed to find resources by tags`)
     throw error
   }
 
-  if (foundResources == null) {
+  if (foundResourcesList == null) {
     return []
   }
 
   const resources = []
-  for (const { ResourceARN, Tags: ResourceTags } of foundResources) {
-    try {
-      if (
-        ResourceARN != null &&
-        (await getFunctionConfiguration({ FunctionName: ResourceARN })) != null
-      ) {
-        resources.push({
-          ResourceARN,
-          Tags:
-            ResourceTags != null
-              ? ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
-                  acc[Key] = Value
-                  return acc
-                }, {})
-              : {}
-        })
+  for (const foundResources of foundResourcesList) {
+    for (const { ResourceARN, Tags: ResourceTags } of foundResources as ResourceTagMappingList) {
+      try {        
+        if (
+          ResourceARN != null &&
+          (await getFunctionConfiguration({ FunctionName: ResourceARN })) != null
+        ) {
+          resources.push({
+            ResourceARN,
+            Tags:
+              ResourceTags != null
+                ? ResourceTags.reduce((acc: Record<string, string>, { Key, Value }) => {
+                    acc[Key] = Value
+                    return acc
+                  }, {})
+                : {}
+          })
+        }
+      } catch (error) {
+        if (error != null && error.code === 'ResourceNotFoundException') {
+          continue
+        }
+        throw error
       }
-    } catch (error) {
-      if (error != null && error.code === 'ResourceNotFoundException') {
-        continue
-      }
-      throw error
     }
   }
 
