@@ -58,10 +58,6 @@ async function getFunctionsByTags(
     throw error
   }
 
-  if (foundResourcesList == null) {
-    return []
-  }
-
   const resources = []
   // eslint-disable-next-line
   for (const foundResources of foundResourcesList) {
