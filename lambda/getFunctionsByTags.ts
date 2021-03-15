@@ -35,13 +35,13 @@ async function getFunctionsByTags(
   let foundResources: ResourceTagMappingList | undefined
   let paginationToken: PaginationToken | undefined
   let nextPaginationToken: PaginationToken | undefined
-  const foundResourcesList:Array<ResourceTagMappingList> = []
+  const foundResourcesList: Array<ResourceTagMappingList> = []
 
   try {
     log.debug(`Find resources by tags`)
     do {
       void ({
-        ResourceTagMappingList: foundResources=[],
+        ResourceTagMappingList: foundResources = [],
         PaginationToken: nextPaginationToken
       } = await getResources({
         PaginationToken: paginationToken,
@@ -49,9 +49,9 @@ async function getFunctionsByTags(
         TagFilters
       }))
       paginationToken = nextPaginationToken
-      foundResourcesList.push(foundResources)      
+      foundResourcesList.push(foundResources)
     } while (nextPaginationToken)
-   
+
     log.debug(`Resources have been found`)
   } catch (error) {
     log.debug(`Failed to find resources by tags`)
@@ -63,9 +63,10 @@ async function getFunctionsByTags(
   }
 
   const resources = []
+  // eslint-disable-next-line
   for (const foundResources of foundResourcesList) {
     for (const { ResourceARN, Tags: ResourceTags } of foundResources as ResourceTagMappingList) {
-      try {        
+      try {
         if (
           ResourceARN != null &&
           (await getFunctionConfiguration({ FunctionName: ResourceARN })) != null
