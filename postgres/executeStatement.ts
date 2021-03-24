@@ -37,10 +37,24 @@ function coercer(field: {
 }
 
 async function executeStatement<T extends Record<string, any>>(
-  params: { Region: string; ResourceArn: string; SecretArn: string; Sql: string },
+  params: {
+    Region: string
+    ResourceArn: string
+    SecretArn: string
+    Sql: string
+    ContinueAfterTimeout?: boolean
+    IncludeResultMetadata?: boolean
+  },
   log: Log = getLog('EXECUTE-STATEMENT')
 ): Promise<Array<T>> {
-  const { Region, ResourceArn, SecretArn, Sql } = params
+  const {
+    Region,
+    ResourceArn,
+    SecretArn,
+    Sql,
+    ContinueAfterTimeout = false,
+    IncludeResultMetadata = true
+  } = params
 
   const rdsDataService = new RDSDataService({
     region: Region
@@ -57,8 +71,8 @@ async function executeStatement<T extends Record<string, any>>(
     resourceArn: ResourceArn,
     secretArn: SecretArn,
     database: 'postgres',
-    continueAfterTimeout: false,
-    includeResultMetadata: true,
+    continueAfterTimeout: ContinueAfterTimeout,
+    includeResultMetadata: IncludeResultMetadata,
     sql: Sql
   })
 
