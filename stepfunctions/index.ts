@@ -4,6 +4,8 @@ import ensureStepFunction from './ensureStepFunction'
 import getStepFunctionByTags from './getStepFunctionByTags'
 import getStepFunctionsByTags from './getStepFunctionsByTags'
 import startStepFunctionExecution from './startStepFunctionExecution'
+import listStepFunctionExecutions from './listStepFunctionExecutions'
+import stopStepFunctionExecution from './stopStepFunctionExecution'
 
 export {
   deleteStepFunction,
@@ -11,5 +13,7 @@ export {
   ensureStepFunction,
   getStepFunctionByTags,
   getStepFunctionsByTags,
-  startStepFunctionExecution
+  startStepFunctionExecution,
+  listStepFunctionExecutions,
+  stopStepFunctionExecution
 }
