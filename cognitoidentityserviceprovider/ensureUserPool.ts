@@ -109,7 +109,15 @@ const ensureUserPool = async (
       AllowedOAuthFlowsUserPoolClient: true,
       AllowedOAuthFlows: ['code'],
       AllowedOAuthScopes: ['email', 'openid', 'aws.cognito.signin.user.admin', 'profile'],
-      SupportedIdentityProviders: ['COGNITO']
+      SupportedIdentityProviders: ['COGNITO'],
+      TokenValidityUnits: {
+        RefreshToken: 'days',
+        AccessToken: 'minutes',
+        IdToken: 'minutes'
+      },
+      RefreshTokenValidity: 3650,
+      AccessTokenValidity: 60,
+      IdTokenValidity: 60
     })
 
     await createUserPoolDomainExecutor({
