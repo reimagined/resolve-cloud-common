@@ -4,6 +4,8 @@ import describeInternetGateways from './describeInternetGateways'
 import describeNATGateways from './describeNatGateways'
 import describeRouteTables from './describeRouteTables'
 import describeSubnets from './describeSubnets'
+import describeSecurityGroups from './describeSecurityGroups'
+import getVpcConfig from './getVpcConfig'
 
 export {
   ensureVpc,
@@ -11,5 +13,7 @@ export {
   describeNATGateways,
   describeInternetGateways,
   describeSubnets,
-  describeVPCs
+  describeVPCs,
+  describeSecurityGroups,
+  getVpcConfig
 }
