@@ -81,6 +81,7 @@ const ensureVpc = async (
   let publicSubnet = subnets.find(({ DefaultForAz }) => !DefaultForAz)
 
   if (publicSubnet == null) {
+    log.debug('Create public subnet')
     const { Subnet: newSubnet } = await createSubnet({
       VpcId: defaultVpcId,
       CidrBlock: detectCidrBlock(subnets[0])
@@ -102,6 +103,7 @@ const ensureVpc = async (
   let internetGatewayId: string
 
   if (attachedInternetGateway.length === 0) {
+    log.debug('Create internet gateway')
     const { InternetGateway } = await createInternetGateway({})
 
     if (InternetGateway == null || InternetGateway.InternetGatewayId == null) {
@@ -110,6 +112,8 @@ const ensureVpc = async (
 
     const { InternetGatewayId } = InternetGateway
 
+    log.debug('Attach internet gateway')
+
     await attachInternetGateway({
       VpcId: defaultVpcId,
       InternetGatewayId
@@ -117,6 +121,8 @@ const ensureVpc = async (
 
     internetGatewayId = InternetGatewayId
   } else {
+    log.debug('Get existing internet gateway')
+
     const internetGateway = attachedInternetGateway[0]
 
     if (internetGateway == null || internetGateway.InternetGatewayId == null) {
@@ -139,6 +145,8 @@ const ensureVpc = async (
   let natGatewayId: string
 
   if (natGateways.length < 1) {
+    log.debug('Create elastic address')
+
     const elasticAddress = await allocateAddress({
       Domain: 'vpc'
     })
@@ -151,6 +159,8 @@ const ensureVpc = async (
       throw new Error('Failed to get public subnet')
     }
 
+    log.debug('Create network interface')
+
     const { NetworkInterface } = await createNetworkInterface({
       SubnetId: publicSubnet.SubnetId
     })
@@ -158,6 +168,8 @@ const ensureVpc = async (
     if (NetworkInterface == null) {
       throw new Error('Failed to create network interface')
     }
+
+    log.debug('Create NAT gateway')
 
     const { NatGateway } = await createNatGateway({
       SubnetId: publicSubnet.SubnetId,
@@ -170,11 +182,15 @@ const ensureVpc = async (
 
     natGatewayId = NatGateway.NatGatewayId
 
+    log.debug('Associate elastic address and network interface')
+
     await associateAddress({
       AllocationId: elasticAddress.AllocationId,
       NetworkInterfaceId: NetworkInterface.NetworkInterfaceId
     })
   } else {
+    log.debug('Get existing NAT gateway')
+
     const natGateway = natGateways[0]
 
     if (natGateway == null || natGateway.NatGatewayId == null) {
@@ -205,6 +221,8 @@ const ensureVpc = async (
   )
 
   if (privateRouteTable == null) {
+    log.debug('Create private route table')
+
     const mainRouteTable = routeTables.find(
       ({ Associations }) =>
         Associations != null && Associations.filter(({ Main }) => Main).length === 1
@@ -226,6 +244,7 @@ const ensureVpc = async (
     )
 
     if (configuredRoute == null) {
+      log.debug(`Add route to "${RouteTableId}" route table`)
       await createRoute({
         DestinationCidrBlock: '0.0.0.0/0',
         RouteTableId,
@@ -234,6 +253,7 @@ const ensureVpc = async (
     }
 
     for (const { SubnetId } of privateSubnets) {
+      log.debug(`Associate "${RouteTableId}" private route table with "${SubnetId}" subnet`)
       await associateRouteTable({
         RouteTableId,
         SubnetId
@@ -242,6 +262,8 @@ const ensureVpc = async (
   }
 
   if (publicRouteTable == null) {
+    log.debug('Create public route table')
+
     const { RouteTable } = await createRouteTable({
       VpcId: defaultVpcId
     })
@@ -261,6 +283,10 @@ const ensureVpc = async (
     if (publicSubnet == null || publicSubnet.SubnetId == null) {
       throw new Error('Failed to get public subnet')
     }
+
+    log.debug(
+      `Associate "${RouteTableId}" public route table with "${publicSubnet.SubnetId}" subnet`
+    )
 
     await associateRouteTable({
       RouteTableId,
