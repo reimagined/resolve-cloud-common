@@ -1,5 +1,7 @@
 import addFunctionPermission from './addFunctionPermission'
+import createEventSourceMapping from './createEventSourceMapping'
 import createFunction from './createFunction'
+import deleteEventSourceMapping from './deleteEventSourceMapping'
 import deleteFunction from './deleteFunction'
 import deleteFunctionConcurrency from './deleteFunctionConcurrency'
 import deleteFunctionPermission from './deleteFunctionPermission'
@@ -23,7 +25,9 @@ import updateFunctionTracingMode from './updateFunctionTracingMode'
 
 export {
   addFunctionPermission,
+  createEventSourceMapping,
   createFunction,
+  deleteEventSourceMapping,
   deleteFunction,
   deleteFunctionConcurrency,
   deleteFunctionPermission,

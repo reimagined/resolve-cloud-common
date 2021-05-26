@@ -19,6 +19,7 @@ jobs:
       - name: Build
         run: |
           yarn install --frozen-lock
+          yarn audit
           yarn prepare
 
       - name: Lint
