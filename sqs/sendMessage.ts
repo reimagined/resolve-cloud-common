@@ -11,7 +11,7 @@ const sendMessage = async (
     MessageAttributes?: MessageBodyAttributeMap
   },
   log: Log = getLog('SEND-MESSAGE')
-) => {
+): Promise<void> => {
   const { Region, QueueUrl, MessageBody, MessageGroupId, MessageAttributes } = params
   const sqs = new SQS({ region: Region, apiVersion: '2012-11-05' })
 

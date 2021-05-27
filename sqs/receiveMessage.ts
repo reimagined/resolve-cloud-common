@@ -12,7 +12,7 @@ const receiveMessage = async (
     VisibilityTimeout?: number
   },
   log: Log = getLog('RECEIVE-MESSAGE')
-) => {
+): Promise<void> => {
   const {
     QueueUrl,
     Region,

@@ -8,7 +8,6 @@ const createEventSourceMapping = async (
   params: {
     FunctionName: string
     QueueName: string
-    Policy?: string
     BatchSize?: number
     MaximumBatchingWindowInSeconds?: number
     Region: string
@@ -18,7 +17,6 @@ const createEventSourceMapping = async (
   const {
     FunctionName,
     QueueName,
-    Policy,
     BatchSize = 10,
     MaximumBatchingWindowInSeconds = 2,
     Region
@@ -47,7 +45,7 @@ const createEventSourceMapping = async (
     if (Account == null || Account === '' || QueueUrl == null || QueueUrl === '') {
       throw new Error('Failed to create event source mapping')
     }
-    
+
     try {
       await createEventSourceMappingExecutor({
         FunctionName,
@@ -59,7 +57,7 @@ const createEventSourceMapping = async (
       log.debug('Failed to create event source mapping')
       log.debug(error)
     }
-    
+
     log.debug(
       `Event source mapping between lambda "${FunctionName}" and queue "${QueueName}" has been created`
     )

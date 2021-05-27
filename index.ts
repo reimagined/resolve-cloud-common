@@ -9,4 +9,15 @@ import * as sqs from './sqs'
 import * as stepfunctions from './stepfunctions'
 import * as utils from './utils'
 
-export { apigateway, cloudfront, iam, lambda, route53, s3, secretsmanager, sqs, stepfunctions, utils }
+export {
+  apigateway,
+  cloudfront,
+  iam,
+  lambda,
+  route53,
+  s3,
+  secretsmanager,
+  sqs,
+  stepfunctions,
+  utils
+}
