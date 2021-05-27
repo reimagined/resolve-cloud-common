@@ -30,7 +30,7 @@ const describeVPCs = async (
         break
       }
 
-      Vpcs.map((vpc) => vpcs.push(vpc))
+      vpcs.push(...Vpcs)
 
       if (Token == null || Token === '') {
         break

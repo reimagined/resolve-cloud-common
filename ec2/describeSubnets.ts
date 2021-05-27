@@ -34,7 +34,7 @@ const describeSubnets = async (
         break
       }
 
-      Subnets.map((subnet) => subnets.push(subnet))
+      subnets.push(...Subnets)
 
       if (Token == null || Token === '') {
         break

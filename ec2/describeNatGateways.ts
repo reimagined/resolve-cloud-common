@@ -34,7 +34,7 @@ const describeNATGateways = async (
         break
       }
 
-      NatGateways.map((natGateway) => natGateways.push(natGateway))
+      natGateways.push(...NatGateways)
 
       if (Token == null || Token === '') {
         break

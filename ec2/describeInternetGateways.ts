@@ -34,7 +34,7 @@ const describeInternetGateways = async (
         break
       }
 
-      InternetGateways.map((internetGateway) => internetGateways.push(internetGateway))
+      internetGateways.push(...InternetGateways)
 
       if (Token == null || Token === '') {
         break

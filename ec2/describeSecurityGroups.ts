@@ -34,7 +34,7 @@ const describeSecurityGroups = async (
         break
       }
 
-      SecurityGroups.map((securityGroup) => securityGroups.push(securityGroup))
+      securityGroups.push(...SecurityGroups)
 
       if (Token == null || Token === '') {
         break

@@ -34,7 +34,7 @@ const describeRouteTables = async (
         break
       }
 
-      RouteTables.map((routeTable) => routeTables.push(routeTable))
+      routeTables.push(...RouteTables)
 
       if (Token == null || Token === '') {
         break
