@@ -27,11 +27,10 @@ async function listResources(
     let Marker: string | undefined
     for (;;) {
       log.debug(`Get resources by Marker = ${Marker ?? '<none>'}`)
-      const {
-        DistributionList: { Items = [], IsTruncated, NextMarker } = {}
-      } = await listDistributions({
-        Marker
-      })
+      const { DistributionList: { Items = [], IsTruncated, NextMarker } = {} } =
+        await listDistributions({
+          Marker
+        })
 
       items.push(...Items)
 

@@ -13,13 +13,8 @@ const deleteDBCluster = async (
   },
   log: Log = getLog('DELETE-DATABASE-CLUSTER')
 ): Promise<void> => {
-  const {
-    Region,
-    DBClusterIdentifier,
-    SkipFinalSnapshot,
-    FinalDBSnapshotIdentifier,
-    IfExists
-  } = params
+  const { Region, DBClusterIdentifier, SkipFinalSnapshot, FinalDBSnapshotIdentifier, IfExists } =
+    params
 
   const rds = new RDS({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })

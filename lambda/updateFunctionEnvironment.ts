@@ -23,12 +23,11 @@ const updateFunctionEnvironment = async (
     lambda.getFunctionConfiguration,
     Options.Defaults.override({ log })
   )
-  const {
-    Environment: { Variables: currentVars } = { Variables: {} }
-  } = await getFunctionConfiguration({
-    FunctionName,
-    Qualifier: '$LATEST'
-  })
+  const { Environment: { Variables: currentVars } = { Variables: {} } } =
+    await getFunctionConfiguration({
+      FunctionName,
+      Qualifier: '$LATEST'
+    })
 
   log.debug(`Function environment variables have been got`)
 

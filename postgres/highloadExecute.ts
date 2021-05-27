@@ -25,5 +25,5 @@ export function highloadExecute<Executor extends () => any>(method: Executor): E
       }
     }
   }
-  return (executor as unknown) as Executor
+  return executor as unknown as Executor
 }

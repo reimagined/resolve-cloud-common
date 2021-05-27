@@ -253,7 +253,11 @@ const listRolePoliciesLoop: ListRolePoliciesLoop = async (
     iam.listRolePolicies,
     Options.Defaults.override({ log, maxAttempts: 1 })
   )
-  const { PolicyNames = [], IsTruncated, Marker: NextMarker } = await getRolePolicies({
+  const {
+    PolicyNames = [],
+    IsTruncated,
+    Marker: NextMarker
+  } = await getRolePolicies({
     RoleName,
     Marker
   })

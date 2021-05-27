@@ -24,7 +24,11 @@ async function invokeFunction<Response extends any>(
   try {
     const invoke = retry(lambda, lambda.invoke, Options.Defaults.override({ log, maxAttempts: 30 }))
 
-    const { FunctionError, Payload: ResponsePayload, LogResult } = await invoke({
+    const {
+      FunctionError,
+      Payload: ResponsePayload,
+      LogResult
+    } = await invoke({
       FunctionName,
       InvocationType,
       Payload: JSON.stringify(Payload),
