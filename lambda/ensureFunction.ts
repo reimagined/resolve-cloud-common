@@ -148,6 +148,7 @@ const ensureFunction = async (
     MemorySize?: number
     Layers?: Array<string>
     Publish?: boolean
+    VpcConfig?: { SubnetIds: Array<string>; SecurityGroupIds: Array<string> }
   },
   log: Log = getLog('ENSURE-FUNCTION')
 ): Promise<{
@@ -169,7 +170,8 @@ const ensureFunction = async (
     Runtime = LambdaDefaults.RUNTIME,
     Timeout = LambdaDefaults.TIMEOUT,
     MemorySize = LambdaDefaults.MEMORY_SIZE,
-    Publish
+    Publish,
+    VpcConfig
   } = params
 
   const Tags = { ...RawTags, Owner: 'reimagined' }
@@ -187,7 +189,8 @@ const ensureFunction = async (
     Runtime,
     Timeout,
     MemorySize,
-    Layers
+    Layers,
+    VpcConfig
   })
 
   try {
@@ -252,7 +255,8 @@ const ensureFunction = async (
               Variables
             }
           : undefined,
-      Layers
+      Layers,
+      VpcConfig
     })
 
     if (FunctionArn == null) {
@@ -350,7 +354,8 @@ const ensureFunction = async (
           Timeout,
           MemorySize,
           Layers,
-          Publish
+          Publish,
+          VpcConfig
         },
         log
       )

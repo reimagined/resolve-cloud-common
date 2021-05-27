@@ -25,6 +25,7 @@ async function createFunction(
     MemorySize: number
     Layers?: Array<string>
     Publish?: boolean
+    VpcConfig?: { SubnetIds: Array<string>; SecurityGroupIds: Array<string> }
   },
   log: Log = getLog('CREATE-FUNCTION')
 ): Promise<{
@@ -46,7 +47,8 @@ async function createFunction(
     Runtime = LambdaDefaults.RUNTIME,
     Timeout = LambdaDefaults.TIMEOUT,
     MemorySize = LambdaDefaults.MEMORY_SIZE,
-    Publish
+    Publish,
+    VpcConfig
   } = params
 
   const Tags = { ...RawTags, Owner: 'reimagined' }
@@ -80,7 +82,8 @@ async function createFunction(
           }
         : undefined,
     Layers,
-    Publish
+    Publish,
+    VpcConfig
   })
 
   if (FunctionArn == null) {
