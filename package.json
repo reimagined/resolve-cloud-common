@@ -31,7 +31,7 @@
     "@typescript-eslint/parser": "^4.3.0",
     "aws-sdk": "2.890.0",
     "jest": "^26.4.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "prettier": "^2.2.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
