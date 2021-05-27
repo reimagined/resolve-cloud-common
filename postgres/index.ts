@@ -8,6 +8,7 @@ import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
 import getDBClusterByTags from './getDBClusterByTags'
 import rollbackTransaction from './rollbackTransaction'
+import describeDBClusters from './describeDBClusters'
 
 export {
   beginTransaction,
@@ -19,5 +20,6 @@ export {
   escapeStr,
   executeStatement,
   getDBClusterByTags,
-  rollbackTransaction
+  rollbackTransaction,
+  describeDBClusters
 }
