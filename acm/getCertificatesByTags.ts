@@ -26,14 +26,12 @@ async function getResourcesByTags(
     let PaginationToken: string | undefined
     for (;;) {
       log.debug(`Get resources by PaginationToken = ${PaginationToken ?? '<none>'}`)
-      const {
-        ResourceTagMappingList = [],
-        PaginationToken: NextPaginationToken
-      } = await getResources({
-        ResourceTypeFilters: ['acm:certificate'],
-        TagFilters,
-        PaginationToken
-      })
+      const { ResourceTagMappingList = [], PaginationToken: NextPaginationToken } =
+        await getResources({
+          ResourceTypeFilters: ['acm:certificate'],
+          TagFilters,
+          PaginationToken
+        })
       PaginationToken = NextPaginationToken
 
       for (const { ResourceARN, Tags: ResourceTags = [] } of ResourceTagMappingList) {

@@ -40,14 +40,12 @@ async function getFunctionsByTags(
   try {
     log.debug(`Find resources by tags`)
     do {
-      void ({
-        ResourceTagMappingList: foundResources = [],
-        PaginationToken: nextPaginationToken
-      } = await getResources({
-        PaginationToken: paginationToken,
-        ResourceTypeFilters: ['lambda'],
-        TagFilters
-      }))
+      void ({ ResourceTagMappingList: foundResources = [], PaginationToken: nextPaginationToken } =
+        await getResources({
+          PaginationToken: paginationToken,
+          ResourceTypeFilters: ['lambda'],
+          TagFilters
+        }))
       paginationToken = nextPaginationToken
       foundResourcesList.push(foundResources)
     } while (nextPaginationToken)
