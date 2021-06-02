@@ -20,7 +20,6 @@ const deleteSqsQueue = async (
   try {
     log.debug(`Delete the queue "${QueueName}"`)
     const deleteSqsQueueExecutor = retry(sqs, sqs.deleteQueue, Options.Defaults.override({ log }))
-
     const getQueueUrlExecutor = retry(sqs, sqs.getQueueUrl, Options.Defaults.override({ log }))
     const untagResource = retry(
       taggingAPI,
