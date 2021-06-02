@@ -26,7 +26,6 @@ const createEventSourceMapping = async (
   const sts = new STS({ region: Region })
   const sqs = new SQS({ region: Region })
 
-  // TODO: set batch window sqs queue      MaximumBatchingWindowInSeconds: 2
   try {
     log.debug('Create a event source mapping')
     const createEventSourceMappingExecutor = retry(
