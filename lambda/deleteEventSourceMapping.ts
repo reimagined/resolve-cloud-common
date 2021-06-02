@@ -5,8 +5,6 @@ const deleteEventSourceMapping = async (
   params: {
     UUID: string
     Region: string
-    FunctionName?: string
-    QueueName?: string
   },
   log: Log = getLog('DELETE-EVENT-SOURCE-MAPPING')
 ): Promise<void> => {

@@ -16,6 +16,7 @@ const ensureSqsQueue = async (
       Statement: Array<{
         Action: string | Array<string>
         Principal: {
+          Service?: string | Array<string>
           AWS: string | Array<string>
         }
         Effect: 'Allow' | 'Deny'
