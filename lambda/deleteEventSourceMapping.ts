@@ -16,15 +16,16 @@ const deleteEventSourceMapping = async (
     Options.Defaults.override({ log })
   )
   try {
-    log.debug('Delete event source mapping')
+    log.debug('Delete an event source mapping')
     const createResult = await deleteEventSourceMappingExecutor({ UUID })
     if (createResult == null) {
       throw new Error('Failed to delete event source mapping')
     }
-    log.debug(`Event source mapping with UUID "${UUID}" has been delete`)
   } catch (error) {
     log.debug('Failed to delete event source mapping')
+    throw error
   }
+  log.debug(`Event source mapping with UUID "${UUID}" has been delete`)
 }
 
 export default deleteEventSourceMapping
