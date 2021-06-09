@@ -6,7 +6,7 @@ const listEventSourceMapping = async (
     FunctionName: string
     Region: string
   },
-  log: Log = getLog('DELETE-EVENT-SOURCE-MAPPING')
+  log: Log = getLog('LIST-EVENT-SOURCE-MAPPING')
 ): Promise<Lambda.ListEventSourceMappingsResponse> => {
   const { FunctionName, Region } = params
   const lambda = new Lambda({ region: Region })

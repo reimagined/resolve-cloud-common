@@ -7,12 +7,13 @@ import { Log, getLog, Options, retry, ignoreNotFoundException } from '../utils'
 const deleteSqsQueue = async (
   params: {
     Region: string
+    QueueUrl: string
     QueueName: string
     IfExist?: boolean
   },
   log: Log = getLog('DELETE-SQS-QUEUE')
 ): Promise<void> => {
-  const { Region, QueueName, IfExist } = params
+  const { Region, QueueUrl, QueueName, IfExist } = params
   const sqs = new SQS({ region: Region })
   const taggingAPI = new Resourcegroupstaggingapi({ region: Region })
   const sts = new STS({ region: Region })
@@ -20,7 +21,6 @@ const deleteSqsQueue = async (
   try {
     log.debug(`Delete the queue "${QueueName}"`)
     const deleteSqsQueueExecutor = retry(sqs, sqs.deleteQueue, Options.Defaults.override({ log }))
-    const getQueueUrlExecutor = retry(sqs, sqs.getQueueUrl, Options.Defaults.override({ log }))
     const untagResource = retry(
       taggingAPI,
       taggingAPI.untagResources,
@@ -29,10 +29,6 @@ const deleteSqsQueue = async (
     const listTags = retry(sqs, sqs.listQueueTags, Options.Defaults.override({ log }))
 
     const { Account } = await sts.getCallerIdentity().promise()
-    const { QueueUrl } = await getQueueUrlExecutor({
-      QueueName,
-      QueueOwnerAWSAccountId: Account
-    })
 
     if (QueueUrl == null || QueueUrl === '') {
       throw new Error('Failed to delete SQS queue')
