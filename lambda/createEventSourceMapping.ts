@@ -27,7 +27,7 @@ const createEventSourceMapping = async (
   const sqs = new SQS({ region: Region })
 
   try {
-    log.debug('Create a event source mapping')
+    log.debug('Create an event source mapping')
     const createEventSourceMappingExecutor = retry(
       lambda,
       lambda.createEventSourceMapping,
@@ -45,24 +45,19 @@ const createEventSourceMapping = async (
       throw new Error('Failed to create event source mapping')
     }
 
-    try {
-      await createEventSourceMappingExecutor({
-        FunctionName,
-        EventSourceArn: QueueArn,
-        BatchSize,
-        MaximumBatchingWindowInSeconds
-      })
-    } catch (error) {
-      log.debug('Failed to create event source mapping')
-      log.debug(error)
-    }
-
-    log.debug(
-      `Event source mapping between lambda "${FunctionName}" and queue "${QueueName}" has been created`
-    )
+    await createEventSourceMappingExecutor({
+      FunctionName,
+      EventSourceArn: QueueArn,
+      BatchSize,
+      MaximumBatchingWindowInSeconds
+    })
   } catch (error) {
     log.debug('Failed to create event source mapping')
+    throw error
   }
+  log.debug(
+    `Event source mapping between lambda "${FunctionName}" and queue "${QueueName}" has been created`
+  )
 }
 
 export default createEventSourceMapping

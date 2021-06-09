@@ -57,15 +57,15 @@ const deleteSqsQueue = async (
       TagKeys: tagKeyList,
       ResourceARNList: [QueueArn]
     })
-
-    log.debug(`The queue "${QueueName}" has been deleted`)
   } catch (error) {
     if (IfExist) {
       log.debug(`Skip delete the queue "${QueueName}"`)
       ignoreNotFoundException(error)
     }
     log.debug(`Failed to delete the queue "${QueueName}"`)
+    throw error
   }
+  log.debug(`The queue "${QueueName}" has been deleted`)
 }
 
 export default deleteSqsQueue
