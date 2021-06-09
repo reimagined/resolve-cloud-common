@@ -20,7 +20,7 @@ const deleteEventSourceMapping = async (
     const createResult = await deleteEventSourceMappingExecutor({ UUID })
     if (createResult == null) {
       throw new Error('Failed to delete event source mapping')
-    }    
+    }
   } catch (error) {
     log.debug('Failed to delete event source mapping')
     throw error

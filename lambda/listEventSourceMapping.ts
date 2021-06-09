@@ -9,16 +9,20 @@ const listEventSourceMapping = async (
   log: Log = getLog('DELETE-EVENT-SOURCE-MAPPING')
 ): Promise<Lambda.ListEventSourceMappingsResponse> => {
   const { FunctionName, Region } = params
-  const lambda = new Lambda({region: Region})
+  const lambda = new Lambda({ region: Region })
 
-  const listEventSourceMappingExecutor = retry(lambda, lambda.listEventSourceMappings, Options.Defaults.override({ log }))
+  const listEventSourceMappingExecutor = retry(
+    lambda,
+    lambda.listEventSourceMappings,
+    Options.Defaults.override({ log })
+  )
 
   try {
     log.debug('List event source mappings')
     const result = await listEventSourceMappingExecutor({
       FunctionName
     })
-    log.debug('List event source mappings executed succesfuly')    
+    log.debug('List event source mappings executed succesfuly')
     return result
   } catch (error) {
     log.debug('Failed to get list event source mapping')
