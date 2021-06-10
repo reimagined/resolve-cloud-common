@@ -16,6 +16,7 @@ import getFunctionRole from './getFunctionRole'
 import getFunctionTags from './getFunctionTags'
 import getFunctionVersion from './getFunctionVersion'
 import invokeFunction from './invokeFunction'
+import listEventSourceMapping from './listEventSourceMapping'
 import setFunctionConcurrency from './setFunctionConcurrency'
 import setFunctionTags from './setFunctionTags'
 import updateFunctionCode from './updateFunctionCode'
@@ -42,6 +43,7 @@ export {
   getFunctionTags,
   getFunctionVersion,
   invokeFunction,
+  listEventSourceMapping,
   setFunctionConcurrency,
   setFunctionTags,
   updateFunctionCode,
