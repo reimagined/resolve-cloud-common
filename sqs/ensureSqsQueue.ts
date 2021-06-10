@@ -44,7 +44,7 @@ const ensureSqsQueue = async (
   const createSqsQueue = retry(sqs, sqs.createQueue, Options.Defaults.override({ log }))
 
   try {
-    log.debug(`Create a queue`)
+    log.debug(`Create a SQS ${QueueName}`)
     const createResult = await createSqsQueue({
       QueueName: `${QueueName}`,
       Attributes: {
