@@ -4,6 +4,7 @@ import listSqsQueue from './listSqsQueue'
 import listSqsQueueTags from './listSqsQueueTags'
 import sendMessage from './sendMessage'
 import receiveMessage from './receiveMessage'
+import tagSqsQueue from './tagSqsQueue'
 
 export {
   deleteSqsQueue,
@@ -11,5 +12,6 @@ export {
   listSqsQueue,
   listSqsQueueTags,
   sendMessage,
-  receiveMessage
+  receiveMessage,
+  tagSqsQueue
 }
