@@ -7,7 +7,7 @@ const listSqsQueueTags = async (
     QueueUrl: string
   },
   log: Log = getLog('LIST-SQS-QUEUE-TAGS')
-) => {
+): Promise<SQS.ListQueueTagsResult> => {
   const { Region, QueueUrl } = params
   const sqs = new SQS({ region: Region })
 
