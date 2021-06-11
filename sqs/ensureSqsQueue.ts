@@ -25,7 +25,7 @@ const ensureSqsQueue = async (
     Tags?: Record<string, string>
   },
   log: Log = getLog('ENSURE-SQS-QUEUE')
-): Promise<void> => {
+): Promise<SQS.CreateQueueResult> => {
   const {
     Region,
     QueueName,
@@ -44,8 +44,8 @@ const ensureSqsQueue = async (
   const createSqsQueue = retry(sqs, sqs.createQueue, Options.Defaults.override({ log }))
 
   try {
-    log.debug(`Create a queue`)
-    const createResult = await createSqsQueue({
+    log.debug(`Create a SQS ${QueueName}`)
+    const result = await createSqsQueue({
       QueueName: `${QueueName}`,
       Attributes: {
         VisibilityTimeout: `${VisibilityTimeout}`,
@@ -58,9 +58,10 @@ const ensureSqsQueue = async (
       tags: { ...Tags }
     })
 
-    if (createResult == null) {
+    if (result == null) {
       throw new Error('Failed to create SQS queue')
     }
+    return result
   } catch (error) {
     log.debug('Failed to create SQS queue')
     throw error

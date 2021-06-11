@@ -22,7 +22,7 @@ const listEventSourceMapping = async (
     const result = await listEventSourceMappingExecutor({
       FunctionName
     })
-    log.debug('List event source mappings executed succesfuly')
+    log.debug(`List event source mappings on function "${FunctionName}" executed succesfuly`)
     return result
   } catch (error) {
     log.debug('Failed to get list event source mapping')

@@ -7,7 +7,7 @@ const deleteEventSourceMapping = async (
     Region: string
   },
   log: Log = getLog('DELETE-EVENT-SOURCE-MAPPING')
-): Promise<void> => {
+): Promise<Lambda.EventSourceMappingConfiguration> => {
   const { UUID, Region } = params
   const lambda = new Lambda({ region: Region })
   const deleteEventSourceMappingExecutor = retry(
@@ -17,15 +17,16 @@ const deleteEventSourceMapping = async (
   )
   try {
     log.debug('Delete an event source mapping')
-    const createResult = await deleteEventSourceMappingExecutor({ UUID })
-    if (createResult == null) {
+    const result = await deleteEventSourceMappingExecutor({ UUID })
+    if (result == null) {
       throw new Error('Failed to delete event source mapping')
     }
+    log.debug(`Event source mapping with UUID "${UUID}" has been delete`)
+    return result
   } catch (error) {
     log.debug('Failed to delete event source mapping')
     throw error
   }
-  log.debug(`Event source mapping with UUID "${UUID}" has been delete`)
 }
 
 export default deleteEventSourceMapping
