@@ -58,6 +58,7 @@ const deleteSqsQueue = async (
       }
       log.debug(`SQS queue tags has been deleted`)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn(error)
     }
   } catch (error) {
