@@ -59,7 +59,7 @@ const deleteSqsQueue = async (
       log.debug(`SQS queue tags has been deleted`)
     } catch (error) {
       console.warn(error)
-    }    
+    }
   } catch (error) {
     if (IfExist) {
       log.debug(`Skip delete the queue "${QueueName}"`)
