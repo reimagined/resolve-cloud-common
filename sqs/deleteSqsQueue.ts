@@ -49,10 +49,18 @@ const deleteSqsQueue = async (
 
     const QueueArn = `arn:aws:sqs:${Region}:${Account}:${QueueName}`
 
-    await untagResource({
-      TagKeys: tagKeyList,
-      ResourceARNList: [QueueArn]
-    })
+    try {
+      if (tagKeyList != null) {
+        await untagResource({
+          TagKeys: tagKeyList,
+          ResourceARNList: [QueueArn]
+        })
+      }
+      log.debug(`SQS queue tags has been deleted`)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error)
+    }
   } catch (error) {
     if (IfExist) {
       log.debug(`Skip delete the queue "${QueueName}"`)
