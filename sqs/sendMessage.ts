@@ -27,6 +27,7 @@ const sendMessage = async (
     log.debug('Sending message succesful complete')
   } catch (error) {
     log.debug('Message not send')
+    throw error
   }
 }
 
