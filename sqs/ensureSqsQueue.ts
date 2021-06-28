@@ -61,12 +61,12 @@ const ensureSqsQueue = async (
     if (result == null) {
       throw new Error('Failed to create SQS queue')
     }
+    log.debug(`The SQS queue "${QueueName}" has been created`)
     return result
   } catch (error) {
     log.debug('Failed to create SQS queue')
     throw error
   }
-  log.debug(`The SQS queue "${QueueName}" has been created`)
 }
 
 export default ensureSqsQueue
