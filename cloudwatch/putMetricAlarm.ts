@@ -14,7 +14,7 @@ interface TMethod {
       Namespace: string
       MetricName: string
       Dimensions: Array<{ Name: string; Value: string }>
-      EvaluationPeriods: number
+      Period: number
       ComparisonOperator: ComparisonOperatorType
       Threshold: number
       AlarmActions: Array<string>
@@ -33,7 +33,7 @@ const putMetricAlarm: TMethod = async (
     Namespace,
     MetricName,
     Dimensions,
-    EvaluationPeriods,
+    Period,
     ComparisonOperator,
     Threshold,
     AlarmActions,
@@ -54,7 +54,8 @@ const putMetricAlarm: TMethod = async (
       Namespace,
       Dimensions,
       MetricName,
-      EvaluationPeriods,
+      Period,
+      EvaluationPeriods: 1,
       ComparisonOperator,
       Threshold,
       AlarmActions,

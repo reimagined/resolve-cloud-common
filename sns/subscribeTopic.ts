@@ -25,17 +25,26 @@ const subscribeTopic: TMethod = async (
   const addPermission = retry(lambda, lambda.addPermission, Options.Defaults.override({ log }))
 
   try {
-    log.verbose('Adding endpoint lambda permissions')
+    if (Endpoint.startsWith('arn:aws:lambda:')) {
+      log.verbose('Endpoint is detected as lambda. Adding permissions')
 
-    await addPermission({
-      FunctionName: Endpoint,
-      StatementId: uuid(),
-      Action: 'lambda:InvokeFunction',
-      Principal: 'sns.amazonaws.com',
-      SourceArn: TopicArn
-    })
+      await addPermission({
+        FunctionName: Endpoint,
+        StatementId: uuid(),
+        Action: 'lambda:InvokeFunction',
+        Principal: 'sns.amazonaws.com',
+        SourceArn: TopicArn
+      })
 
-    log.verbose('Lambda permissions added. Subscribing SNS topic')
+      log.verbose('Lambda permissions added')
+    }
+  } catch (error) {
+    log.verbose('SNS topic subscribing failed')
+    throw error
+  }
+
+  try {
+    log.verbose('Subscribing SNS topic')
 
     await subscribeSnsTopic({
       TopicArn,
