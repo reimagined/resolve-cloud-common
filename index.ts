@@ -1,23 +1,11 @@
-import * as apigateway from './apigateway'
-import * as cloudfront from './cloudfront'
-import * as iam from './iam'
-import * as lambda from './lambda'
-import * as route53 from './route53'
-import * as s3 from './s3'
-import * as secretsmanager from './secretsmanager'
-import * as sqs from './sqs'
-import * as stepfunctions from './stepfunctions'
-import * as utils from './utils'
-
-export {
-  apigateway,
-  cloudfront,
-  iam,
-  lambda,
-  route53,
-  s3,
-  secretsmanager,
-  sqs,
-  stepfunctions,
-  utils
-}
+export * as apigateway from './apigateway'
+export * as cloudfront from './cloudfront'
+export * as iam from './iam'
+export * as lambda from './lambda'
+export * as route53 from './route53'
+export * as s3 from './s3'
+export * as secretsmanager from './secretsmanager'
+export * as sqs from './sqs'
+export * as stepfunctions from './stepfunctions'
+export * as utils from './utils'
+export * as sns from './sns'
