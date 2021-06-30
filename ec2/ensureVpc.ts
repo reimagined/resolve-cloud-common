@@ -35,6 +35,7 @@ const ensureVpc = async (
   const tags = transformTags(Tags)
 
   const createSubnet = retry(ec2, ec2.createSubnet, Options.Defaults.override({ log }))
+  const deleteRoute = retry(ec2, ec2.deleteRoute, Options.Defaults.override({ log }))
   const createRoute = retry(ec2, ec2.createRoute, Options.Defaults.override({ log }))
   const createRouteTable = retry(ec2, ec2.createRouteTable, Options.Defaults.override({ log }))
   const createNatGateway = retry(ec2, ec2.createNatGateway, Options.Defaults.override({ log }))
@@ -253,12 +254,17 @@ const ensureVpc = async (
     const { RouteTableId, Routes } = mainRouteTable
 
     const configuredRoute = Routes.find(
-      ({ DestinationCidrBlock }) =>
-        DestinationCidrBlock != null && DestinationCidrBlock === '0.0.0.0/0'
+      ({ DestinationCidrBlock, NatGatewayId }) =>
+        DestinationCidrBlock != null && DestinationCidrBlock === '0.0.0.0/0' && NatGatewayId != null
     )
 
     if (configuredRoute == null) {
       log.debug(`Add route to "${RouteTableId}" route table`)
+
+      await deleteRoute({
+        DestinationCidrBlock: '0.0.0.0/0',
+        RouteTableId
+      })
 
       await createRoute({
         DestinationCidrBlock: '0.0.0.0/0',
