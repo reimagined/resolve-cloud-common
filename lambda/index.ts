@@ -8,6 +8,7 @@ import deleteFunctionPermission from './deleteFunctionPermission'
 import deleteFunctionTags from './deleteFunctionTags'
 import deleteFunctionWithRole from './deleteFunctionWithRole'
 import ensureFunction from './ensureFunction'
+import getEventSourceMapping from './getEventSourceMapping'
 import getFunctionByTags from './getFunctionByTags'
 import getFunctionsByTags from './getFunctionsByTags'
 import getFunctionConcurrency from './getFunctionConcurrency'
@@ -35,6 +36,7 @@ export {
   deleteFunctionTags,
   deleteFunctionWithRole,
   ensureFunction,
+  getEventSourceMapping,
   getFunctionByTags,
   getFunctionsByTags,
   getFunctionConcurrency,
