@@ -16,13 +16,17 @@ async function invokeFunction<Response extends any>(
 ): Promise<Response> {
   const { Payload, FunctionName, Region, InvocationType, WithLogs } = params
 
-  const lambda = new Lambda({ region: Region })
+  const lambda = new Lambda({ region: Region, maxRetries: 0 })
 
   log.debug(`Invoke lambda ${JSON.stringify(FunctionName)}`)
   log.verbose('Payload', Payload)
 
   try {
-    const invoke = retry(lambda, lambda.invoke, Options.Defaults.override({ log, maxAttempts: 30 }))
+    const invoke = retry(
+      lambda,
+      lambda.invoke,
+      Options.Defaults.override({ log, maxAttempts: 30, expectedErrors: ['TimeoutError'] })
+    )
 
     const {
       FunctionError,
