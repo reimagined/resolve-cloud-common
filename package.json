@@ -11,7 +11,7 @@
     "prettier": "prettier --write \"**/**.{ts,tsx,json}\"",
     "prettier:scripts": "prettier --write \"**/scripts/**.js\"",
     "test": "yarn clear && jest",
-    "test:f": "echo || exit 0"
+    "test:f": "yarn clear && jest -c ./jest.config.functional.js"
   },
   "dependencies": {
     "chalk": "^4.0.0",
@@ -42,19 +42,5 @@
     "lint-staged": "^10.2.2",
     "ts-jest": "^26.4.1",
     "typescript": "^4.0.5"
-  },
-  "jest": {
-    "verbose": true,
-    "testEnvironment": "node",
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-      "**/__tests__/**/*.unit.test.ts?(x)",
-      "**/?(*.)+(spec|test).unit.test.ts?(x)"
-    ],
-    "roots": [
-      "<rootDir>"
-    ]
   }
 }
