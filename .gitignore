@@ -95,3 +95,4 @@ build
 !jest.config.functional.js
 !jest.config.js
 *.zip
+!__tests__/lambda/invoke-lambda-test/index.js
