@@ -92,3 +92,6 @@ build
 **/*.js
 **/*.js.map
 !scripts
+!jest.config.functional.js
+!jest.config.js
+*.zip
