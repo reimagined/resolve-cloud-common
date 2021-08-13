@@ -2,20 +2,16 @@ import CloudWatch from 'aws-sdk/clients/cloudwatch'
 
 import { Log, getLog, retry } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      AlarmName: string
-    },
-    log?: Log
-  ): Promise<void>
-}
-
-const deleteMetricAlarm: TMethod = async (
-  { Region, AlarmName },
-  log = getLog('DELETE-METRIC-ALARM')
-) => {
+const deleteMetricAlarm = async (
+  {
+    Region,
+    AlarmName
+  }: {
+    Region: string
+    AlarmName: string
+  },
+  log: Log = getLog('DELETE-METRIC-ALARM')
+): Promise<void> => {
   const cw = new CloudWatch({ region: Region })
   const deleteAlarm = retry(cw, cw.deleteAlarms)
 
