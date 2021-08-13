@@ -11,18 +11,34 @@ async function invokeFunction<Response extends any>(
     Payload: Record<string, any>
     InvocationType?: 'Event' | 'RequestResponse' | 'DryRun'
     WithLogs?: boolean
+    MaximumExecutionDuration?: number
   },
   log: Log = getLog('INVOKE-FUNCTION')
 ): Promise<Response> {
-  const { Payload, FunctionName, Region, InvocationType, WithLogs } = params
+  const {
+    Payload,
+    FunctionName,
+    Region,
+    InvocationType,
+    WithLogs,
+    MaximumExecutionDuration = 300000
+  } = params
 
-  const lambda = new Lambda({ region: Region })
+  const lambda = new Lambda({
+    region: Region,
+    maxRetries: 0,
+    httpOptions: { timeout: MaximumExecutionDuration }
+  })
 
   log.debug(`Invoke lambda ${JSON.stringify(FunctionName)}`)
   log.verbose('Payload', Payload)
 
   try {
-    const invoke = retry(lambda, lambda.invoke, Options.Defaults.override({ log, maxAttempts: 30 }))
+    const invoke = retry(
+      lambda,
+      lambda.invoke,
+      Options.Defaults.override({ log, maxAttempts: 30, expectedErrors: ['TimeoutError'] })
+    )
 
     const {
       FunctionError,
