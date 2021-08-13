@@ -2,18 +2,18 @@ import SNS from 'aws-sdk/clients/sns'
 
 import { Log, getLog, retry } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      Name: string
-      Tags: Array<{ Key: string; Value: string }>
-    },
-    log?: Log
-  ): Promise<{ TopicArn: string }>
-}
-
-const createTopic: TMethod = async ({ Region, Name, Tags }, log = getLog('CREATE-SNS-TOPIC')) => {
+const createTopic = async (
+  {
+    Region,
+    Name,
+    Tags
+  }: {
+    Region: string
+    Name: string
+    Tags: Array<{ Key: string; Value: string }>
+  },
+  log: Log = getLog('CREATE-SNS-TOPIC')
+): Promise<{ TopicArn: string }> => {
   const sns = new SNS({ region: Region })
   const createSnsTopic = retry(sns, sns.createTopic)
 
