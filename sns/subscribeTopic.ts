@@ -4,21 +4,18 @@ import { v4 as uuid } from 'uuid'
 
 import { Log, getLog, retry, Options } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      TopicArn: string
-      Endpoint: string
-    },
-    log?: Log
-  ): Promise<void>
-}
-
-const subscribeTopic: TMethod = async (
-  { Region, TopicArn, Endpoint },
-  log = getLog('SUBSCRIBE-SNS-TOPIC')
-) => {
+const subscribeTopic = async (
+  {
+    Region,
+    TopicArn,
+    Endpoint
+  }: {
+    Region: string
+    TopicArn: string
+    Endpoint: string
+  },
+  log: Log = getLog('SUBSCRIBE-SNS-TOPIC')
+): Promise<void> => {
   const sns = new Sns({ region: Region })
   const lambda = new Lambda({ region: Region })
   const subscribeSnsTopic = retry(sns, sns.subscribe)
