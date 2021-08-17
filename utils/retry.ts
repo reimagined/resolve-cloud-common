@@ -41,23 +41,24 @@ export class Options implements OptionsStruct {
   }
 }
 
-type AwsServicePromiseArgumentsType<T> = T extends { (args: infer A1): any; (args: infer A2): any }
-  ? A1 | A2
+type AwsServicePromiseArgumentsType<T> = T extends {
+  (args: infer A1): any
+  (args: infer A2): any
+  (args: infer A3): any
+}
+  ? A1 | A2 | A3
   : T extends (args: infer A) => any
   ? A
   : never
 
-type AwsServicePromiseReturnType<T> = T extends { (args: any): infer R1; (args: any): infer R2 }
-  ? R1 | R2
+type AwsServicePromiseReturnType<T> = T extends {
+  (args: any): infer R1
+  (args: any): infer R2
+  (args: any): infer R3
+}
+  ? R1 | R2 | R3
   : T extends (args: any) => infer R
   ? R
-  : never
-
-type UnwrapAwsPromise<AWSWrappedResult> = AWSWrappedResult extends {
-  // eslint-disable-next-line no-empty-pattern
-  promise: ({}) => infer AWSPureResult
-}
-  ? AWSPureResult
   : never
 
 type GetPromiseType<PromiseLike> = PromiseLike extends Promise<infer R> ? R : never
@@ -68,17 +69,17 @@ export function retry<Callback extends (...args: any) => any>(
   options: Options = Options.Defaults
 ): (
   params: AwsServicePromiseArgumentsType<Callback>
-) => Promise<GetPromiseType<UnwrapAwsPromise<AwsServicePromiseReturnType<Callback>>>> {
+) => Promise<GetPromiseType<AwsServicePromiseReturnType<Callback>>> {
   return async (
     params: AwsServicePromiseArgumentsType<Callback>
-  ): Promise<GetPromiseType<UnwrapAwsPromise<AwsServicePromiseReturnType<Callback>>>> => {
+  ): Promise<GetPromiseType<AwsServicePromiseReturnType<Callback>>> => {
     const { maxAttempts, silent, log, delay } = options
     const callback = callable.bind(client)
     let lastError: Error | undefined
 
     for (let attempt = 0; attempt < maxAttempts; ) {
       try {
-        return await callback(params).promise()
+        return await callback(params)
       } catch (error) {
         if (error != null && options.expectedErrors.includes(error.code)) {
           throw error

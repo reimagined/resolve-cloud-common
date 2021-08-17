@@ -1,6 +1,7 @@
 import { EOL } from 'os'
 import chalk from 'chalk'
-import Lambda from 'aws-sdk/clients/lambda'
+import { Lambda } from '@aws-sdk/client-lambda'
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -26,8 +27,10 @@ async function invokeFunction<Response extends any>(
 
   const lambda = new Lambda({
     region: Region,
-    maxRetries: 0,
-    httpOptions: { timeout: MaximumExecutionDuration }
+    maxAttempts: 1,
+    requestHandler: new NodeHttpHandler({
+      socketTimeout: MaximumExecutionDuration
+    })
   })
 
   log.debug(`Invoke lambda ${JSON.stringify(FunctionName)}`)
@@ -47,7 +50,7 @@ async function invokeFunction<Response extends any>(
     } = await invoke({
       FunctionName,
       InvocationType,
-      Payload: JSON.stringify(Payload),
+      Payload: Buffer.from(JSON.stringify(Payload)),
       ...(WithLogs ? { LogType: 'Tail' } : {})
     })
 
@@ -72,7 +75,7 @@ async function invokeFunction<Response extends any>(
 
     const result: Response =
       (InvocationType === 'RequestResponse' || InvocationType == null) && ResponsePayload != null
-        ? JSON.parse(ResponsePayload.toString())
+        ? JSON.parse(Buffer.from(ResponsePayload).toString())
         : null
 
     log.debug(`Lambda ${JSON.stringify(FunctionName)} has been invoked`)
