@@ -24,6 +24,7 @@ import updateFunctionCode from './updateFunctionCode'
 import updateFunctionEnvironment from './updateFunctionEnvironment'
 import updateFunctionHandler from './updateFunctionHandler'
 import updateFunctionTracingMode from './updateFunctionTracingMode'
+import updateFunctionVpcConfig from './updateFunctionVpcConfig'
 
 export {
   addFunctionPermission,
@@ -51,5 +52,6 @@ export {
   updateFunctionCode,
   updateFunctionEnvironment,
   updateFunctionHandler,
-  updateFunctionTracingMode
+  updateFunctionTracingMode,
+  updateFunctionVpcConfig
 }
