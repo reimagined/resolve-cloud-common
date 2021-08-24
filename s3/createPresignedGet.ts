@@ -2,22 +2,17 @@ import S3 from 'aws-sdk/clients/s3'
 
 import { getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      BucketName: string
-      Key: string
-      Expires?: number /* in seconds */
-    },
-    log?: Log
-  ): Promise<string>
-}
+const createPresignedGet = async (
+  params: {
+    Region: string
+    BucketName: string
+    Key: string
+    Expires?: number /* in seconds */
+  },
+  log: Log = getLog(`CREATE-PRESIGNED-GET`)
+): Promise<string> => {
+  const { Region, BucketName, Key, Expires } = params
 
-const createPresignedPut: TMethod = async (
-  { Region, BucketName, Key, Expires },
-  log = getLog(`CREATE-PRESIGNED-GET`)
-) => {
   const s3 = new S3({
     region: Region,
     signatureVersion: 'v4'
@@ -37,4 +32,4 @@ const createPresignedPut: TMethod = async (
   }
 }
 
-export default createPresignedPut
+export default createPresignedGet
