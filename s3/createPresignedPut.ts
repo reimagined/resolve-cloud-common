@@ -2,28 +2,33 @@ import S3 from 'aws-sdk/clients/s3'
 
 import { getLog, Log } from '../utils'
 
-interface TMethod {
-  (
-    params: {
-      Region: string
-      BucketName: string
-      Key: string
-      Expires?: number /* in seconds */
-      ContentLength?: number
-      ContentType?: string
-      Metadata?: Record<string, string>
-    },
-    log?: Log
-  ): Promise<string>
-}
-
-const createPresignedPut: TMethod = async (
-  { Region, BucketName, Key, Expires, Metadata, ContentType, ContentLength },
-  log = getLog(`CREATE-PRESIGNED-PUT`)
-) => {
+const createPresignedPut = async (
+  params: {
+    Region: string
+    BucketName: string
+    Key: string
+    Expires?: number /* in seconds */
+    ContentLength?: number
+    ContentType?: string
+    Metadata?: Record<string, string>
+    UseAccelerateEndpoint?: boolean
+  },
+  log: Log = getLog(`CREATE-PRESIGNED-PUT`)
+): Promise<string> => {
+  const {
+    Region,
+    BucketName,
+    Key,
+    Expires,
+    Metadata,
+    ContentType,
+    ContentLength,
+    UseAccelerateEndpoint = false
+  } = params
   const s3 = new S3({
     region: Region,
-    signatureVersion: 'v4'
+    signatureVersion: 'v4',
+    useAccelerateEndpoint: UseAccelerateEndpoint
   })
 
   try {
