@@ -8,14 +8,16 @@ const createPresignedGet = async (
     BucketName: string
     Key: string
     Expires?: number /* in seconds */
+    UseAccelerateEndpoint?: boolean
   },
   log: Log = getLog(`CREATE-PRESIGNED-GET`)
 ): Promise<string> => {
-  const { Region, BucketName, Key, Expires } = params
+  const { Region, BucketName, Key, Expires, UseAccelerateEndpoint = false } = params
 
   const s3 = new S3({
     region: Region,
-    signatureVersion: 'v4'
+    signatureVersion: 'v4',
+    useAccelerateEndpoint: UseAccelerateEndpoint
   })
 
   try {
