@@ -19,11 +19,7 @@ const subscribeTopic = async (
   const lambda = new Lambda({ region: Region })
   const subscribeSnsTopic = retry(sns, sns.subscribe)
 
-  const addPermission = retry(
-    lambda,
-    lambda.addPermission,
-    Options.Defaults.override({ log, expectedErrors: ['ResourceConflictException'] })
-  )
+  const addPermission = retry(lambda, lambda.addPermission, Options.Defaults.override({ log }))
 
   const removePermission = retry(
     lambda,
@@ -65,12 +61,8 @@ const subscribeTopic = async (
 
       log.verbose('Lambda permission added')
     } catch (error) {
-      if (error.name !== 'ResourceConflictException') {
-        log.verbose('Adding permission failed')
-        throw error
-      }
-
-      log.verbose('Lambda permissions already exist')
+      log.verbose('Adding permission failed')
+      throw error
     }
   }
 
