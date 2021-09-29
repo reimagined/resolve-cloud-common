@@ -19,7 +19,7 @@ AWS.config.update({
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const retry = async (callback: () => Promise<void>) => {
-  for (let index = 20; index >= 0; index--) {
+  for (let index = 60; index >= 0; index--) {
     try {
       await callback()
       break
@@ -32,9 +32,9 @@ const retry = async (callback: () => Promise<void>) => {
   }
 }
 
-describe('method "invokeFunction" should call the lambda', () => {
+describe('method "invokeFunction" with args { InvocationType: "RequestOnly" }', () => {
   const functionDirectoryPath = path.join(__dirname, 'invoke-lambda-test')
-  const functionZipPath = path.join(__dirname, 'invoke-lambda-test.zip')
+  const functionZipPath = path.join(__dirname, 'lambda-request-only.zip')
 
   execSync(`zip -r -9  --quiet ${JSON.stringify(functionZipPath)} .`, {
     cwd: functionDirectoryPath
@@ -49,9 +49,9 @@ describe('method "invokeFunction" should call the lambda', () => {
   let functionArn: string
 
   const region = 'eu-central-1'
-  const policyName = `resolve-cloud-common-invoke-function-test-p`
-  const roleName = `resolve-cloud-common-invoke-function-test-r`
-  const functionName = `resolve-cloud-common-invoke-function-test`
+  const policyName = `resolve-cloud-common-request-only-test-p`
+  const roleName = `resolve-cloud-common-request-only-test-r`
+  const functionName = `resolve-cloud-common-request-only-test`
 
   const zipFile = fs.readFileSync(functionZipPath)
 
@@ -118,80 +118,30 @@ describe('method "invokeFunction" should call the lambda', () => {
     })
   })
 
-  test('and increment the counter to 1', async () => {
+  test('should increment the counter to 10', async () => {
     const envKey = `resolve`
 
-    await invokeFunction({
-      Region: region,
-      FunctionName: functionName,
-      Payload: {
-        delayTime: 0,
-        envKey
-      },
-      MaximumExecutionDuration: 10000
-    })
-
-    await retry(async () => {
-      const { Environment: { Variables = {} } = { Variables: {} } } =
-        await getFunctionConfiguration({
-          Region: region,
-          FunctionName: functionName
-        })
-
-      expect(+Variables[envKey]).toEqual(1)
-    })
-  })
-
-  test('and increment the counter to 2', async () => {
-    const envKey = `resolve`
-
-    await invokeFunction({
-      Region: region,
-      FunctionName: functionName,
-      Payload: {
-        delayTime: 0,
-        envKey
-      },
-      MaximumExecutionDuration: 10000
-    })
-
-    await retry(async () => {
-      const { Environment: { Variables = {} } = { Variables: {} } } =
-        await getFunctionConfiguration({
-          Region: region,
-          FunctionName: functionName
-        })
-
-      expect(+Variables[envKey]).toEqual(2)
-    })
-  })
-
-  test('throw TimeoutError and increment the counter to 3', async () => {
-    const envKey = `resolve`
-
-    try {
+    for (let index = 0; index < 10; index++) {
       await invokeFunction({
         Region: region,
         FunctionName: functionName,
         Payload: {
-          delayTime: 1000,
+          delayTime: 0,
           envKey
         },
-        MaximumExecutionDuration: 1000
+        InvocationType: 'RequestOnly',
+        MaximumExecutionDuration: 200
       })
-      throw new Error(`Test failed`)
-    } catch (error) {
-      expect(`${error}`).toContain('Timeout')
+
+      await retry(async () => {
+        const { Environment: { Variables = {} } = { Variables: {} } } =
+          await getFunctionConfiguration({
+            Region: region,
+            FunctionName: functionName
+          })
+
+        expect(+Variables[envKey]).toEqual(index + 1)
+      })
     }
-
-    await retry(async () => {
-      const { Environment: { Variables = {} } = { Variables: {} } } =
-        await getFunctionConfiguration({
-          Region: region,
-          FunctionName: functionName
-        })
-
-      expect(+Variables[envKey]).toEqual(3)
-    })
   })
 })

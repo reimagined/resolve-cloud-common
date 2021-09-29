@@ -1,6 +1,6 @@
 import { getLog, Log } from './log'
 
-const toleratedErrors: Array<string> = [
+export const toleratedErrors: Array<string> = [
   'ProvisionedThroughputExceededException',
   'LimitExceededException',
   'RequestLimitExceeded',
