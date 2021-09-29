@@ -31,7 +31,8 @@ const deleteFunction = async (
       lambda,
       lambda.getFunction,
       Options.Defaults.override({
-        log
+        log,
+        expectedErrors: ['ResourceNotFoundException', 'InvalidParameterValueException']
       })
     )
 

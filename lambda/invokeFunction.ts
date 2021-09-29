@@ -57,6 +57,8 @@ async function invokeFunction<Response extends any>(
           if (!(error != null && error.code != null && toleratedErrors.includes(error.code))) {
             throw error
           }
+
+          await new Promise((resolve) => setTimeout(resolve, 100))
         }
       }
 

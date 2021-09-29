@@ -34,7 +34,7 @@ const retry = async (callback: () => Promise<void>) => {
 
 describe('method "invokeFunction" with args { InvocationType: "RequestOnly" }', () => {
   const functionDirectoryPath = path.join(__dirname, 'invoke-lambda-test')
-  const functionZipPath = path.join(__dirname, 'invoke-lambda-test.zip')
+  const functionZipPath = path.join(__dirname, 'lambda-request-only.zip')
 
   execSync(`zip -r -9  --quiet ${JSON.stringify(functionZipPath)} .`, {
     cwd: functionDirectoryPath
@@ -48,7 +48,7 @@ describe('method "invokeFunction" with args { InvocationType: "RequestOnly" }', 
   let roleArn: string
   let functionArn: string
 
-  const region = 'us-east-1'
+  const region = 'eu-central-1'
   const policyName = `resolve-cloud-common-request-only-test-p`
   const roleName = `resolve-cloud-common-request-only-test-r`
   const functionName = `resolve-cloud-common-request-only-test`
@@ -129,7 +129,8 @@ describe('method "invokeFunction" with args { InvocationType: "RequestOnly" }', 
           delayTime: 0,
           envKey
         },
-        InvocationType: 'RequestOnly'
+        InvocationType: 'RequestOnly',
+        MaximumExecutionDuration: 200
       })
 
       await retry(async () => {

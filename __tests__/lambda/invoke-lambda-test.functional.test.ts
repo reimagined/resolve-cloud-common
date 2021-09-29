@@ -48,7 +48,7 @@ describe('method "invokeFunction" should call the lambda', () => {
   let roleArn: string
   let functionArn: string
 
-  const region = 'us-east-1'
+  const region = 'eu-central-1'
   const policyName = `resolve-cloud-common-invoke-function-test-p`
   const roleName = `resolve-cloud-common-invoke-function-test-r`
   const functionName = `resolve-cloud-common-invoke-function-test`
