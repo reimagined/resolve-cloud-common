@@ -19,7 +19,7 @@ AWS.config.update({
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const retry = async (callback: () => Promise<void>) => {
-  for (let index = 20; index >= 0; index--) {
+  for (let index = 60; index >= 0; index--) {
     try {
       await callback()
       break
