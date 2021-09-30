@@ -38,15 +38,15 @@ async function invokeFunction<Response extends any>(
   log.verbose('Payload', Payload)
 
   try {
-    if (InvocationType != null && InvocationType === 'RequestOnly') {
-      const invoke = lambda.invoke({
-        FunctionName,
-        InvocationType: 'RequestResponse',
-        Payload: JSON.stringify(Payload),
-        ...(WithLogs ? { LogType: 'Tail' } : {})
-      })
-
+    if (InvocationType === 'RequestOnly') {
       for (;;) {
+        const invoke = lambda.invoke({
+          FunctionName,
+          InvocationType: 'RequestResponse',
+          Payload: JSON.stringify(Payload),
+          ...(WithLogs ? { LogType: 'Tail' } : {})
+        })
+
         try {
           await new Promise((resolve, reject) => {
             invoke.on('httpUploadProgress', () => setTimeout(resolve, MaximumExecutionDuration))
