@@ -38,7 +38,7 @@ async function invokeFunction<Response extends any>(
   log.verbose('Payload', Payload)
 
   try {
-    if (InvocationType != null && InvocationType === 'RequestOnly') {
+    if (InvocationType === 'RequestOnly') {
       for (;;) {
         const invoke = lambda.invoke({
           FunctionName,
