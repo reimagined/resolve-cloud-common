@@ -4,7 +4,7 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log, toleratedErrors } from '../utils'
 
-async function invokeFunction<Response extends any>(
+async function invokeFunction<Response>(
   params: {
     Region: string
     FunctionName: string
@@ -62,7 +62,7 @@ async function invokeFunction<Response extends any>(
         }
       }
 
-      return undefined as Response
+      return undefined as any as Response
     } else {
       const invoke = retry(
         lambda,
