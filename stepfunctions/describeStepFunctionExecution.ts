@@ -11,6 +11,7 @@ const describeStepFunctionExecution = async (
 ): Promise<{
   Status: string
   Output: Record<string, any> | null
+  Input: Record<string, any> | null
 }> => {
   const { Region, ExecutionArn } = params
   const stepFunctions = new StepFunctions({ region: Region })
@@ -23,13 +24,18 @@ const describeStepFunctionExecution = async (
 
   try {
     log.debug(`Describe the execution "${ExecutionArn}" status`)
-    const { status: executionStatus, output: executionOutput } = await describeExecution({
+    const {
+      status: executionStatus,
+      output: executionOutput,
+      input: executionInput
+    } = await describeExecution({
       executionArn: ExecutionArn
     })
     log.debug(`The execution "${ExecutionArn}" status = "${executionStatus}"`)
     return {
       Status: executionStatus,
-      Output: executionOutput != null ? JSON.parse(executionOutput) : null
+      Output: executionOutput != null ? JSON.parse(executionOutput) : null,
+      Input: executionInput != null ? JSON.parse(executionInput) : null
     }
   } catch (error) {
     log.debug(`Failed to describe the execution "${ExecutionArn}" status`)
