@@ -2,6 +2,17 @@ import StepFunctions from 'aws-sdk/clients/stepfunctions'
 
 import { retry, Options, getLog } from '../utils'
 
+const safeJsonParse = (text: string | undefined) => {
+  if (text == null) {
+    return null
+  }
+  try {
+    return JSON.parse(text)
+  } catch {
+    return null
+  }
+}
+
 const describeStepFunctionExecution = async (
   params: {
     Region: string
@@ -34,8 +45,8 @@ const describeStepFunctionExecution = async (
     log.debug(`The execution "${ExecutionArn}" status = "${executionStatus}"`)
     return {
       Status: executionStatus,
-      Output: executionOutput != null ? JSON.parse(executionOutput) : null,
-      Input: executionInput != null ? JSON.parse(executionInput) : null
+      Output: safeJsonParse(executionOutput),
+      Input: safeJsonParse(executionInput)
     }
   } catch (error) {
     log.debug(`Failed to describe the execution "${ExecutionArn}" status`)
