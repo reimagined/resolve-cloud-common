@@ -79,12 +79,12 @@ async function getDBClusterByTags(
     }>
   >((result, { ResourceARN, Tags: ResourceTagList }) => {
     if (ResourceARN != null && ResourceTagList != null) {
-      const Tags = ResourceTagList.reduce((acc: Record<string, string>, { Key, Value }) => {
+      const ResourceTags = ResourceTagList.reduce((acc: Record<string, string>, { Key, Value }) => {
         acc[Key] = Value
         return acc
       }, {})
 
-      result.push({ ResourceARN, Tags })
+      result.push({ ResourceARN, Tags: ResourceTags })
     }
     return result
   }, [])
