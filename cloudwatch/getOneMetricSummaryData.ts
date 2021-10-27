@@ -1,9 +1,10 @@
 import CloudWatch from 'aws-sdk/clients/cloudwatch'
 
 import { getLog, Log, Options, retry } from '../utils'
+
 const CURRENT_METRIC_ID = 'current_metric_id'
 
-export const getOneMetricSummaryData = async (
+const getOneMetricSummaryData = async (
   params: {
     Region: string
     StartTime: number
@@ -16,13 +17,13 @@ export const getOneMetricSummaryData = async (
   log: Log = getLog('GET-ONE-METRIC-DATA')
 ): Promise<Map<number, number> | null> => {
   const { Region, StartTime, EndTime, Dimensions, MetricName, Namespace, Period } = params
-
   const cw = new CloudWatch({ region: Region })
 
   try {
     const getMetrics = retry(cw, cw.getMetricData, Options.Defaults.override({ log }))
     let NextToken: string | undefined
     const result = new Map<number, number>()
+
     do {
       const { MetricDataResults, NextToken: CurrentNextToken } = await getMetrics({
         ScanBy: 'TimestampAscending',
