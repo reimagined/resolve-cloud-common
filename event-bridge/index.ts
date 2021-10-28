@@ -1,5 +1,5 @@
 import putRule from './putRule'
 import deleteRule from './deleteRule'
-import getRuleByTags from './getRuleByTags'
+import getRulesByTags from './getRulesByTags'
 
-export { putRule, deleteRule, getRuleByTags }
+export { putRule, deleteRule, getRulesByTags }

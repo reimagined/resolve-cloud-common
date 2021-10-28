@@ -2,13 +2,13 @@ import EventBridge, { Rule } from 'aws-sdk/clients/eventbridge'
 
 import { retry, Options, getLog, Log } from '../utils'
 
-const getRuleByTags = async (
+const getRulesByTags = async (
   params: {
     Region: string
     Tags: Record<string, string>
   },
   log: Log = getLog('GET-RULES-BY-TAGS')
-): Promise<Array<{ ResourceArn: string; Tags: Record<string, string> }>> => {
+): Promise<Array<{ Rule: Rule; Tags: Record<string, string> }>> => {
   const { Region, Tags } = params
 
   const eventBridge = new EventBridge({ region: Region })
@@ -39,11 +39,11 @@ const getRuleByTags = async (
     }
   }
 
-  const resources: Array<{ ResourceArn: string; Tags: Record<string, string> }> = []
+  const resources = []
 
-  for (const { Arn } of rulesList) {
+  for (const rule of rulesList) {
     const { Tags: ResourceTags } = await listTagsForResource({
-      ResourceARN: Arn as string
+      ResourceARN: rule.Arn as string
     })
 
     if (ResourceTags != null) {
@@ -53,7 +53,7 @@ const getRuleByTags = async (
 
       if (matchedTags === Object.keys(Tags).length) {
         resources.push({
-          ResourceArn: Arn as string,
+          Rule: rule,
           Tags: ResourceTags.reduce((acc, { Key, Value }) => {
             return Object.assign(acc, { [Key]: Value })
           }, {})
@@ -65,4 +65,4 @@ const getRuleByTags = async (
   return resources
 }
 
-export default getRuleByTags
+export default getRulesByTags
