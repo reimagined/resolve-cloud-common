@@ -7,6 +7,7 @@ import escapeId from './escapeId'
 import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
 import getDBClusterByTags from './getDBClusterByTags'
+import getDBClustersByTags from './getDBClustersByTags'
 import rollbackTransaction from './rollbackTransaction'
 import describeDBClusters from './describeDBClusters'
 
@@ -20,6 +21,7 @@ export {
   escapeStr,
   executeStatement,
   getDBClusterByTags,
+  getDBClustersByTags,
   rollbackTransaction,
   describeDBClusters
 }
