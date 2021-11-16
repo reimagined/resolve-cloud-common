@@ -1,4 +1,4 @@
-import CloudWatch, { Dimensions } from 'aws-sdk/clients/cloudwatch'
+import CloudWatch, { Dimensions as DimensionsType } from 'aws-sdk/clients/cloudwatch'
 
 import { getLog, Log, Options, retry } from '../utils'
 
@@ -9,7 +9,7 @@ const getOneMetricSummaryData = async (
     Region: string
     StartTime: number
     EndTime: number
-    Dimensions: Dimensions
+    Dimensions: DimensionsType
     MetricName: string
     Namespace: string
     Period: number

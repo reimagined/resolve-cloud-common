@@ -1,4 +1,7 @@
-import CloudWatch, { Dimensions, Metrics } from 'aws-sdk/clients/cloudwatch'
+import CloudWatch, {
+  Dimensions as DimensionsType,
+  Metrics as MetricsType
+} from 'aws-sdk/clients/cloudwatch'
 
 import { getLog, Log, Options, retry } from '../utils'
 
@@ -7,10 +10,10 @@ export const listMetrics = async (
     Region: string
     Namespace?: string
     MetricName?: string
-    Dimensions?: Dimensions
+    Dimensions?: DimensionsType
   },
   log: Log = getLog('LIST-METRICS')
-): Promise<Metrics> => {
+): Promise<MetricsType> => {
   const { Region, Namespace, MetricName, Dimensions } = params
 
   const cw = new CloudWatch({ region: Region })
