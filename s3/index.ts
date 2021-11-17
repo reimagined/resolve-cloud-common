@@ -1,12 +1,14 @@
+import abortMultipartUpload from './abortMultipartUpload'
 import completeMultipartUpload from './completeMultipartUpload'
 import createMultipartUpload from './createMultipartUpload'
+import createPresignedGet from './createPresignedGet'
 import createPresignedPost from './createPresignedPost'
 import createPresignedPut from './createPresignedPut'
-import createPresignedGet from './createPresignedGet'
 import deleteS3Bucket from './deleteS3Bucket'
 import deleteS3Folder from './deleteS3Folder'
 import ensureS3Bucket from './ensureS3Bucket'
 import getFileSize from './getFileSize'
+import getMetadata from './getMetadata'
 import getS3BucketByTags from './getS3BucketByTags'
 import getS3BucketNameByArn from './getS3BucketNameByArn'
 import getS3ObjectAsStream from './getS3ObjectAsStream'
@@ -18,9 +20,9 @@ import putS3BucketLifecycle from './putS3BucketLifecycle'
 import putS3PublicAccessBlock from './putS3PublicAccessBlock'
 import uploadPart from './uploadPart'
 import uploadS3Object from './uploadS3Object'
-import getMetadata from './getMetadata'
 
 export {
+  abortMultipartUpload,
   completeMultipartUpload,
   createMultipartUpload,
   createPresignedPost,
