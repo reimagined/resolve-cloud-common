@@ -36,7 +36,7 @@ const updateFunctionEnvironment = async (
     const updateFunctionConfiguration = retry(
       lambda,
       lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log })
+      Options.Defaults.override({ log, maxAttempts: 50 })
     )
     const nextVariables: Record<string, string> = { ...currentVars }
     for (const [key, value] of Object.entries(Variables) as Array<[string, string | null]>) {
