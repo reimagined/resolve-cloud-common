@@ -74,7 +74,6 @@ describe('method "invokeFunction" with args { InvocationType: "RequestOnly" }', 
   let roleArn: string
   let functionArn: string
 
-  const region = 'eu-central-1'
   const policyName = `resolve-cloud-common-request-only-test-p`
   const roleName = `resolve-cloud-common-request-only-test-r`
   const functionName = `resolve-cloud-common-request-only-test`
