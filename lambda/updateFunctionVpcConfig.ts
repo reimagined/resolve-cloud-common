@@ -18,7 +18,7 @@ async function updateFunctionVpcConfig(
   const updateFunctionConfiguration = retry(
     lambda,
     lambda.updateFunctionConfiguration,
-    Options.Defaults.override({ log, silent: true })
+    Options.Defaults.override({ log, silent: true, maxAttempts: 50 })
   )
 
   try {

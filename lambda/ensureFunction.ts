@@ -238,7 +238,7 @@ const ensureFunction = async (
     const updateFunctionConfiguration = retry(
       lambda,
       lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, silent: true })
+      Options.Defaults.override({ log, silent: true, maxAttempts: 50 })
     )
 
     const { FunctionArn } = await updateFunctionConfiguration({
