@@ -16,6 +16,10 @@ AWS.config.update({
   secretAccessKey: process.env.DEV_AWS_SECRET_ACCESS_KEY
 })
 
+const MAX_ATTEMPTS = 180
+const ATTEMPT_TIMEOUT = 1000
+const region = 'eu-central-1'
+
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const retry = async (callback: () => Promise<void>) => {
@@ -27,8 +31,30 @@ const retry = async (callback: () => Promise<void>) => {
       if (index === 0) {
         throw error
       }
-      await delay(1000)
+      await delay(ATTEMPT_TIMEOUT)
     }
+  }
+}
+
+const waitWhileLambdaPending = async (functionName: string): Promise<void> => {
+  let isStateCorrect = false
+
+  for (let i = 1; i <= MAX_ATTEMPTS; i++) {
+    const { State } = await getFunctionConfiguration({
+      Region: region,
+      FunctionName: functionName
+    })
+
+    if (State == null || State !== 'Pending') {
+      isStateCorrect = true
+      break
+    }
+
+    await delay(ATTEMPT_TIMEOUT)
+  }
+
+  if (!isStateCorrect) {
+    throw new Error('Lambda is still in "Pending" state')
   }
 }
 
@@ -48,7 +74,6 @@ describe('method "invokeFunction" should call the lambda', () => {
   let roleArn: string
   let functionArn: string
 
-  const region = 'eu-central-1'
   const policyName = `resolve-cloud-common-invoke-function-test-p`
   const roleName = `resolve-cloud-common-invoke-function-test-r`
   const functionName = `resolve-cloud-common-invoke-function-test`
@@ -102,6 +127,8 @@ describe('method "invokeFunction" should call the lambda', () => {
       Runtime: 'nodejs12.x',
       Timeout: 15 * 60
     }))
+
+    await waitWhileLambdaPending(functionArn)
   })
 
   afterAll(async () => {
@@ -145,6 +172,8 @@ describe('method "invokeFunction" should call the lambda', () => {
   test('and increment the counter to 2', async () => {
     const envKey = `resolve`
 
+    await delay(2000)
+
     await invokeFunction({
       Region: region,
       FunctionName: functionName,
@@ -168,6 +197,8 @@ describe('method "invokeFunction" should call the lambda', () => {
 
   test('throw TimeoutError and increment the counter to 3', async () => {
     const envKey = `resolve`
+
+    await delay(2000)
 
     try {
       await invokeFunction({
