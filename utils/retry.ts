@@ -7,7 +7,8 @@ export const toleratedErrors: Array<string> = [
   'ThrottlingException',
   'Throttling',
   'TooManyRequestsException',
-  'NetworkingError'
+  'NetworkingError',
+  'ResourceConflictException'
 ]
 
 interface OptionsStruct {
