@@ -1,5 +1,6 @@
 import Lambda from 'aws-sdk/clients/lambda'
 
+import updateFunctionConfiguration from './updateFunctionConfiguration'
 import { retry, Options, getLog, Log } from '../utils'
 
 const updateFunctionEnvironment = async (
@@ -33,11 +34,6 @@ const updateFunctionEnvironment = async (
 
   try {
     log.debug(`Update function environment variables`)
-    const updateFunctionConfiguration = retry(
-      lambda,
-      lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, maxAttempts: 50 })
-    )
     const nextVariables: Record<string, string> = { ...currentVars }
     for (const [key, value] of Object.entries(Variables) as Array<[string, string | null]>) {
       if (value == null) {
@@ -48,6 +44,7 @@ const updateFunctionEnvironment = async (
     }
 
     await updateFunctionConfiguration({
+      Region,
       FunctionName,
       Environment: {
         Variables: nextVariables

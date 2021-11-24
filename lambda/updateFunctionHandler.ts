@@ -1,6 +1,5 @@
-import Lambda from 'aws-sdk/clients/lambda'
-
-import { retry, Options, getLog, Log } from '../utils'
+import updateFunctionConfiguration from './updateFunctionConfiguration'
+import { getLog, Log } from '../utils'
 
 const updateFunctionHandler = async (
   params: {
@@ -15,14 +14,8 @@ const updateFunctionHandler = async (
   try {
     log.debug(`Update the function "${FunctionName}" handler`)
 
-    const lambda = new Lambda({ region: Region })
-
-    const updateFunctionConfiguration = retry(
-      lambda,
-      lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, maxAttempts: 1 })
-    )
     await updateFunctionConfiguration({
+      Region,
       FunctionName,
       Handler
     })
