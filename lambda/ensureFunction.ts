@@ -197,7 +197,6 @@ const ensureFunction = async (
   try {
     log.debug(`Update function configuration`)
 
-    const lambda = new Lambda({ region: Region })
     let FunctionVersion
 
     if (S3Key != null || ZipFile != null) {
