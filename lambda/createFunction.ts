@@ -1,12 +1,16 @@
 import Lambda from 'aws-sdk/clients/lambda'
 
 import { Log, Options, retry, getLog } from '../utils'
+import getFunctionConfiguration from './getFunctionConfiguration'
 
 export const LambdaDefaults = {
   MEMORY_SIZE: 512,
   TIMEOUT: 900,
-  RUNTIME: 'nodejs12.x'
+  RUNTIME: 'nodejs14.x'
 }
+
+const MAX_ATTEMPTS = 180
+const ATTEMPT_TIMEOUT = 1000
 
 async function createFunction(
   params: {
@@ -88,6 +92,20 @@ async function createFunction(
 
   if (FunctionArn == null) {
     throw new Error('Unknown function ARN')
+  }
+
+  for (let i = 1; i <= MAX_ATTEMPTS; i++) {
+    const { State } = await getFunctionConfiguration({
+      Region,
+      FunctionName: FunctionArn
+    })
+
+    if (State != null && State !== 'Pending') {
+      break
+    }
+
+    log.verbose(`Lambda is pending [${i}/${MAX_ATTEMPTS}]`)
+    await new Promise((resolve) => setTimeout(resolve, ATTEMPT_TIMEOUT))
   }
 
   return {

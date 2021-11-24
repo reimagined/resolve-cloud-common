@@ -18,6 +18,7 @@ const mockPutFunctionConcurrency = mockedSdkFunction(Lambda.prototype.putFunctio
 const mockUpdateFunctionConfiguration = mockedSdkFunction(
   Lambda.prototype.updateFunctionConfiguration
 )
+const mockGetFunctionConfiguration = mockedSdkFunction(Lambda.prototype.getFunctionConfiguration)
 
 describe('ensureFunction', () => {
   afterEach(() => {
@@ -30,8 +31,13 @@ describe('ensureFunction', () => {
     mockPutFunctionConcurrency.mockClear()
     mockUpdateFunctionConfiguration.mockClear()
     mockPutFunctionEventInvokeConfig.mockClear()
+    mockGetFunctionConfiguration.mockClear()
   })
   test('should function has been ensure', async () => {
+    mockGetFunctionConfiguration.mockResolvedValue({
+      State: 'Active',
+      LastUpdateStatus: 'Successful'
+    })
     mockUpdateFunctionConfiguration.mockResolvedValue({ FunctionArn: 'functionArn' })
     mockUpdateFunctionCode.mockResolvedValue({ Version: 'version' })
     mockListTags.mockResolvedValue({
@@ -75,6 +81,10 @@ describe('ensureFunction', () => {
   })
 
   test('should failed to ensure function', async () => {
+    mockGetFunctionConfiguration.mockResolvedValue({
+      State: 'Active',
+      LastUpdateStatus: 'Successful'
+    })
     mockUpdateFunctionConfiguration.mockRejectedValue(new Error())
     try {
       await ensureFunction({
@@ -94,6 +104,10 @@ describe('ensureFunction', () => {
   test('should function has been created with ARN', async () => {
     const error: Error & { code?: string } = new Error()
     error.code = 'ResourceNotFoundException'
+    mockGetFunctionConfiguration.mockResolvedValue({
+      State: 'Active',
+      LastUpdateStatus: 'Successful'
+    })
     mockUpdateFunctionConfiguration.mockRejectedValue(error)
     mockCreateFunction.mockResolvedValue({ FunctionArn: 'functionArn', Version: 'version' })
     const result = await ensureFunction({
@@ -116,7 +130,7 @@ describe('ensureFunction', () => {
       Role: 'roleArn',
       MemorySize: 512,
       Layers: undefined,
-      Runtime: 'nodejs12.x',
+      Runtime: 'nodejs14.x',
       Tags: {
         Owner: 'reimagined'
       },
@@ -130,6 +144,10 @@ describe('ensureFunction', () => {
     err.code = 'ResourceNotFoundException'
     mockUpdateFunctionConfiguration.mockRejectedValue(err)
     mockCreateFunction.mockResolvedValue({})
+    mockGetFunctionConfiguration.mockResolvedValue({
+      State: 'Active',
+      LastUpdateStatus: 'Successful'
+    })
     try {
       await ensureFunction({
         Region: 'region',

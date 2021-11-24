@@ -1,6 +1,5 @@
-import Lambda from 'aws-sdk/clients/lambda'
-
-import { retry, Options, getLog, Log } from '../utils'
+import updateFunctionConfiguration from './updateFunctionConfiguration'
+import { getLog, Log } from '../utils'
 
 const updateFunctionTracingMode = async (
   params: {
@@ -15,14 +14,8 @@ const updateFunctionTracingMode = async (
   try {
     log.debug(`Update the function "${FunctionName}" tracing mode`)
 
-    const lambda = new Lambda({ region: Region })
-
-    const updateFunctionConfiguration = retry(
-      lambda,
-      lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, maxAttempts: 5, delay: 5000 })
-    )
     await updateFunctionConfiguration({
+      Region,
       FunctionName,
       TracingConfig: {
         Mode

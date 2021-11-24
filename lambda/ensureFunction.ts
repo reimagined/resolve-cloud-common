@@ -2,6 +2,7 @@ import Lambda from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log } from '../utils'
 
+import updateFunctionConfiguration from './updateFunctionConfiguration'
 import setFunctionConcurrency from './setFunctionConcurrency'
 import deleteFunctionConcurrency from './deleteFunctionConcurrency'
 import createFunction, { LambdaDefaults } from './createFunction'
@@ -196,7 +197,6 @@ const ensureFunction = async (
   try {
     log.debug(`Update function configuration`)
 
-    const lambda = new Lambda({ region: Region })
     let FunctionVersion
 
     if (S3Key != null || ZipFile != null) {
@@ -235,13 +235,8 @@ const ensureFunction = async (
       log
     )
 
-    const updateFunctionConfiguration = retry(
-      lambda,
-      lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, silent: true, maxAttempts: 50 })
-    )
-
     const { FunctionArn } = await updateFunctionConfiguration({
+      Region,
       Description,
       FunctionName,
       Handler,

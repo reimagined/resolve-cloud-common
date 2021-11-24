@@ -17,9 +17,13 @@ describe('updateFunctionEnvironment', () => {
   })
   test('should function environment variables have been updated', async () => {
     mockGetFunctionConfiguration.mockResolvedValue({
-      Environment: { Variables: { testEnv1: 'testEnv1' } }
+      Environment: { Variables: { testEnv1: 'testEnv1' } },
+      State: 'Active',
+      LastUpdateStatus: 'Successful'
     })
-    mockUpdateFunctionConfiguration.mockResolvedValue({})
+    mockUpdateFunctionConfiguration.mockResolvedValue({
+      FunctionArn: 'functionArn'
+    })
     await updateFunctionEnvironment({
       Region: 'region',
       FunctionName: 'functionName',

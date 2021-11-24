@@ -1,5 +1,5 @@
-import Lambda from 'aws-sdk/clients/lambda'
-import { getLog, Log, Options, retry } from '../utils'
+import updateFunctionConfiguration from './updateFunctionConfiguration'
+import { getLog, Log } from '../utils'
 
 async function updateFunctionVpcConfig(
   params: {
@@ -11,19 +11,10 @@ async function updateFunctionVpcConfig(
 ): Promise<void> {
   const { Region, VpcConfig, FunctionName } = params
 
-  const lambda = new Lambda({
-    region: Region
-  })
-
-  const updateFunctionConfiguration = retry(
-    lambda,
-    lambda.updateFunctionConfiguration,
-    Options.Defaults.override({ log, silent: true, maxAttempts: 50 })
-  )
-
   try {
     log.debug(`Update function "${FunctionName}" VPC config`)
     await updateFunctionConfiguration({
+      Region,
       FunctionName,
       VpcConfig
     })
