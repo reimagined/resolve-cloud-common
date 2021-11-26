@@ -1,6 +1,10 @@
 import Lambda from 'aws-sdk/clients/lambda'
 
+import getFunctionConfiguration from './getFunctionConfiguration'
 import { retry, Options, getLog, Log } from '../utils'
+
+const MAX_ATTEMPTS = 180
+const ATTEMPT_TIMEOUT = 1000
 
 const updateFunctionCode = async (
   params: {
@@ -23,11 +27,32 @@ const updateFunctionCode = async (
       lambda.updateFunctionCode,
       Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
     )
+
     await setFunctionCode({
       FunctionName,
       S3Bucket,
       S3Key
     })
+
+    for (let i = 1; i <= MAX_ATTEMPTS; i++) {
+      const { State, LastUpdateStatus } = await getFunctionConfiguration({
+        Region,
+        FunctionName
+      })
+
+      if (
+        State != null &&
+        State !== 'Pending' &&
+        LastUpdateStatus != null &&
+        LastUpdateStatus !== 'InProgress'
+      ) {
+        break
+      }
+
+      log.verbose(`Lambda is pending [${i}/${MAX_ATTEMPTS}]`)
+      await new Promise((resolve) => setTimeout(resolve, ATTEMPT_TIMEOUT))
+    }
+
     log.debug(`The function "${FunctionName}" code has been updated`)
   } catch (error) {
     log.debug(`Failed to update the function "${FunctionName}" code`)
