@@ -3,6 +3,7 @@ import commitTransaction from './commitTransaction'
 import createStatementExecutor from './createStatementExecutor'
 import deleteDBCluster from './deleteDBCluster'
 import ensureDBCluster from './ensureDBCluster'
+import modifyDBClusterMinMaxCapacity from './modifyDBClusterMinMaxCapacity'
 import escapeId from './escapeId'
 import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
@@ -17,6 +18,7 @@ export {
   createStatementExecutor,
   deleteDBCluster,
   ensureDBCluster,
+  modifyDBClusterMinMaxCapacity,
   escapeId,
   escapeStr,
   executeStatement,
