@@ -4,6 +4,7 @@ import createStatementExecutor from './createStatementExecutor'
 import deleteDBCluster from './deleteDBCluster'
 import ensureDBCluster from './ensureDBCluster'
 import modifyDBClusterMinMaxCapacity from './modifyDBClusterMinMaxCapacity'
+import modifyCurrentDBClusterCapacity from './modifyCurrentDBClusterCapacity'
 import escapeId from './escapeId'
 import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
@@ -19,6 +20,7 @@ export {
   deleteDBCluster,
   ensureDBCluster,
   modifyDBClusterMinMaxCapacity,
+  modifyCurrentDBClusterCapacity,
   escapeId,
   escapeStr,
   executeStatement,
