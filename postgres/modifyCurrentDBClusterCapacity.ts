@@ -31,7 +31,7 @@ const modifyCurrentDBClusterCapacity = async (
   }
   let [cluster] = DBClusters
   if (cluster == null || cluster.DBClusterIdentifier == null) {
-    throw new Error('Failed to get database cluster identifier')
+    throw new Error('Failed to  get database cluster identifier')
   }
 
   for (let iteration = 0; ; iteration++) {
