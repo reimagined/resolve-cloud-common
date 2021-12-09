@@ -1,31 +1,17 @@
 import beginTransaction from './beginTransaction'
 import commitTransaction from './commitTransaction'
 import createStatementExecutor from './createStatementExecutor'
-import deleteDBCluster from './deleteDBCluster'
-import ensureDBCluster from './ensureDBCluster'
-import modifyDBClusterMinMaxCapacity from './modifyDBClusterMinMaxCapacity'
-import modifyCurrentDBClusterCapacity from './modifyCurrentDBClusterCapacity'
 import escapeId from './escapeId'
 import escapeStr from './escapeStr'
 import executeStatement from './executeStatement'
-import getDBClusterByTags from './getDBClusterByTags'
-import getDBClustersByTags from './getDBClustersByTags'
 import rollbackTransaction from './rollbackTransaction'
-import describeDBClusters from './describeDBClusters'
 
 export {
   beginTransaction,
   commitTransaction,
   createStatementExecutor,
-  deleteDBCluster,
-  ensureDBCluster,
-  modifyDBClusterMinMaxCapacity,
-  modifyCurrentDBClusterCapacity,
   escapeId,
   escapeStr,
   executeStatement,
-  getDBClusterByTags,
-  getDBClustersByTags,
-  rollbackTransaction,
-  describeDBClusters
+  rollbackTransaction
 }
