@@ -5,7 +5,7 @@ import RDS, {
 
 import { retry, Options, getLog, Log } from '../utils'
 
-const ensureDBCluster = async (
+const createDBCluster = async (
   params: {
     Region: string
     DBClusterIdentifier: string
@@ -16,6 +16,7 @@ const ensureDBCluster = async (
     SecondsUntilAutoPause?: number | null
     TimeoutAction?: 'ForceApplyCapacityChange' | 'RollbackCapacityChange'
     Tags?: Record<string, string>
+    IfNotExists?: boolean
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
 ): Promise<DBCluster> => {
@@ -28,7 +29,8 @@ const ensureDBCluster = async (
     MaxCapacity,
     SecondsUntilAutoPause,
     TimeoutAction = 'RollbackCapacityChange',
-    Tags = {}
+    Tags = {},
+    IfNotExists
   } = params
 
   Tags.Owner = 'reimagined'
@@ -59,10 +61,9 @@ const ensureDBCluster = async (
 
   try {
     const { DBClusters } = await describeDBClusters({ DBClusterIdentifier })
-    if (DBClusters == null || DBClusters.length < 1) {
-      throw new Error('Failed to get database cluster')
+    if (DBClusters != null && DBClusters.length > 0 && !IfNotExists) {
+      throw new Error(`Cluster with the same cluster id "${DBClusterIdentifier}" already exists`)
     }
-    return DBClusters[0]
   } catch (error) {
     if (error != null && !/DBCluster .*? not found/i.test(error.message)) {
       throw error
@@ -88,7 +89,7 @@ const ensureDBCluster = async (
       MasterUsername,
       MasterUserPassword,
       Engine: 'aurora-postgresql',
-      EngineVersion: '10.7',
+      EngineVersion: '10.14',
       EngineMode: 'serverless',
       ScalingConfiguration,
       StorageEncrypted: true,
@@ -110,4 +111,4 @@ const ensureDBCluster = async (
   }
 }
 
-export default ensureDBCluster
+export default createDBCluster
