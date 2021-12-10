@@ -4,6 +4,7 @@ import createApiGatewayLambdaIntegration from './createApiGatewayLambdaIntegrati
 import createApiGatewayMethod from './createApiGatewayMethod'
 import createApiGatewayResource from './createApiGatewayResource'
 import createApiWithLambdaIntegration from './createApiWithLambdaIntegration'
+import createHTTPApi from './createHTTPApi'
 import createRestApi from './createRestApi'
 import createRouteWithLambdaIntegration from './createRouteWithLambdaIntegration'
 import createWebSocketApi from './createWebSocketApi'
@@ -23,6 +24,7 @@ export {
   createApiGatewayMethod,
   createApiGatewayResource,
   createApiWithLambdaIntegration,
+  createHTTPApi,
   createRestApi,
   createRouteWithLambdaIntegration,
   createWebSocketApi,
