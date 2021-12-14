@@ -1,35 +1,33 @@
-import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2, { ProtocolType, CreateApiResponse } from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log, ignoreAlreadyExistsException } from '../utils'
 
-const createHTTPApi = async (
+const createHttpApi = async (
   params: {
     Region: string
     Name: string
-    ProtocolType: 'WEBSOKET' | 'HTTP'
+    ProtocolType: ProtocolType
     Tags?: Record<string, string>
     IfNotExists?: boolean
   },
   log: Log = getLog('CREATE-HTTP-API')
-) => {
+): Promise<{ ID: string | undefined, Name: string }> => {
   const { Region, Name, ProtocolType, IfNotExists, Tags } = params
 
   const gateway = new ApiGatewayV2({ region: Region })
-  const createHTTPApiExecutor = retry(
+  const createHttpApiExecutor = retry(
     gateway,
     gateway.createApi,
     Options.Defaults.override({ log })
   )
 
-  // const getHTTPApiExecutor = retry(gateway, gateway.getApi, Options.Defaults.override({ log }))
-
-  const getHTTPApisExecutor = retry(gateway, gateway.getApis, Options.Defaults.override({ log }))
+  const getHttpApisExecutor = retry(gateway, gateway.getApis, Options.Defaults.override({ log }))
 
   let httpApiId: string | undefined
   try {
     log.debug(`Create the "${Name}" HTTP API`)
 
-    void ({ ApiId: httpApiId } = await createHTTPApiExecutor({
+    void ({ ApiId: httpApiId } = await createHttpApiExecutor({
       Name,
       ProtocolType,
       Tags
@@ -44,7 +42,7 @@ const createHTTPApi = async (
 
       let NextToken: string | undefined
       searchLoop: for (;;) {
-        const { Items, NextToken: token } = await getHTTPApisExecutor({
+        const { Items, NextToken: token } = await getHttpApisExecutor({
           MaxResults: '50',
           NextToken
         })
@@ -73,4 +71,4 @@ const createHTTPApi = async (
   }
 }
 
-export default createHTTPApi
+export default createHttpApi
