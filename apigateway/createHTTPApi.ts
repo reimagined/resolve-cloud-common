@@ -1,4 +1,4 @@
-import ApiGatewayV2, { ProtocolType, CreateApiResponse } from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2, { ProtocolType as TypeOfProtocol } from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log, ignoreAlreadyExistsException } from '../utils'
 
@@ -6,12 +6,12 @@ const createHttpApi = async (
   params: {
     Region: string
     Name: string
-    ProtocolType: ProtocolType
+    ProtocolType: TypeOfProtocol
     Tags?: Record<string, string>
     IfNotExists?: boolean
   },
   log: Log = getLog('CREATE-HTTP-API')
-): Promise<{ ID: string | undefined, Name: string }> => {
+): Promise<{ ID: string | undefined; Name: string }> => {
   const { Region, Name, ProtocolType, IfNotExists, Tags } = params
 
   const gateway = new ApiGatewayV2({ region: Region })

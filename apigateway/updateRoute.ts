@@ -1,4 +1,9 @@
-import ApiGatewayV2, { AuthorizationType, AuthorizationScopes, RouteParameters, UpdateApiResponse, Route } from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2, {
+  AuthorizationType as TypeOfAuthorization,
+  AuthorizationScopes as TypeOfAuthorizationScopes,
+  RouteParameters,
+  UpdateApiResponse
+} from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -10,15 +15,14 @@ const updateRoute = async (
     ApiId: string
     RouteId: string
     RouteKey: string
-    AuthorizationType?: AuthorizationType
-    AuthorizationScopes?: AuthorizationScopes
+    AuthorizationType?: TypeOfAuthorization
+    AuthorizationScopes?: TypeOfAuthorizationScopes
     ApiKeyRequired?: boolean
     RequestParameters?: RouteParameters
     Target?: string
   },
   log: Log = getLog('UPDATE-ROUTE')
 ): Promise<UpdateApiResponse | undefined> => {
-
   const {
     Region,
     ApiId,
@@ -36,7 +40,7 @@ const updateRoute = async (
   const updateRouteExecutor = retry(
     gateway,
     gateway.updateRoute,
-    Options.Defaults.override({log})
+    Options.Defaults.override({ log })
   )
 
   try {
@@ -53,11 +57,11 @@ const updateRoute = async (
       Target
     })
 
-    const route = await getRoute({ApiId, Region, RouteKey})
+    const route = await getRoute({ ApiId, Region, RouteKey })
 
     if (route) {
       log.debug(`Route "${RouteId}" on api gateway "${ApiId}" has been updated`)
-      return route 
+      return route
     } else {
       return undefined
     }

@@ -40,11 +40,7 @@ const udpateApi = async (
 
   const gateway = new ApiGatewayV2({ region: Region })
 
-  const udpateApiExecutor = retry(
-    gateway,
-    gateway.updateApi,
-    Options.Defaults.override({log})
-  )
+  const udpateApiExecutor = retry(gateway, gateway.updateApi, Options.Defaults.override({ log }))
 
   try {
     log.debug(`Update api gateway "${ApiId}"`)
@@ -61,7 +57,7 @@ const udpateApi = async (
       RouteKey,
       RouteSelectionExpression,
       Target,
-      Version,
+      Version
     })
     console.log('222')
     const api = await getApi({
@@ -77,7 +73,7 @@ const udpateApi = async (
     }
   } catch (error) {
     log.error(`Failed to update api gateway "${ApiId}"`)
-    throw error 
+    throw error
   }
 }
 

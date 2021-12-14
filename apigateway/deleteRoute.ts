@@ -2,7 +2,7 @@ import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log, ignoreNotFoundException } from '../utils'
 
-const deleteRoute = async(
+const deleteRoute = async (
   params: {
     Region: string
     ApiId: string
@@ -14,11 +14,11 @@ const deleteRoute = async(
   const { Region, ApiId, RouteId, IfExists } = params
 
   const gateway = new ApiGatewayV2({ region: Region })
-  
+
   const deleteRouteExecutor = retry(
     gateway,
     gateway.deleteRoute,
-    Options.Defaults.override({log})
+    Options.Defaults.override({ log })
   )
 
   try {
@@ -31,7 +31,7 @@ const deleteRoute = async(
 
     log.debug(`The route "${RouteId}" has been deleted`)
   } catch (error) {
-    if (IfExists){
+    if (IfExists) {
       ignoreNotFoundException(error)
     } else {
       log.error(`Failed to delete the route "${RouteId}"`)

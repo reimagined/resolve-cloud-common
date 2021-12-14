@@ -1,4 +1,8 @@
-import ApiGatewayV2, { AuthorizationType, AuthorizationScopes, RouteParameters } from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2, {
+  AuthorizationType as TypeOfAuthorization,
+  AuthorizationScopes as TypeOfAuthorizationScopes,
+  RouteParameters
+} from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log } from '../utils'
 
@@ -7,15 +11,15 @@ const createRoute = async (
     Region: string
     ApiId: string
     RouteKey: string
-    AuthorizationType?: AuthorizationType
-    AuthorizationScopes?: AuthorizationScopes
+    AuthorizationType?: TypeOfAuthorization
+    AuthorizationScopes?: TypeOfAuthorizationScopes
     ApiKeyRequired?: boolean
     RequestParameters?: RouteParameters
     Target?: string
   },
   log: Log = getLog('CREATE-ROUTE')
 ): Promise<string | undefined> => {
-  const { 
+  const {
     Region,
     ApiId,
     RouteKey,
@@ -31,25 +35,25 @@ const createRoute = async (
   const createRouteExecutor = retry(
     gateway,
     gateway.createRoute,
-    Options.Defaults.override({log})
+    Options.Defaults.override({ log })
   )
 
   try {
-  log.debug(`Create route for API Gateway ID "${ApiId}"`)
+    log.debug(`Create route for API Gateway ID "${ApiId}"`)
 
-  const { RouteId } = await createRouteExecutor({
-    ApiId,
-    RouteKey,
-    ApiKeyRequired,
-    AuthorizationScopes,
-    AuthorizationType,
-    RequestParameters,
-    Target
-  })
+    const { RouteId } = await createRouteExecutor({
+      ApiId,
+      RouteKey,
+      ApiKeyRequired,
+      AuthorizationScopes,
+      AuthorizationType,
+      RequestParameters,
+      Target
+    })
 
-  log.debug(`Route "${RouteKey}" has been created with ID "${RouteId}"`)
+    log.debug(`Route "${RouteKey}" has been created with ID "${RouteId}"`)
 
-  return RouteId
+    return RouteId
   } catch (error) {
     log.error(`Failed to create route "${RouteKey}" for "${ApiId}"`)
     throw error

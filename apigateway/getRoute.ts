@@ -14,27 +14,21 @@ const getRoute = async (
 
   const gateway = new ApiGatewayV2({ region: Region })
 
-  const getRouteExecutor = retry(
-    gateway,
-    gateway.getRoutes,
-    Options.Defaults.override({log})
-  )
+  const getRouteExecutor = retry(gateway, gateway.getRoutes, Options.Defaults.override({ log }))
   let nextToken: string | undefined
   let items: Route[] | undefined
 
   do {
     try {
       log.debug(`Find a api gateway route`)
-  
-      void({ NextToken: nextToken, Items: items } = await getRouteExecutor({
+
+      void ({ NextToken: nextToken, Items: items } = await getRouteExecutor({
         ApiId,
         MaxResults: '100',
         NextToken: nextToken
       }))
 
-      const route = items?.find(
-        (item) => item.RouteKey === RouteKey
-      )
+      const route = items?.find((item) => item.RouteKey === RouteKey)
 
       if (route) {
         return route
@@ -44,7 +38,7 @@ const getRoute = async (
       throw error
     }
   } while (nextToken != null)
-  
+
   return null
 }
 
