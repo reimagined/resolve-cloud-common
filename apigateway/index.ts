@@ -20,6 +20,7 @@ import getApiGatewayRootResource from './getApiGatewayRootResource'
 import getRestApi from './getRestApi'
 import getRoute from './getRoute'
 import getApisByTags from './getApisByTags'
+import getTags from './getTags'
 import updateApi from './updateApi'
 import updateRoute from './updateRoute'
 
@@ -46,6 +47,7 @@ export {
   getRestApi,
   getRoute,
   getApisByTags,
+  getTags,
   updateApi,
   updateRoute
 }
