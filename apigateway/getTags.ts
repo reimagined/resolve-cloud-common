@@ -13,11 +13,7 @@ const getTags = async (
 
   const gateway = new ApiGatewayV2({ region: Region })
 
-  const getTagsExecutor = retry(
-    gateway,
-    gateway.getTags,
-    Options.Defaults.override({log})
-  )
+  const getTagsExecutor = retry(gateway, gateway.getTags, Options.Defaults.override({ log }))
 
   try {
     log.debug(`Find tags in "${ApiId}" api gateway`)
