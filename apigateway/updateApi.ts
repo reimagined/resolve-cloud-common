@@ -44,7 +44,7 @@ const udpateApi = async (
 
   try {
     log.debug(`Update api gateway "${ApiId}"`)
-    console.log('111')
+
     await udpateApiExecutor({
       ApiId,
       Name,
@@ -59,7 +59,6 @@ const udpateApi = async (
       Target,
       Version
     })
-    console.log('222')
     const api = await getApi({
       Region,
       Name
