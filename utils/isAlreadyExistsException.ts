@@ -7,6 +7,7 @@ export function isAlreadyExistsException(error?: Error & { code: string }): bool
       error.code === 'BucketAlreadyExists' ||
       error.code === 'UsernameExistsException' ||
       error.code === 'StateMachineAlreadyExists' ||
+      error.code === 'DBClusterAlreadyExistsFault' ||
       (error.code === 'InvalidChangeBatch' && error.message?.includes('already exists')))
   )
 }
