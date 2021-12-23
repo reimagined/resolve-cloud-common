@@ -16,6 +16,7 @@ const createDBCluster = async (
     SecondsUntilAutoPause?: number | null
     TimeoutAction?: 'ForceApplyCapacityChange' | 'RollbackCapacityChange'
     Tags?: Record<string, string>
+    AvailabilityZones?: Array<string>
     IfNotExists?: boolean
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
@@ -30,6 +31,7 @@ const createDBCluster = async (
     SecondsUntilAutoPause,
     TimeoutAction = 'RollbackCapacityChange',
     Tags = {},
+    AvailabilityZones,
     IfNotExists
   } = params
 
@@ -88,6 +90,7 @@ const createDBCluster = async (
       DBClusterIdentifier,
       MasterUsername,
       MasterUserPassword,
+      AvailabilityZones,
       Engine: 'aurora-postgresql',
       EngineVersion: '10.14',
       EngineMode: 'serverless',
