@@ -1,9 +1,10 @@
-import RDS, {
+import RDS from 'aws-sdk/clients/rds'
+import type {
   DBCluster,
   ScalingConfiguration as ScalingConfigurationType
 } from 'aws-sdk/clients/rds'
 
-import { retry, Options, getLog, Log } from '../utils'
+import { retry, Options, getLog, Log, isAlreadyExistsException } from '../utils'
 
 const createDBCluster = async (
   params: {
@@ -16,6 +17,8 @@ const createDBCluster = async (
     SecondsUntilAutoPause?: number | null
     TimeoutAction?: 'ForceApplyCapacityChange' | 'RollbackCapacityChange'
     Tags?: Record<string, string>
+    AvailabilityZones?: Array<string>
+    VpcSecurityGroupIds?: Array<string>
     IfNotExists?: boolean
   },
   log: Log = getLog('ENSURE-DATABASE-CLUSTER')
@@ -30,6 +33,8 @@ const createDBCluster = async (
     SecondsUntilAutoPause,
     TimeoutAction = 'RollbackCapacityChange',
     Tags = {},
+    AvailabilityZones,
+    VpcSecurityGroupIds,
     IfNotExists
   } = params
 
@@ -59,17 +64,6 @@ const createDBCluster = async (
     Options.Defaults.override({ log, maxAttempts: 2 })
   )
 
-  try {
-    const { DBClusters } = await describeDBClusters({ DBClusterIdentifier })
-    if (DBClusters != null && DBClusters.length > 0 && !IfNotExists) {
-      throw new Error(`Cluster with the same cluster id "${DBClusterIdentifier}" already exists`)
-    }
-  } catch (error) {
-    if (error != null && !/DBCluster .*? not found/i.test(error.message)) {
-      throw error
-    }
-  }
-
   const ScalingConfiguration: ScalingConfigurationType = {
     MinCapacity,
     MaxCapacity,
@@ -88,6 +82,8 @@ const createDBCluster = async (
       DBClusterIdentifier,
       MasterUsername,
       MasterUserPassword,
+      AvailabilityZones,
+      VpcSecurityGroupIds,
       Engine: 'aurora-postgresql',
       EngineVersion: '10.14',
       EngineMode: 'serverless',
@@ -105,9 +101,18 @@ const createDBCluster = async (
 
     return createResult.DBCluster
   } catch (error) {
-    log.debug(`Failed to create RDS database cluster`)
+    if (!isAlreadyExistsException(error) || !IfNotExists) {
+      log.debug(`Failed to create RDS database cluster`)
 
-    throw error
+      throw error
+    } else {
+      const { DBClusters = [] } = await describeDBClusters({ DBClusterIdentifier })
+      const cluster = DBClusters[0]
+      if (cluster == null) {
+        throw error
+      }
+      return cluster
+    }
   }
 }
 
