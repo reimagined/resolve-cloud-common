@@ -1,5 +1,4 @@
 import { EOL } from 'os'
-// eslint-disable-next-line import/no-unresolved
 import chalk from 'chalk'
 import Lambda from 'aws-sdk/clients/lambda'
 
