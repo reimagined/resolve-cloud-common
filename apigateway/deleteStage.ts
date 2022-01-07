@@ -19,7 +19,7 @@ const deleteStage = async (
   const deleteStageExecutor = retry(
     gateway,
     gateway.deleteStage,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['NotFoundException'] })
   )
   const untagResourcesExecutor = retry(
     taggingApi,

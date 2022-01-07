@@ -35,7 +35,7 @@ const createRoute = async (
   const createRouteExecutor = retry(
     gateway,
     gateway.createRoute,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['ConflictException', 'NotFoundException'] })
   )
 
   try {

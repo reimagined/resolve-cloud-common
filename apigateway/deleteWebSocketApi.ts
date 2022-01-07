@@ -18,7 +18,11 @@ const deleteWebSocketApi = async (
   const apiGatewayV2 = new ApiGatewayV2({ region: Region })
   const taggingApi = new Resourcegroupstaggingapi({ region: Region })
 
-  const deleteApi = retry(apiGatewayV2, apiGatewayV2.deleteApi, Options.Defaults.override({ log }))
+  const deleteApi = retry(
+    apiGatewayV2,
+    apiGatewayV2.deleteApi,
+    Options.Defaults.override({ log, expectedErrors: ['NotFoundException'] })
+  )
 
   const untaggingResources = retry(
     taggingApi,

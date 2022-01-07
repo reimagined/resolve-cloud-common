@@ -19,7 +19,7 @@ const createStage = async (
   const createStageExecutor = retry(
     gateway,
     gateway.createStage,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['ConflictException', 'NotFoundException'] })
   )
 
   try {

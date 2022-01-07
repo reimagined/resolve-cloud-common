@@ -18,7 +18,7 @@ const deleteRoute = async (
   const deleteRouteExecutor = retry(
     gateway,
     gateway.deleteRoute,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['NotFoundException'] })
   )
 
   try {

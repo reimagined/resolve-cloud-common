@@ -1,4 +1,4 @@
-import ApiGatewayV2, { ProtocolType as TypeOfProtocol } from 'aws-sdk/clients/apigatewayv2'
+import ApiGatewayV2 from 'aws-sdk/clients/apigatewayv2'
 
 import { retry, Options, getLog, Log, ignoreAlreadyExistsException } from '../utils'
 
@@ -6,21 +6,25 @@ const createHttpApi = async (
   params: {
     Region: string
     Name: string
-    ProtocolType: TypeOfProtocol
+    ProtocolType: 'WEBSOCKET' | 'HTTP'
     Tags?: Record<string, string>
     IfNotExists?: boolean
   },
   log: Log = getLog('CREATE-HTTP-API')
 ): Promise<{ ApiId: string | undefined; ApiEndpoint: string | undefined; Name: string }> => {
-  const { Region, Name, ProtocolType, IfNotExists, Tags } = params
+  const { Region, Name, ProtocolType, IfNotExists, Tags = {} } = params
 
   const gateway = new ApiGatewayV2({ region: Region })
   const createHttpApiExecutor = retry(
     gateway,
     gateway.createApi,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, expectedErrors: ['ConflictException', 'NotFoundException'] })
   )
-  const getHttpApisExecutor = retry(gateway, gateway.getApis, Options.Defaults.override({ log }))
+  const getHttpApisExecutor = retry(
+    gateway,
+    gateway.getApis,
+    Options.Defaults.override({ log, expectedErrors: ['NotFoundException'] })
+  )
 
   let httpApiId: string | undefined
   let httpApiEndpoint: string | undefined
