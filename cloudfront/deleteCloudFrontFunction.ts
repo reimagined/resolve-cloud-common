@@ -44,7 +44,7 @@ const deleteCloudFrontFunction = async (
 
     log.debug(`Cloudfront function "${Name}" has been delete`)
   } catch (error) {
-    log.debug(`Failed to delete "${Name}" cloudfront function`)
+    log.error(`Failed to delete "${Name}" cloudfront function`)
     throw error
   }
 }
