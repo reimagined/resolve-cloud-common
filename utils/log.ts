@@ -1,5 +1,6 @@
+import type { Chalk } from 'chalk'
+import chalk from 'chalk'
 import debug from 'debug'
-import chalk, { Chalk } from 'chalk'
 
 import { EnvVar } from './env'
 

@@ -40,6 +40,7 @@
     "no-extra-label": "off",
     "no-void": "off",
     "no-else-return": "off",
+    "no-promise-executor-return": "off",
     "one-var": "off",
     "class-methods-use-this": "off",
     "lines-between-class-members": "off",
