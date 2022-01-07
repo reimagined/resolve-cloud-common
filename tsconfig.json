@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2018",
+    "target": "es2020",
     "declaration": true,
-    "lib": ["es2018"],
+    "lib": ["es2020"],
     "baseUrl": "./",
     "outDir": "./",
     "strict": true,
@@ -19,7 +19,7 @@
     "removeComments": false,
     "resolveJsonModule": true,
     "useUnknownInCatchVariables": false,
-    "types": ["node", "jest", "lodash"]
+    "types": ["node", "jest", "chalk"]
   },
   "include": ["./**/*"],
   "exclude": ["node_modules", "**/__tests__/**", "**/__mocks__/**", "**/*.test.ts"]

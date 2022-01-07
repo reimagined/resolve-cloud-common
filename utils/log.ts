@@ -1,11 +1,13 @@
+import type { ChalkInstance } from 'chalk'
+// eslint-disable-next-line import/no-unresolved
+import chalk from 'chalk'
 import debug from 'debug'
-import chalk, { Chalk } from 'chalk'
 
 import { EnvVar } from './env'
 
 export const logRootNamespace = 'resolve:cloud:lambda:environment'
 
-const logLevels: Array<[string, Chalk]> = [
+const logLevels: Array<[string, ChalkInstance]> = [
   ['log', chalk.white],
   ['error', chalk.red.inverse],
   ['warn', chalk.yellow.inverse],
