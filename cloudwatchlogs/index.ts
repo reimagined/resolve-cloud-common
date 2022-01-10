@@ -1,6 +1,6 @@
-import { setupRetentionLogs } from './setupRetentionLogs'
-import describeLogStreams from './describeLogStreams'
-import filterLogEvents from './filterLogEvents'
-import deleteLogGroup from './deleteLogGroup'
-
-export { setupRetentionLogs, describeLogStreams, filterLogEvents, deleteLogGroup }
+export { default as describeLogStreams } from './describeLogStreams'
+export { default as deleteLogGroup } from './deleteLogGroup'
+export { default as filterLogEvents } from './filterLogEvents'
+export { default as getLogsQueryResults } from './getLogsQueryResults'
+export { setupRetentionLogs } from './setupRetentionLogs'
+export { default as startLogsQuery } from './startLogsQuery'
