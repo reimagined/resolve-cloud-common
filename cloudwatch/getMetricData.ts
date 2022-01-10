@@ -1,7 +1,7 @@
 import CloudWatch, {
-  MetricDataQueries,
+  MetricDataQueries as MetricDataQueriesType,
   Timestamp,
-  MetricDataResults
+  MetricDataResults as MetricDataResultsType
 } from 'aws-sdk/clients/cloudwatch'
 
 import { Log, getLog, retry } from '../utils'
@@ -14,12 +14,12 @@ const getMetricData = async (
     EndTime
   }: {
     Region: string
-    MetricDataQueries: MetricDataQueries
+    MetricDataQueries: MetricDataQueriesType
     StartTime: Timestamp
     EndTime: Timestamp
   },
   log: Log = getLog('DELETE-METRIC-ALARM')
-): Promise<{ MetricDataResults: MetricDataResults }> => {
+): Promise<{ MetricDataResults: MetricDataResultsType }> => {
   const cw = new CloudWatch({ region: Region })
   const getMetricDataExecutor = retry(cw, cw.getMetricData)
 
