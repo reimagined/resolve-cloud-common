@@ -1,6 +1,6 @@
 {
   "name": "resolve-cloud-common",
-  "version": "0.0.168",
+  "version": "0.0.169",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
