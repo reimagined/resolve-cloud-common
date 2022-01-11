@@ -12,7 +12,7 @@ const putRule = async (
     EventPattern?: string
     RoleArn?: string
     TargetArn: string
-    InputEvent: string
+    InputEvent?: string
     ScheduleExpression?: string
     State?: 'ENABLED' | 'DISABLED'
     Tags: Record<string, string>
