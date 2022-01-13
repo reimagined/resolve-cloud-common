@@ -75,7 +75,7 @@ const putRule = async (
       Action: 'lambda:InvokeFunction',
       Principal: 'events.amazonaws.com',
       SourceArn: RuleArn,
-      StatementId: Name,
+      StatementId: Name
     })
 
     log.debug(`Permissions added`)
