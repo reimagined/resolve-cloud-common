@@ -7,7 +7,7 @@ export const toleratedErrors: Array<string> = [
   'ThrottlingException',
   'Throttling',
   'TooManyRequestsException',
-  'NetworkingError'
+  'NetworkingError',
 ]
 
 interface OptionsStruct {
@@ -82,14 +82,18 @@ export function retry<Callback extends (...args: any) => any>(
       try {
         return await callback(params).promise()
       } catch (error) {
-        if (error != null && options.expectedErrors.includes(error.code)) {
+        if (options.expectedErrors.includes(error?.code)) {
           throw error
         }
 
-        attempt +=
-          error != null && error.code != null && toleratedErrors.includes(error.code) ? 0 : 1
+        if (
+          !toleratedErrors.includes(error?.code) &&
+          !options.toleratedErrors.includes(error?.code)
+        ) {
+          attempt++
+        }
 
-        if (attempt !== maxAttempts) {
+        if (attempt < maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, delay))
         }
 
