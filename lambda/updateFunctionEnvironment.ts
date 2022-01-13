@@ -22,7 +22,7 @@ const updateFunctionEnvironment = async (
   const getFunctionConfiguration = retry(
     lambda,
     lambda.getFunctionConfiguration,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
   )
   const { Environment: { Variables: currentVars } = { Variables: {} } } =
     await getFunctionConfiguration({

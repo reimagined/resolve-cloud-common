@@ -20,7 +20,11 @@ const getFunctionConcurrency = async (
     const getFunction = retry(
       lambda,
       lambda.getFunction,
-      Options.Defaults.override({ log, maxAttempts: 1 })
+      Options.Defaults.override({
+        log,
+        maxAttempts: 1,
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
     const { Concurrency } = await getFunction({
       FunctionName

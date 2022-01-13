@@ -14,7 +14,7 @@ const listEventSourceMapping = async (
   const listEventSourceMappingExecutor = retry(
     lambda,
     lambda.listEventSourceMappings,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
   )
 
   try {

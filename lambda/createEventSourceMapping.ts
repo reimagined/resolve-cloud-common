@@ -33,7 +33,11 @@ const createEventSourceMapping = async (
       lambda.createEventSourceMapping,
       Options.Defaults.override({ log })
     )
-    const getQueueUrlExecutor = retry(sqs, sqs.getQueueUrl, Options.Defaults.override({ log }))
+    const getQueueUrlExecutor = retry(
+      sqs,
+      sqs.getQueueUrl,
+      Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
+    )
     const { Account } = await sts.getCallerIdentity().promise()
     const { QueueUrl } = await getQueueUrlExecutor({
       QueueName,

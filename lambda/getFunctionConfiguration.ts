@@ -19,7 +19,11 @@ const getFunctionConfiguration = async (
     const getFunctionConfig = retry(
       lambda,
       lambda.getFunctionConfiguration,
-      Options.Defaults.override({ log, maxAttempts: 50 })
+      Options.Defaults.override({
+        log,
+        maxAttempts: 50,
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
     const functionConfiguration = await getFunctionConfig({
       FunctionName,

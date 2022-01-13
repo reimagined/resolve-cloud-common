@@ -17,7 +17,11 @@ const deleteFunctionTags = async (
   const untagResource = retry(
     lambda,
     lambda.untagResource,
-    Options.Defaults.override({ log, maxAttempts: 1 })
+    Options.Defaults.override({
+      log,
+      maxAttempts: 1,
+      toleratedErrors: ['ResourceConflictException']
+    })
   )
 
   try {

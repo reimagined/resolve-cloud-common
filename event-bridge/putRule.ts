@@ -1,4 +1,3 @@
-import { v4 as uuidV4 } from 'uuid'
 import EventBridge from 'aws-sdk/clients/eventbridge'
 
 import { addFunctionPermission } from '../lambda'
@@ -55,13 +54,11 @@ const putRule = async (
 
   log.debug(`The rule "${Name}" has been put`)
 
-  const Id = uuidV4()
-
   await putTargets({
     Rule: Name,
     Targets: [
       {
-        Id,
+        Id: Name,
         Arn: TargetArn,
         Input: InputEvent,
         RoleArn
@@ -69,14 +66,27 @@ const putRule = async (
     ]
   })
 
-  await addFunctionPermission({
-    Region,
-    FunctionName: TargetArn,
-    Action: 'lambda:InvokeFunction',
-    Principal: 'events.amazonaws.com',
-    SourceArn: RuleArn,
-    StatementId: Id
-  })
+  log.debug(`Add target permissions`)
+
+  try {
+    await addFunctionPermission({
+      Region,
+      FunctionName: TargetArn,
+      Action: 'lambda:InvokeFunction',
+      Principal: 'events.amazonaws.com',
+      SourceArn: RuleArn,
+      StatementId: Name
+    })
+
+    log.debug(`Permissions added`)
+  } catch (error) {
+    if (error.code !== 'ResourceConflictException') {
+      log.debug(`Permissions add failed`)
+      throw error
+    }
+
+    log.debug(`Permissions already exist`)
+  }
 
   return { RuleArn }
 }

@@ -7,8 +7,7 @@ export const toleratedErrors: Array<string> = [
   'ThrottlingException',
   'Throttling',
   'TooManyRequestsException',
-  'NetworkingError',
-  'ResourceConflictException'
+  'NetworkingError'
 ]
 
 interface OptionsStruct {
@@ -17,6 +16,7 @@ interface OptionsStruct {
   readonly silent?: boolean
   readonly log?: Log
   readonly expectedErrors?: string[]
+  readonly toleratedErrors?: string[]
 }
 
 export class Options implements OptionsStruct {
@@ -25,6 +25,7 @@ export class Options implements OptionsStruct {
   public readonly silent: boolean = false
   public readonly log: Log = getLog('retry')
   public readonly expectedErrors: string[] = []
+  public readonly toleratedErrors: string[] = []
 
   public static get Defaults(): Options {
     return new Options({})
@@ -81,14 +82,18 @@ export function retry<Callback extends (...args: any) => any>(
       try {
         return await callback(params).promise()
       } catch (error) {
-        if (error != null && options.expectedErrors.includes(error.code)) {
+        if (options.expectedErrors.includes(error?.code)) {
           throw error
         }
 
-        attempt +=
-          error != null && error.code != null && toleratedErrors.includes(error.code) ? 0 : 1
+        if (
+          !toleratedErrors.includes(error?.code) &&
+          !options.toleratedErrors.includes(error?.code)
+        ) {
+          attempt++
+        }
 
-        if (attempt !== maxAttempts) {
+        if (attempt < maxAttempts) {
           await new Promise((resolve) => setTimeout(resolve, delay))
         }
 

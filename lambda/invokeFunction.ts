@@ -67,7 +67,12 @@ async function invokeFunction<Response>(
       const invoke = retry(
         lambda,
         lambda.invoke,
-        Options.Defaults.override({ log, maxAttempts: 30, expectedErrors: ['TimeoutError'] })
+        Options.Defaults.override({
+          log,
+          maxAttempts: 30,
+          expectedErrors: ['TimeoutError'],
+          toleratedErrors: ['ResourceConflictException']
+        })
       )
 
       const {
