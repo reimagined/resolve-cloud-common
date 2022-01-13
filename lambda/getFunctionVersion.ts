@@ -19,7 +19,7 @@ const getFunctionVersion = async (
     const listVersionsByFunction = retry(
       lambda,
       lambda.listVersionsByFunction,
-      Options.Defaults.override({ log })
+      Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
     )
 
     let Marker: string | undefined

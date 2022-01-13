@@ -21,7 +21,8 @@ const getFunctionRole = async (
       lambda.getFunctionConfiguration,
       Options.Defaults.override({
         log,
-        expectedErrors: ['ResourceNotFoundException', 'MissingRequiredParameter']
+        expectedErrors: ['ResourceNotFoundException', 'MissingRequiredParameter'],
+        toleratedErrors: ['ResourceConflictException']
       })
     )
     const { Role: RoleArn } = await getFunctionConfiguration({

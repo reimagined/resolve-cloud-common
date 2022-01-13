@@ -18,7 +18,11 @@ const deleteFunctionConcurrency = async (
     const removeFunctionConcurrency = retry(
       lambda,
       lambda.deleteFunctionConcurrency,
-      Options.Defaults.override({ log, maxAttempts: 1 })
+      Options.Defaults.override({
+        log,
+        maxAttempts: 1,
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
     await removeFunctionConcurrency({
       FunctionName

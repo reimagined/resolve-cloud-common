@@ -13,7 +13,7 @@ const getEventSourceMapping = async (
   const getEventSourceMappingExecutor = retry(
     lambda,
     lambda.getEventSourceMapping,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
   )
 
   try {

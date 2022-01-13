@@ -19,7 +19,7 @@ const deleteFunctionPermission = async (
     const removePermission = retry(
       lambda,
       lambda.removePermission,
-      Options.Defaults.override({ log })
+      Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
     )
     await removePermission({
       FunctionName,

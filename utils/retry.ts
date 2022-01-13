@@ -7,8 +7,7 @@ export const toleratedErrors: Array<string> = [
   'ThrottlingException',
   'Throttling',
   'TooManyRequestsException',
-  'NetworkingError',
-  'ResourceConflictException'
+  'NetworkingError'
 ]
 
 interface OptionsStruct {
@@ -17,6 +16,7 @@ interface OptionsStruct {
   readonly silent?: boolean
   readonly log?: Log
   readonly expectedErrors?: string[]
+  readonly toleratedErrors?: string[]
 }
 
 export class Options implements OptionsStruct {
@@ -25,6 +25,7 @@ export class Options implements OptionsStruct {
   public readonly silent: boolean = false
   public readonly log: Log = getLog('retry')
   public readonly expectedErrors: string[] = []
+  public readonly toleratedErrors: string[] = []
 
   public static get Defaults(): Options {
     return new Options({})

@@ -21,7 +21,12 @@ async function setupFunctionEventInvokeConfig(
   const putFunctionEventInvokeConfig = retry(
     lambda,
     lambda.putFunctionEventInvokeConfig,
-    Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
+    Options.Defaults.override({
+      log,
+      silent: true,
+      maxAttempts: 1,
+      toleratedErrors: ['ResourceConflictException']
+    })
   )
 
   await putFunctionEventInvokeConfig({

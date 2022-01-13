@@ -25,7 +25,12 @@ const updateFunctionCode = async (
     const setFunctionCode = retry(
       lambda,
       lambda.updateFunctionCode,
-      Options.Defaults.override({ log, silent: true, maxAttempts: 1 })
+      Options.Defaults.override({
+        log,
+        silent: true,
+        maxAttempts: 1,
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
 
     await setFunctionCode({

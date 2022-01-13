@@ -19,7 +19,11 @@ const getFunctionTags = async (
     const getFunction = retry(
       lambda,
       lambda.getFunction,
-      Options.Defaults.override({ log, expectedErrors: ['ResourceNotFoundException'] })
+      Options.Defaults.override({
+        log,
+        expectedErrors: ['ResourceNotFoundException'],
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
     const { Tags } = await getFunction({
       FunctionName

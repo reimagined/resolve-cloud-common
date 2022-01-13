@@ -19,7 +19,11 @@ const addFunctionPermission = async (
 
   try {
     log.debug(`Add the function "${FunctionName}" permission "${Action}"`)
-    const addPermission = retry(lambda, lambda.addPermission, Options.Defaults.override({ log }))
+    const addPermission = retry(
+      lambda,
+      lambda.addPermission,
+      Options.Defaults.override({ log, expectedErrors: ['ResourceConflictException'] })
+    )
     await addPermission({
       FunctionName,
       Action,

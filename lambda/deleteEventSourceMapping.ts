@@ -13,7 +13,7 @@ const deleteEventSourceMapping = async (
   const deleteEventSourceMappingExecutor = retry(
     lambda,
     lambda.deleteEventSourceMapping,
-    Options.Defaults.override({ log })
+    Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
   )
   try {
     log.debug('Delete an event source mapping')

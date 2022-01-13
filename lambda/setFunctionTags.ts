@@ -17,7 +17,11 @@ const setFunctionTags = async (
   const tagResource = retry(
     lambda,
     lambda.tagResource,
-    Options.Defaults.override({ log, maxAttempts: 1 })
+    Options.Defaults.override({
+      log,
+      maxAttempts: 1,
+      toleratedErrors: ['ResourceConflictException']
+    })
   )
 
   try {

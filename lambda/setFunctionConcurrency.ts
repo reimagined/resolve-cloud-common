@@ -19,7 +19,11 @@ const setFunctionConcurrency = async (
     const putFunctionConcurrency = retry(
       lambda,
       lambda.putFunctionConcurrency,
-      Options.Defaults.override({ log, maxAttempts: 1 })
+      Options.Defaults.override({
+        log,
+        maxAttempts: 1,
+        toleratedErrors: ['ResourceConflictException']
+      })
     )
     await putFunctionConcurrency({
       FunctionName,
