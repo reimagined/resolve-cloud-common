@@ -21,7 +21,11 @@ const updateFunctionConfiguration = async (
     const updateFunctionConfigurationExecutor = retry(
       lambda,
       lambda.updateFunctionConfiguration,
-      Options.Defaults.override({ log, toleratedErrors: ['ResourceConflictException'] })
+      Options.Defaults.override({
+        log,
+        toleratedErrors: ['ResourceConflictException'],
+        delay: 5000
+      })
     )
 
     const { FunctionArn } = await updateFunctionConfigurationExecutor({
