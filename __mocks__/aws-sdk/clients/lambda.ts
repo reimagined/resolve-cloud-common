@@ -12,7 +12,7 @@ Lambda.prototype.tagResource = jest.fn()
 Lambda.prototype.untagResource = jest.fn()
 Lambda.prototype.putFunctionEventInvokeConfig = jest.fn()
 Lambda.prototype.waitFor = jest.fn().mockReturnValue({
-  promise: () => {}
+  promise: () => void 0
 })
 
 export default Lambda
