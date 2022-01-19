@@ -19,9 +19,10 @@ describe('updateFunctionEnvironment', () => {
   })
   test('should function environment variables have been updated', async () => {
     mockWaitFor.mockReturnValue({
-      promise: async () => ({
-        Environment: { Variables: { testEnv1: 'testEnv1' } },
-      } as FunctionConfiguration),
+      promise: async () =>
+        ({
+          Environment: { Variables: { testEnv1: 'testEnv1' } }
+        } as FunctionConfiguration)
     } as Request<FunctionConfiguration, AWSError>)
 
     mockUpdateFunctionConfiguration.mockResolvedValue({
