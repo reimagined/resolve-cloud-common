@@ -19,7 +19,7 @@ const updateFunctionEnvironment = async (
     await updateFunctionConfiguration({
       Region,
       FunctionName,
-      Variables,
+      Variables
     })
   } catch (error) {
     log.debug(`Failed to update function environment variables`)

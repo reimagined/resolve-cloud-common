@@ -36,7 +36,7 @@ const updateFunctionCode = async (
     })
 
     await lambda.waitFor('functionUpdated', {
-      FunctionName,
+      FunctionName
     })
 
     log.debug(`The function "${FunctionName}" code has been updated`)

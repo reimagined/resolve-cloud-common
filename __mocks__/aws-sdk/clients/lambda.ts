@@ -11,5 +11,8 @@ Lambda.prototype.listTags = jest.fn()
 Lambda.prototype.tagResource = jest.fn()
 Lambda.prototype.untagResource = jest.fn()
 Lambda.prototype.putFunctionEventInvokeConfig = jest.fn()
+Lambda.prototype.waitFor = jest.fn().mockReturnValue({
+  promise: () => {}
+})
 
 export default Lambda

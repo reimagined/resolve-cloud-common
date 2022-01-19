@@ -37,7 +37,7 @@ const getTraceSummaries = async (
         EndTime,
         FilterExpression,
         TimeRangeType: 'TraceId',
-        NextToken,
+        NextToken
       }))
 
       if (TraceSummaries != null) {

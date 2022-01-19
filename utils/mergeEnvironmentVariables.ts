@@ -3,7 +3,7 @@ export function mergeEnvironmentVariables(
   extending: Record<string, string | null>
 ): Record<string, string> {
   const result = {
-    ...original,
+    ...original
   }
 
   for (const [key, value] of Object.entries(extending)) {

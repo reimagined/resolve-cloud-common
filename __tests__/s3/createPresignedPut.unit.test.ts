@@ -1,5 +1,5 @@
 import S3 from 'aws-sdk/clients/s3'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 
 import createPresignedPut from '../../s3/createPresignedPut'
 

@@ -23,7 +23,7 @@ const updateFunctionTracingConfiguration = async (
       TracingConfig: {
         Mode
       },
-      Variables,
+      Variables
     })
     log.debug(`The function "${FunctionName}" tracing mode has been updated`)
   } catch (error) {
