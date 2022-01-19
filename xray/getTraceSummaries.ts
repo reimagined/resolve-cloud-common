@@ -7,7 +7,7 @@ const getTraceSummaries = async (
     Region: string
     StartTime: Date
     EndTime: Date
-    FilterExpression?: string
+    FilterExpression: string
   },
   log: Log = getLog('GET-TRACE-SUMMARIES')
 ): Promise<TraceSummaryList> => {
@@ -21,35 +21,29 @@ const getTraceSummaries = async (
     Options.Defaults.override({ log })
   )
 
-  const items: TraceSummaryList = []
+  let items: TraceSummaryList = []
+  let TraceSummaries: TraceSummaryList | undefined = []
 
   try {
     log.debug(`List trace summaries`)
 
     let NextToken: string | undefined
-    for (;;) {
+
+    do {
       log.debug(`Get resources by Marker = ${NextToken ?? '<none>'}`)
-      const { TraceSummaries, NextToken: FollowingNextToken } = await getTraceSummariesExecutor({
+
+      void ({ TraceSummaries, NextToken } = await getTraceSummariesExecutor({
         StartTime,
         EndTime,
-        FilterExpression
-      })
+        FilterExpression,
+        TimeRangeType: 'TraceId',
+        NextToken,
+      }))
 
       if (TraceSummaries != null) {
-        TraceSummaries.map((summary) => items.push(summary))
+        items = items.concat(TraceSummaries)
       }
-
-      if (
-        TraceSummaries == null ||
-        TraceSummaries.length === 0 ||
-        FollowingNextToken == null ||
-        FollowingNextToken === ''
-      ) {
-        break
-      }
-
-      NextToken = FollowingNextToken
-    }
+    } while (NextToken)
   } catch (error) {
     log.debug(`Failed to get trace summaries`)
     throw error
