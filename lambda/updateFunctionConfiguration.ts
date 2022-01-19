@@ -1,13 +1,12 @@
 import Lambda, { UpdateFunctionConfigurationRequest } from 'aws-sdk/clients/lambda'
 
 import { retry, Options, getLog, Log, mergeEnvironmentVariables } from '../utils'
-import getFunctionConfiguration from './getFunctionConfiguration'
 
 const updateFunctionConfiguration = async (
   params: {
     Region: string
     Variables?: { [key: string]: string | null }
-  } & UpdateFunctionConfigurationRequest,
+  } & Exclude<UpdateFunctionConfigurationRequest, 'Environment'>,
   log: Log = getLog('UPDATE-LAMBDA-CONFIGURATION')
 ): Promise<{ FunctionArn: string }> => {
   const { Region, FunctionName, Variables, ...config } = params
@@ -21,20 +20,15 @@ const updateFunctionConfiguration = async (
     }
 
     if (Variables != null) {
-      log.debug('Environment variables found, waiting for updated')
+      log.debug('Environment variables found, waiting for updated state')
 
-      await lambda
+      const { Environment: CurrentEnvironment } = await lambda
         .waitFor('functionUpdated', {
           FunctionName
         })
         .promise()
 
-      log.debug('Function updated, getting of current environment variables')
-
-      const { Environment: CurrentEnvironment } = await getFunctionConfiguration({
-        Region,
-        FunctionName
-      })
+      log.debug('Function updated')
 
       if (CurrentEnvironment?.Variables == null) {
         throw new Error('Environment not found in function configuration')
@@ -71,7 +65,7 @@ const updateFunctionConfiguration = async (
       })
       .promise()
 
-    log.debug(`Function environment variables have been updated`)
+    log.debug(`Function configuration have been updated`)
 
     return { FunctionArn }
   } catch (error) {
