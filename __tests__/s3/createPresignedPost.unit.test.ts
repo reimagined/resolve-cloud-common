@@ -1,5 +1,5 @@
 import S3 from 'aws-sdk/clients/s3'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 
 import createPresignedPost from '../../s3/createPresignedPost'
 

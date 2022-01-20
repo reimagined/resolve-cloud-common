@@ -1,26 +1,30 @@
-import Lambda from 'aws-sdk/clients/lambda'
+import type { AWSError, Request } from 'aws-sdk'
+import Lambda, { FunctionConfiguration } from 'aws-sdk/clients/lambda'
+import { mocked } from 'jest-mock'
 
 import { mockedSdkFunction } from '../mockedSdkFunction'
 import updateFunctionEnvironment from '../../lambda/updateFunctionEnvironment'
 
 jest.mock('../../utils')
 
-const mockGetFunctionConfiguration = mockedSdkFunction(Lambda.prototype.getFunctionConfiguration)
+const mockWaitFor = mocked(Lambda.prototype.waitFor)
 const mockUpdateFunctionConfiguration = mockedSdkFunction(
   Lambda.prototype.updateFunctionConfiguration
 )
 
 describe('updateFunctionEnvironment', () => {
   afterEach(() => {
-    mockGetFunctionConfiguration.mockClear()
+    mockWaitFor.mockClear()
     mockUpdateFunctionConfiguration.mockClear()
   })
   test('should function environment variables have been updated', async () => {
-    mockGetFunctionConfiguration.mockResolvedValue({
-      Environment: { Variables: { testEnv1: 'testEnv1' } },
-      State: 'Active',
-      LastUpdateStatus: 'Successful'
-    })
+    mockWaitFor.mockReturnValue({
+      promise: async () =>
+        ({
+          Environment: { Variables: { testEnv1: 'testEnv1' } }
+        } as FunctionConfiguration)
+    } as Request<FunctionConfiguration, AWSError>)
+
     mockUpdateFunctionConfiguration.mockResolvedValue({
       FunctionArn: 'functionArn'
     })
@@ -30,9 +34,8 @@ describe('updateFunctionEnvironment', () => {
       Variables: { testEnv2: 'testEnv2' }
     })
 
-    expect(mockGetFunctionConfiguration).toHaveBeenCalledWith({
-      FunctionName: 'functionName',
-      Qualifier: '$LATEST'
+    expect(mockWaitFor).toHaveBeenCalledWith('functionUpdated', {
+      FunctionName: 'functionName'
     })
     expect(mockUpdateFunctionConfiguration).toHaveBeenCalledWith({
       FunctionName: 'functionName',

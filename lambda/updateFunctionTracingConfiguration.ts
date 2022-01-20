@@ -1,15 +1,18 @@
 import updateFunctionConfiguration from './updateFunctionConfiguration'
 import { getLog, Log } from '../utils'
 
-const updateFunctionTracingMode = async (
+const updateFunctionTracingConfiguration = async (
   params: {
     Region: string
     FunctionName: string
     Mode: 'Active' | 'PassThrough'
+    Variables?: {
+      [key: string]: string | null
+    }
   },
-  log: Log = getLog('UPDATE-FUNCTION-TRACING-MODE')
+  log: Log = getLog('UPDATE-FUNCTION-TRACING-CONFIGURATION')
 ): Promise<void> => {
-  const { Region, FunctionName, Mode } = params
+  const { Region, FunctionName, Mode, Variables } = params
 
   try {
     log.debug(`Update the function "${FunctionName}" tracing mode`)
@@ -19,7 +22,8 @@ const updateFunctionTracingMode = async (
       FunctionName,
       TracingConfig: {
         Mode
-      }
+      },
+      Variables
     })
     log.debug(`The function "${FunctionName}" tracing mode has been updated`)
   } catch (error) {
@@ -28,4 +32,4 @@ const updateFunctionTracingMode = async (
   }
 }
 
-export default updateFunctionTracingMode
+export default updateFunctionTracingConfiguration

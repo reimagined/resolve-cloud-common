@@ -1,6 +1,6 @@
 import S3, { ManagedUpload } from 'aws-sdk/clients/s3'
 import { Writable } from 'stream'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 
 import uploadS3Object from '../../s3/uploadS3Object'
 

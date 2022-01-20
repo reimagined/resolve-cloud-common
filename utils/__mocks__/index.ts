@@ -26,3 +26,11 @@ export const Options = {
     override: jest.fn()
   }
 }
+
+export const mergeEnvironmentVariables = (
+  first: Record<string, string>,
+  second: Record<string, string | null>
+) => ({
+  ...first,
+  ...second
+})

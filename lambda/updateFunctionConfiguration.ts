@@ -1,23 +1,46 @@
 import Lambda, { UpdateFunctionConfigurationRequest } from 'aws-sdk/clients/lambda'
 
-import getFunctionConfiguration from './getFunctionConfiguration'
-import { retry, Options, getLog, Log } from '../utils'
-
-const MAX_ATTEMPTS = 180
-const ATTEMPT_TIMEOUT = 1000
+import { retry, Options, getLog, Log, mergeEnvironmentVariables } from '../utils'
 
 const updateFunctionConfiguration = async (
   params: {
     Region: string
-  } & UpdateFunctionConfigurationRequest,
+    Variables?: { [key: string]: string | null }
+  } & Exclude<UpdateFunctionConfigurationRequest, 'Environment'>,
   log: Log = getLog('UPDATE-LAMBDA-CONFIGURATION')
 ): Promise<{ FunctionArn: string }> => {
-  const { Region, FunctionName, ...config } = params
+  const { Region, FunctionName, Variables, ...config } = params
 
   const lambda = new Lambda({ region: Region })
 
   try {
+    const updateParams: UpdateFunctionConfigurationRequest = {
+      FunctionName,
+      ...config
+    }
+
+    if (Variables != null) {
+      log.debug('Environment variables found, waiting for updated state')
+
+      const { Environment: CurrentEnvironment } = await lambda
+        .waitFor('functionUpdated', {
+          FunctionName
+        })
+        .promise()
+
+      log.debug('Function updated')
+
+      if (CurrentEnvironment?.Variables == null) {
+        throw new Error('Environment not found in function configuration')
+      }
+
+      updateParams.Environment = {
+        Variables: mergeEnvironmentVariables(CurrentEnvironment.Variables, Variables)
+      }
+    }
+
     log.debug(`Update function configuration`)
+
     const updateFunctionConfigurationExecutor = retry(
       lambda,
       lambda.updateFunctionConfiguration,
@@ -28,35 +51,21 @@ const updateFunctionConfiguration = async (
       })
     )
 
-    const { FunctionArn } = await updateFunctionConfigurationExecutor({
-      FunctionName,
-      ...config
-    })
-
-    for (let i = 1; i <= MAX_ATTEMPTS; i++) {
-      const { State, LastUpdateStatus } = await getFunctionConfiguration({
-        Region,
-        FunctionName
-      })
-
-      if (
-        State != null &&
-        State !== 'Pending' &&
-        LastUpdateStatus != null &&
-        LastUpdateStatus !== 'InProgress'
-      ) {
-        break
-      }
-
-      log.verbose(`Lambda is pending [${i}/${MAX_ATTEMPTS}]`)
-      await new Promise((resolve) => setTimeout(resolve, ATTEMPT_TIMEOUT))
-    }
-
-    log.debug(`Function environment variables have been updated`)
+    const { FunctionArn } = await updateFunctionConfigurationExecutor(updateParams)
 
     if (FunctionArn == null) {
       throw new Error(`Failed to get FunctionArn`)
     }
+
+    log.debug(`Configuration update started, waiting for updated status`)
+
+    await lambda
+      .waitFor('functionUpdated', {
+        FunctionName
+      })
+      .promise()
+
+    log.debug(`Function configuration have been updated`)
 
     return { FunctionArn }
   } catch (error) {

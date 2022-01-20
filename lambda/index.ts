@@ -23,7 +23,7 @@ import setFunctionTags from './setFunctionTags'
 import updateFunctionCode from './updateFunctionCode'
 import updateFunctionEnvironment from './updateFunctionEnvironment'
 import updateFunctionHandler from './updateFunctionHandler'
-import updateFunctionTracingMode from './updateFunctionTracingMode'
+import updateFunctionTracingConfiguration from './updateFunctionTracingConfiguration'
 import updateFunctionVpcConfig from './updateFunctionVpcConfig'
 
 export {
@@ -52,6 +52,6 @@ export {
   updateFunctionCode,
   updateFunctionEnvironment,
   updateFunctionHandler,
-  updateFunctionTracingMode,
+  updateFunctionTracingConfiguration,
   updateFunctionVpcConfig
 }

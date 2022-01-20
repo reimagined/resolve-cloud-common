@@ -1,5 +1,5 @@
 import EC2 from 'aws-sdk/clients/ec2'
-import { mocked } from 'ts-jest/utils'
+import { mocked } from 'jest-mock'
 
 import { mockedSdkFunction } from '../mockedSdkFunction'
 
