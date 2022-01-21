@@ -35,9 +35,11 @@ const updateFunctionCode = async (
       S3Key
     })
 
-    await lambda.waitFor('functionUpdated', {
-      FunctionName
-    })
+    await lambda
+      .waitFor('functionUpdated', {
+        FunctionName
+      })
+      .promise()
 
     log.debug(`The function "${FunctionName}" code has been updated`)
   } catch (error) {
