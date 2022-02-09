@@ -82,25 +82,31 @@ async function getCloudFrontDistributionsByTags(
 
   const resourcesByTags: Record<string, Record<string, string>> = {}
 
-  await Promise.all(
-    distributions.map(async (distribution) => {
-      const { Tags: { Items = [] } = {} } = await listTagsForResource({
-        Resource: distribution.ARN
-      })
-      const tags: Record<string, string> = {}
-      for (const { Key, Value } of Items) {
-        if (Key != null && Value != null) {
-          tags[Key] = Value
-        }
-      }
-      for (const [Key, Value] of Object.entries(Tags)) {
-        if (tags[Key] !== Value) {
-          return
-        }
-      }
-      resourcesByTags[distribution.ARN] = tags
+  for (const { ARN } of distributions) {
+    let flag = true
+
+    const { Tags: { Items = [] } = {} } = await listTagsForResource({
+      Resource: ARN
     })
-  )
+
+    const tags: Record<string, string> = {}
+
+    for (const { Key, Value } of Items) {
+      if (Key != null && Value != null) {
+        tags[Key] = Value
+      }
+    }
+
+    for (const [Key, Value] of Object.entries(Tags)) {
+      if (tags[Key] !== Value) {
+        flag = false
+      }
+    }
+
+    if (flag) {
+      resourcesByTags[ARN] = tags
+    }
+  }
 
   const resources = distributions
     .filter(({ ARN }) => resourcesByTags[ARN] != null)
