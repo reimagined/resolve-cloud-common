@@ -31,7 +31,7 @@ const publishLayerVersion = async (
   const publishLayer = retry(lambda, lambda.publishLayerVersion, Options.Defaults.override({ log }))
 
   try {
-    log.debug('List layers')
+    log.debug(`Publish layer with "${LayerName}" name`)
 
     const result = await publishLayer({
       LayerName,
@@ -45,11 +45,11 @@ const publishLayerVersion = async (
       LicenseInfo
     })
 
-    log.debug(`List layers have been found`)
+    log.debug(`Publish layer with "${LayerName}" name complete`)
 
     return result
   } catch (error) {
-    log.debug(`Failed to find list of layers`)
+    log.debug(`Failed to publish layer with "${LayerName}" name`)
     throw error
   }
 }
