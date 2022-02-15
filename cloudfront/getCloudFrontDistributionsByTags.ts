@@ -84,11 +84,7 @@ async function getCloudFrontDistributionsByTags(
 
   const batchSize = 20
 
-  for (
-    let batchIndex = 0;
-    batchIndex < Math.floor(distributions.length / batchSize);
-    batchIndex++
-  ) {
+  for (let batchIndex = 0; batchIndex < Math.ceil(distributions.length / batchSize); batchIndex++) {
     await Promise.all(
       distributions
         .slice(batchIndex * batchSize, (batchIndex + 1) * batchSize)

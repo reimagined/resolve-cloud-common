@@ -25,6 +25,8 @@ import updateFunctionEnvironment from './updateFunctionEnvironment'
 import updateFunctionHandler from './updateFunctionHandler'
 import updateFunctionTracingConfiguration from './updateFunctionTracingConfiguration'
 import updateFunctionVpcConfig from './updateFunctionVpcConfig'
+import listLayers from './listLayers'
+import publishLayerVersion from './publishLayerVersion'
 
 export {
   addFunctionPermission,
@@ -53,5 +55,7 @@ export {
   updateFunctionEnvironment,
   updateFunctionHandler,
   updateFunctionTracingConfiguration,
-  updateFunctionVpcConfig
+  updateFunctionVpcConfig,
+  listLayers,
+  publishLayerVersion
 }
