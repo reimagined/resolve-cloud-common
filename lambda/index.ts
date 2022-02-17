@@ -25,6 +25,7 @@ import updateFunctionEnvironment from './updateFunctionEnvironment'
 import updateFunctionHandler from './updateFunctionHandler'
 import updateFunctionTracingConfiguration from './updateFunctionTracingConfiguration'
 import updateFunctionVpcConfig from './updateFunctionVpcConfig'
+import updateFunctionLayers from './updateFunctionLayers'
 import listLayers from './listLayers'
 import publishLayerVersion from './publishLayerVersion'
 
@@ -56,6 +57,7 @@ export {
   updateFunctionHandler,
   updateFunctionTracingConfiguration,
   updateFunctionVpcConfig,
+  updateFunctionLayers,
   listLayers,
   publishLayerVersion
 }
