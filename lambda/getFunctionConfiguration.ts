@@ -22,6 +22,7 @@ const getFunctionConfiguration = async (
       Options.Defaults.override({
         log,
         maxAttempts: 50,
+        expectedErrors: ['ResourceNotFoundException'],
         toleratedErrors: ['ResourceConflictException']
       })
     )
